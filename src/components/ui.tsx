@@ -22,14 +22,7 @@ export function Field({
 }) {
   return (
     <label className="block">
-      <span className="mb-1 flex items-baseline justify-between gap-2 text-sm font-medium text-slate-700">
-        <span className="shrink-0">{label}</span>
-        {hint && (
-          <span className="min-w-0 truncate text-right text-xs font-normal text-slate-400">
-            {hint}
-          </span>
-        )}
-      </span>
+      <span className="mb-1 block text-sm font-medium text-slate-700">{label}</span>
       <div className="relative">
         <input
           type="number"
@@ -44,6 +37,7 @@ export function Field({
           {suffix}
         </span>
       </div>
+      {hint && <span className="mt-1 block text-xs leading-snug text-slate-400">{hint}</span>}
     </label>
   )
 }
@@ -93,16 +87,14 @@ export function DateField({
 }) {
   return (
     <label className="block">
-      <span className="mb-1 flex items-baseline justify-between text-sm font-medium text-slate-700">
-        {label}
-        {hint && <span className="text-xs font-normal text-slate-400">{hint}</span>}
-      </span>
+      <span className="mb-1 block text-sm font-medium text-slate-700">{label}</span>
       <input
         type="date"
         value={value}
         onChange={(e) => onChange(e.target.value)}
         className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm tabular-nums focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 focus:outline-none"
       />
+      {hint && <span className="mt-1 block text-xs leading-snug text-slate-400">{hint}</span>}
     </label>
   )
 }
