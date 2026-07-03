@@ -55,7 +55,12 @@ const components: Record<string, () => React.JSX.Element> = {
   lossRecovery: LossRecoveryCalculator,
 }
 
-const groups = [...new Set(routes.map((r) => r.group))]
+/** 사이드바 그룹 표시 순서 */
+const GROUP_ORDER = ['주식', '직장인', '나이', '대출', '날짜', '셀러']
+const groups = [
+  ...GROUP_ORDER.filter((g) => routes.some((r) => r.group === g)),
+  ...[...new Set(routes.map((r) => r.group))].filter((g) => !GROUP_ORDER.includes(g)),
+]
 
 /** 끝 슬래시 제거 정규화 */
 const normalize = (p: string) => p.replace(/\/+$/, '') || '/'
@@ -148,7 +153,7 @@ function App() {
       {/* 모바일 상단 바 */}
       <header className="sticky top-0 z-10 border-b border-slate-200 bg-white lg:hidden">
         <div className="flex items-center gap-3 px-4 py-3">
-          <span className="shrink-0 text-lg font-bold">셀러 계산기</span>
+          <span className="shrink-0 text-lg font-bold">계산기</span>
           <nav className="flex gap-1 overflow-x-auto" aria-label="계산기 메뉴">
             {routes.map((r) => (
               <MenuLink
@@ -176,9 +181,9 @@ function App() {
               }}
               className="text-xl font-extrabold tracking-tight"
             >
-              셀러 계산기
+              계산기
             </a>
-            <p className="mt-1 text-xs text-slate-400">팔기 전에, 받기 전에 계산부터</p>
+            <p className="mt-1 text-xs text-slate-400">돈·나이·날짜, 생활 계산 한곳에서</p>
           </div>
           <nav
             className="min-h-0 flex-1 space-y-6 overflow-y-auto px-3 pb-4"

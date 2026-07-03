@@ -1,4 +1,4 @@
-# 셀러 계산기
+# 계산기
 
 셀러와 직장인을 위한 생활 계산기 모음. Vite + React + TypeScript + Tailwind CSS.
 
