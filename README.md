@@ -43,6 +43,15 @@ npm run preview  # 빌드 결과 미리보기
 2. 도메인 확정 시 `scripts/postbuild.mjs`의 `SITE_URL` 변경 후 재배포
 3. [구글 서치 콘솔](https://search.google.com/search-console)과 [네이버 서치어드바이저](https://searchadvisor.naver.com)에 사이트 등록 + `sitemap.xml` 제출
 
+## 광고 (AdSense)
+
+1. 배포 + 도메인 연결 후 [AdSense](https://adsense.google.com)에 사이트 등록 → 승인 대기
+2. 승인되면 `src/lib/ads.ts`의 `ADSENSE_CLIENT`에 게시자 ID(`ca-pub-...`) 입력
+3. `public/ads.txt`의 `pub-0000000000000000`을 같은 ID로 교체
+4. 광고 단위(수동)를 쓰려면 `SLOTS.belowResult`에 슬롯 ID 입력 — 비우면 자동 광고만 동작
+
+ID가 비어 있으면 광고 코드가 로드되지 않으므로 승인 전에도 안전하게 배포할 수 있습니다.
+
 ## 기준값 메모 (2026)
 
 - 국민연금 근로자 4.75% (기준소득월액 41만~659만, 2026.7~2027.6)

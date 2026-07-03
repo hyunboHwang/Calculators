@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react'
 import routes from './routes.json'
+import AdSlot from './components/AdSlot'
+import { SLOTS, loadAdsense } from './lib/ads'
 import MarginCalculator from './pages/MarginCalculator'
 import SalaryCalculator from './pages/SalaryCalculator'
 import RaiseComparator from './pages/RaiseComparator'
@@ -115,6 +117,7 @@ function MenuLink({
 function App() {
   const { route, navigate } = useRoute()
   useSeo(route)
+  useEffect(loadAdsense, []) // 자동 광고 (ADSENSE_CLIENT 설정 시에만 동작)
   const Current = components[route.id] ?? MarginCalculator
 
   return (
@@ -183,6 +186,7 @@ function App() {
 
         <main className="min-w-0 flex-1 px-4 py-8 lg:px-10">
           <Current />
+          <AdSlot key={route.id} slot={SLOTS.belowResult} />
         </main>
       </div>
     </div>
