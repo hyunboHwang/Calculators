@@ -1,19 +1,37 @@
 import { useMemo, useState } from 'react'
 import { Field, Row, fmt } from '../components/ui'
+import { CurrencyToggle, moneySuffix, type Currency } from '../components/currency'
 
 const DEDUCTION = 2_500_000 // 양도소득 기본공제 (연간)
 const TAX_RATE = 0.22 // 20% + 지방소득세 2%
 
+const defaults: Record<Currency, number> = { KRW: 10_000_000, USD: 7_000 }
+
 export default function UsStockTaxCalculator() {
+  const [currency, setCurrency] = useState<Currency>('KRW')
   const [gain, setGain] = useState(10_000_000)
   const [loss, setLoss] = useState(0)
+  const [fxRate, setFxRate] = useState(1_400)
+
+  const switchCurrency = (c: Currency) => {
+    if (c !== currency) {
+      setCurrency(c)
+      setGain(defaults[c])
+      setLoss(0)
+    }
+  }
 
   const r = useMemo(() => {
-    const net = gain - loss // 손익 통산
+    const fx = currency === 'USD' ? fxRate : 1
+    const gainKrw = gain * fx
+    const lossKrw = loss * fx
+    const net = gainKrw - lossKrw // 손익 통산 (원화 기준)
     const taxBase = Math.max(net - DEDUCTION, 0)
     const tax = taxBase * TAX_RATE
     const remainingDeduction = Math.max(DEDUCTION - Math.max(net, 0), 0)
     return {
+      gainKrw,
+      lossKrw,
       net,
       taxBase,
       tax,
@@ -21,7 +39,7 @@ export default function UsStockTaxCalculator() {
       remainingDeduction,
       effectiveRate: net > 0 ? (tax / net) * 100 : 0,
     }
-  }, [gain, loss])
+  }, [gain, loss, currency, fxRate])
 
   return (
     <div>
@@ -35,8 +53,32 @@ export default function UsStockTaxCalculator() {
         <section className="h-fit rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
           <h2 className="mb-4 text-base font-semibold">올해 실현 손익 (1.1 ~ 12.31 결제 기준)</h2>
           <div className="space-y-4">
-            <Field label="실현 이익 합계" value={gain} onChange={setGain} step={500_000} hint="원화 환산" />
-            <Field label="실현 손실 합계" value={loss} onChange={setLoss} step={500_000} hint="손익 통산 가능" />
+            <CurrencyToggle value={currency} onChange={switchCurrency} />
+            <Field
+              label="실현 이익 합계"
+              value={gain}
+              onChange={setGain}
+              suffix={moneySuffix(currency)}
+              step={currency === 'KRW' ? 500_000 : 100}
+            />
+            <Field
+              label="실현 손실 합계"
+              value={loss}
+              onChange={setLoss}
+              suffix={moneySuffix(currency)}
+              step={currency === 'KRW' ? 500_000 : 100}
+              hint="손익 통산 가능"
+            />
+            {currency === 'USD' && (
+              <Field
+                label="환율 (원/달러)"
+                value={fxRate}
+                onChange={setFxRate}
+                suffix="원"
+                step={10}
+                hint="세금은 원화 기준으로 계산"
+              />
+            )}
           </div>
         </section>
 
@@ -54,8 +96,16 @@ export default function UsStockTaxCalculator() {
           <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
             <h2 className="mb-2 text-base font-semibold">계산 내역</h2>
             <div className="divide-y divide-slate-100">
-              <Row label="실현 이익" value={`${fmt(gain)}원`} />
-              <Row label="실현 손실 (통산)" value={`-${fmt(loss)}원`} />
+              <Row
+                label="실현 이익"
+                value={`${fmt(r.gainKrw)}원`}
+                sub={currency === 'USD' ? `$${gain.toLocaleString('en-US')} × ${fmt(fxRate)}원` : undefined}
+              />
+              <Row
+                label="실현 손실 (통산)"
+                value={`-${fmt(r.lossKrw)}원`}
+                sub={currency === 'USD' && loss > 0 ? `$${loss.toLocaleString('en-US')} × ${fmt(fxRate)}원` : undefined}
+              />
               <Row label="순손익" value={`${fmt(r.net)}원`} strong negative={r.net < 0} />
               <Row label="기본공제" value={`-${fmt(Math.min(Math.max(r.net, 0), DEDUCTION))}원`} sub="연 250만원" />
               <Row label="과세표준" value={`${fmt(r.taxBase)}원`} />
