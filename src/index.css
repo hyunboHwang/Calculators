@@ -1,0 +1,13 @@
+@import 'tailwindcss';
+
+:root {
+  color-scheme: light;
+}
+
+body {
+  margin: 0;
+  font-family:
+    'Pretendard Variable', Pretendard, system-ui, 'Segoe UI', 'Apple SD Gothic Neo',
+    'Malgun Gothic', Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
