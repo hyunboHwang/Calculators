@@ -10,7 +10,7 @@
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs'
 import { join } from 'node:path'
 
-const SITE_URL = 'https://example.com' // TODO: 배포 도메인으로 변경
+const SITE_URL = 'https://calculators-orpin.vercel.app' // 커스텀 도메인 연결 시 변경
 
 const dist = new URL('../dist', import.meta.url).pathname
 const routes = JSON.parse(
@@ -75,6 +75,3 @@ writeFileSync(
 )
 console.log('✓ robots.txt')
 
-if (SITE_URL.includes('example.com')) {
-  console.warn('\n⚠️  SITE_URL이 아직 placeholder입니다. scripts/postbuild.mjs에서 배포 도메인으로 변경하세요.')
-}
