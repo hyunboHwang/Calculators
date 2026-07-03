@@ -26,6 +26,7 @@ import AveragePriceCalculator from './pages/AveragePriceCalculator'
 import DividendCalculator from './pages/DividendCalculator'
 import CompoundCalculator from './pages/CompoundCalculator'
 import UsStockTaxCalculator from './pages/UsStockTaxCalculator'
+import LossRecoveryCalculator from './pages/LossRecoveryCalculator'
 
 const components: Record<string, () => React.JSX.Element> = {
   margin: MarginCalculator,
@@ -51,6 +52,7 @@ const components: Record<string, () => React.JSX.Element> = {
   dividend: DividendCalculator,
   compound: CompoundCalculator,
   usStockTax: UsStockTaxCalculator,
+  lossRecovery: LossRecoveryCalculator,
 }
 
 const groups = [...new Set(routes.map((r) => r.group))]
