@@ -168,7 +168,10 @@ function App() {
             </a>
             <p className="mt-1 text-xs text-slate-400">팔기 전에, 받기 전에 계산부터</p>
           </div>
-          <nav className="flex-1 space-y-6 px-3" aria-label="계산기 메뉴">
+          <nav
+            className="min-h-0 flex-1 space-y-6 overflow-y-auto px-3 pb-4"
+            aria-label="계산기 메뉴"
+          >
             {groups.map((g) => (
               <div key={g}>
                 <p className="mb-1 px-3 text-xs font-semibold tracking-wide text-slate-400">
