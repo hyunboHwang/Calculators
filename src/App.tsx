@@ -21,6 +21,11 @@ import DateCalculator from './pages/DateCalculator'
 import DischargeCalculator from './pages/DischargeCalculator'
 import DueDateCalculator from './pages/DueDateCalculator'
 import PartTimeCalculator from './pages/PartTimeCalculator'
+import StockReturnCalculator from './pages/StockReturnCalculator'
+import AveragePriceCalculator from './pages/AveragePriceCalculator'
+import DividendCalculator from './pages/DividendCalculator'
+import CompoundCalculator from './pages/CompoundCalculator'
+import UsStockTaxCalculator from './pages/UsStockTaxCalculator'
 
 const components: Record<string, () => React.JSX.Element> = {
   margin: MarginCalculator,
@@ -41,6 +46,11 @@ const components: Record<string, () => React.JSX.Element> = {
   dateCalc: DateCalculator,
   discharge: DischargeCalculator,
   dueDate: DueDateCalculator,
+  stockReturn: StockReturnCalculator,
+  averagePrice: AveragePriceCalculator,
+  dividend: DividendCalculator,
+  compound: CompoundCalculator,
+  usStockTax: UsStockTaxCalculator,
 }
 
 const groups = [...new Set(routes.map((r) => r.group))]
