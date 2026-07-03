@@ -12,7 +12,7 @@
  * 승인 전에 배포해도 안전합니다.
  */
 
-export const ADSENSE_CLIENT = '' // TODO: 승인 후 'ca-pub-...' 입력
+export const ADSENSE_CLIENT = 'ca-pub-9428641211250390'
 
 /** 수동 광고 단위 슬롯 ID (선택) */
 export const SLOTS = {
@@ -25,6 +25,8 @@ let loaded = false
 export function loadAdsense() {
   if (loaded || !ADSENSE_CLIENT || typeof document === 'undefined') return
   loaded = true
+  // index.html에 정적 스크립트가 이미 있으면 중복 로드하지 않음
+  if (document.querySelector('script[src*="adsbygoogle.js"]')) return
   const s = document.createElement('script')
   s.async = true
   s.src = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT}`
