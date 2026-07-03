@@ -16,6 +16,11 @@ import LoanCalculator from './pages/LoanCalculator'
 import DsrCalculator from './pages/DsrCalculator'
 import PrepaymentCalculator from './pages/PrepaymentCalculator'
 import RefinanceCalculator from './pages/RefinanceCalculator'
+import DdayCalculator from './pages/DdayCalculator'
+import DateCalculator from './pages/DateCalculator'
+import DischargeCalculator from './pages/DischargeCalculator'
+import DueDateCalculator from './pages/DueDateCalculator'
+import PartTimeCalculator from './pages/PartTimeCalculator'
 
 const components: Record<string, () => React.JSX.Element> = {
   margin: MarginCalculator,
@@ -31,6 +36,11 @@ const components: Record<string, () => React.JSX.Element> = {
   dsr: DsrCalculator,
   prepayment: PrepaymentCalculator,
   refinance: RefinanceCalculator,
+  partTime: PartTimeCalculator,
+  dday: DdayCalculator,
+  dateCalc: DateCalculator,
+  discharge: DischargeCalculator,
+  dueDate: DueDateCalculator,
 }
 
 const groups = [...new Set(routes.map((r) => r.group))]
