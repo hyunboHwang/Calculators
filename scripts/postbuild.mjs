@@ -10,7 +10,7 @@
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs'
 import { join } from 'node:path'
 
-const SITE_URL = 'https://calculators.ai.kr'
+const SITE_URL = 'https://www.calculators.ai.kr'
 
 const dist = new URL('../dist', import.meta.url).pathname
 const routes = JSON.parse(
