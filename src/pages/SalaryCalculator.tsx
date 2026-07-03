@@ -77,15 +77,15 @@ export default function SalaryCalculator() {
               suffix="명"
               step={1}
             />
-            <div>
+            <div className="col-span-2">
               <span className="mb-1 block text-sm font-medium text-slate-700">원천징수 비율</span>
-              <div className="flex gap-1">
+              <div className="flex gap-1.5">
                 {([80, 100, 120] as const).map((p) => (
                   <button
                     key={p}
                     type="button"
                     onClick={() => set('withholdingRatio')(p)}
-                    className={`flex-1 rounded-lg border px-2 py-2 text-sm font-medium transition-colors ${
+                    className={`min-w-0 flex-1 rounded-lg border px-1 py-2 text-sm font-medium transition-colors ${
                       input.withholdingRatio === p
                         ? 'border-emerald-600 bg-emerald-600 text-white'
                         : 'border-slate-300 text-slate-500 hover:bg-slate-100'
