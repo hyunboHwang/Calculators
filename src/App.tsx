@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import routes from './routes.json'
 import AdSlot from './components/AdSlot'
+import InfoSection from './components/InfoSection'
 import { SLOTS, loadAdsense } from './lib/ads'
 import MarginCalculator from './pages/MarginCalculator'
 import SalaryCalculator from './pages/SalaryCalculator'
@@ -187,6 +188,7 @@ function App() {
         <main className="min-w-0 flex-1 px-4 py-8 lg:px-10">
           <Current />
           <AdSlot key={route.id} slot={SLOTS.belowResult} />
+          <InfoSection pageId={route.id} />
         </main>
       </div>
     </div>
