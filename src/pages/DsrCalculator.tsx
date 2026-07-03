@@ -92,8 +92,8 @@ export default function DsrCalculator() {
 
         <section className="space-y-4">
           <div className={`rounded-2xl border p-5 ${verdict.style}`}>
-            <div className="flex items-center gap-3">
-              <span className={`rounded-full px-3 py-1 text-sm font-bold text-white ${verdict.badge}`}>
+            <div className="flex flex-wrap items-center gap-3">
+              <span className={`shrink-0 rounded-full px-3 py-1 text-sm font-bold whitespace-nowrap text-white ${verdict.badge}`}>
                 {verdict.label}
               </span>
               <span className="text-3xl font-extrabold tabular-nums">{fmtPct(r.dsr)}</span>

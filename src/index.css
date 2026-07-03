@@ -10,4 +10,7 @@ body {
     'Pretendard Variable', Pretendard, system-ui, 'Segoe UI', 'Apple SD Gothic Neo',
     'Malgun Gothic', Roboto, sans-serif;
   -webkit-font-smoothing: antialiased;
+  /* 한글은 어절 단위로 줄바꿈, 긴 숫자는 넘칠 때만 강제 줄바꿈 */
+  word-break: keep-all;
+  overflow-wrap: break-word;
 }

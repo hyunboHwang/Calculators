@@ -93,9 +93,9 @@ export default function RefinanceCalculator() {
               good ? 'border-emerald-200 bg-emerald-50' : 'border-red-200 bg-red-50'
             }`}
           >
-            <div className="flex items-center gap-3">
+            <div className="flex flex-wrap items-center gap-3">
               <span
-                className={`rounded-full px-3 py-1 text-sm font-bold text-white ${
+                className={`shrink-0 rounded-full px-3 py-1 text-sm font-bold whitespace-nowrap text-white ${
                   good ? 'bg-emerald-600' : 'bg-red-600'
                 }`}
               >

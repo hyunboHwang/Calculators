@@ -62,7 +62,7 @@ export default function LoanCalculator() {
                   }`}
                 >
                   <p className="text-xs font-semibold text-slate-500">{REPAY_LABELS[t]}</p>
-                  <p className="mt-1 text-lg font-extrabold tabular-nums">
+                  <p className="mt-1 text-base font-extrabold tabular-nums xl:text-lg">
                     {t === 'equalPayment'
                       ? `월 ${fmt(r.firstPayment)}원`
                       : t === 'equalPrincipal'

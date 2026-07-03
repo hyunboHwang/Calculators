@@ -22,9 +22,13 @@ export function Field({
 }) {
   return (
     <label className="block">
-      <span className="mb-1 flex items-baseline justify-between text-sm font-medium text-slate-700">
-        {label}
-        {hint && <span className="text-xs font-normal text-slate-400">{hint}</span>}
+      <span className="mb-1 flex items-baseline justify-between gap-2 text-sm font-medium text-slate-700">
+        <span className="shrink-0">{label}</span>
+        {hint && (
+          <span className="min-w-0 truncate text-right text-xs font-normal text-slate-400">
+            {hint}
+          </span>
+        )}
       </span>
       <div className="relative">
         <input
@@ -58,13 +62,15 @@ export function Row({
   negative?: boolean
 }) {
   return (
-    <div className="flex items-center justify-between py-1.5">
-      <span className={`text-sm ${strong ? 'font-semibold text-slate-800' : 'text-slate-500'}`}>
+    <div className="flex flex-wrap items-baseline justify-between gap-x-3 py-1.5">
+      <span
+        className={`min-w-0 text-sm ${strong ? 'font-semibold text-slate-800' : 'text-slate-500'}`}
+      >
         {label}
         {sub && <span className="ml-1.5 text-xs text-slate-400">{sub}</span>}
       </span>
       <span
-        className={`tabular-nums ${strong ? 'text-base font-bold' : 'text-sm font-medium'} ${
+        className={`ml-auto text-right tabular-nums ${strong ? 'text-base font-bold' : 'text-sm font-medium'} ${
           negative ? 'text-red-600' : 'text-slate-800'
         }`}
       >
