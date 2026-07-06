@@ -1,5 +1,7 @@
 /* 공용 입력/출력 컴포넌트 */
 
+import { useEffect, useState } from 'react'
+
 export const fmt = (n: number) =>
   Number.isFinite(n) ? Math.round(n).toLocaleString('ko-KR') : '-'
 
@@ -20,6 +22,16 @@ export function Field({
   step?: number
   hint?: string
 }) {
+  // 입력 중에는 문자열로 관리 → 0을 지우고 빈칸 상태로 타이핑 가능
+  const [text, setText] = useState(() => (Number.isFinite(value) ? String(value) : ''))
+
+  // 프리셋 버튼 등 외부에서 값이 바뀌면 표시 문자열 동기화
+  useEffect(() => {
+    const parsed = text === '' ? 0 : Number(text)
+    if (parsed !== value) setText(Number.isFinite(value) ? String(value) : '')
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [value])
+
   return (
     <label className="block">
       <span className="mb-1 block text-sm font-medium text-slate-700">{label}</span>
@@ -29,8 +41,14 @@ export function Field({
           inputMode="decimal"
           min={0}
           step={step}
-          value={Number.isNaN(value) ? '' : value}
-          onChange={(e) => onChange(e.target.value === '' ? 0 : Number(e.target.value))}
+          value={text}
+          onChange={(e) => {
+            const raw = e.target.value
+            setText(raw)
+            const n = raw === '' ? 0 : Number(raw)
+            if (Number.isFinite(n)) onChange(n)
+          }}
+          onBlur={() => setText(Number.isFinite(value) ? String(value) : '')}
           className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 pr-10 text-right text-sm tabular-nums focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 focus:outline-none"
         />
         <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-xs text-slate-400">
