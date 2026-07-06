@@ -14,9 +14,15 @@
 
 export const ADSENSE_CLIENT = 'ca-pub-9428641211250390'
 
-/** 수동 광고 단위 슬롯 ID (선택) */
+/**
+ * 수동 광고 단위 슬롯 ID (선택)
+ * 애드센스에서 "디스플레이 광고" 단위를 만들고 data-ad-slot 숫자를 붙여넣으세요.
+ * 비워두면 해당 자리는 렌더링되지 않습니다.
+ */
 export const SLOTS = {
-  belowResult: '', // 계산 결과 아래
+  belowResult: '', // 계산 결과 아래, 설명/FAQ 위
+  bottomOfPage: '', // FAQ 아래 (페이지 최하단)
+  sidebar: '', // 데스크톱 사이드바 하단
 }
 
 let loaded = false

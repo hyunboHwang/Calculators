@@ -210,6 +210,7 @@ function App() {
               </div>
             ))}
           </nav>
+          <AdSlot slot={SLOTS.sidebar} className="min-h-[250px] shrink-0 px-3 pt-2" />
           <p className="px-5 py-4 text-[11px] leading-relaxed text-slate-300">
             모든 결과는 참고용 추정치입니다.
           </p>
@@ -217,8 +218,9 @@ function App() {
 
         <main className="min-w-0 flex-1 px-4 py-8 lg:px-10">
           <Current />
-          <AdSlot key={route.id} slot={SLOTS.belowResult} />
+          <AdSlot key={`${route.id}-mid`} slot={SLOTS.belowResult} />
           <InfoSection pageId={route.id} />
+          <AdSlot key={`${route.id}-bottom`} slot={SLOTS.bottomOfPage} />
         </main>
       </div>
     </div>

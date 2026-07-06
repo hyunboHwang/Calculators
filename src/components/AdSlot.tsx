@@ -11,7 +11,13 @@ declare global {
  * 수동 광고 단위. client/slot이 설정된 경우에만 렌더링됩니다.
  * 페이지(라우트)별로 key를 다르게 주면 이동 시 새 광고가 요청됩니다.
  */
-export default function AdSlot({ slot }: { slot: string }) {
+export default function AdSlot({
+  slot,
+  className = 'mt-8 min-h-[100px]',
+}: {
+  slot: string
+  className?: string
+}) {
   const enabled = Boolean(ADSENSE_CLIENT && slot)
 
   useEffect(() => {
@@ -27,7 +33,7 @@ export default function AdSlot({ slot }: { slot: string }) {
   if (!enabled) return null
 
   return (
-    <div className="mt-8 min-h-[100px]">
+    <div className={className}>
       <ins
         className="adsbygoogle"
         style={{ display: 'block' }}
