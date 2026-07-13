@@ -27,6 +27,8 @@ import DividendCalculator from './pages/DividendCalculator'
 import CompoundCalculator from './pages/CompoundCalculator'
 import UsStockTaxCalculator from './pages/UsStockTaxCalculator'
 import LossRecoveryCalculator from './pages/LossRecoveryCalculator'
+import AboutPage from './pages/AboutPage'
+import PrivacyPage from './pages/PrivacyPage'
 
 const components: Record<string, () => React.JSX.Element> = {
   margin: MarginCalculator,
@@ -53,14 +55,13 @@ const components: Record<string, () => React.JSX.Element> = {
   compound: CompoundCalculator,
   usStockTax: UsStockTaxCalculator,
   lossRecovery: LossRecoveryCalculator,
+  about: AboutPage,
+  privacy: PrivacyPage,
 }
 
-/** 사이드바 그룹 표시 순서 */
+/** 사이드바 그룹 표시 순서 ('정보' 그룹은 푸터에만 노출) */
 const GROUP_ORDER = ['주식', '직장인', '나이', '대출', '날짜', '셀러']
-const groups = [
-  ...GROUP_ORDER.filter((g) => routes.some((r) => r.group === g)),
-  ...[...new Set(routes.map((r) => r.group))].filter((g) => !GROUP_ORDER.includes(g)),
-]
+const groups = GROUP_ORDER.filter((g) => routes.some((r) => r.group === g))
 
 /** 끝 슬래시 제거 정규화 */
 const normalize = (p: string) => p.replace(/\/+$/, '') || '/'
@@ -155,7 +156,7 @@ function App() {
         <div className="flex items-center gap-3 px-4 py-3">
           <span className="shrink-0 text-lg font-bold">계산기</span>
           <nav className="flex gap-1 overflow-x-auto" aria-label="계산기 메뉴">
-            {routes.map((r) => (
+            {routes.filter((r) => r.group !== '정보').map((r) => (
               <MenuLink
                 key={r.id}
                 to={r.path}
@@ -221,6 +222,31 @@ function App() {
           <AdSlot key={`${route.id}-mid`} slot={SLOTS.belowResult} />
           <InfoSection pageId={route.id} />
           <AdSlot key={`${route.id}-bottom`} slot={SLOTS.bottomOfPage} />
+
+          <footer className="mt-14 border-t border-slate-200 pt-5 pb-2 text-xs text-slate-400">
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
+              {routes
+                .filter((r) => r.group === '정보')
+                .map((r) => (
+                  <a
+                    key={r.id}
+                    href={`${r.path}/`}
+                    onClick={(e) => {
+                      e.preventDefault()
+                      navigate(r.path)
+                    }}
+                    className="hover:text-slate-600"
+                  >
+                    {r.label}
+                  </a>
+                ))}
+              <span>© {new Date().getFullYear()} 계산기 · calculators.ai.kr</span>
+            </div>
+            <p className="mt-2">
+              모든 계산 결과는 참고용 추정치이며, 세무·법률·투자 판단의 근거로 사용할 수
+              없습니다.
+            </p>
+          </footer>
         </main>
       </div>
     </div>
