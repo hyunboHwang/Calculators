@@ -28,7 +28,7 @@ export default function AboutPage() {
       </div>
 
       <p className="mt-8 text-sm text-slate-500">
-        문의: <a href="mailto:hyunbo.hwang@chungchy.com" className="text-emerald-700 underline">hyunbo.hwang@chungchy.com</a>
+        문의: <a href="mailto:hwang177@gmail.com" className="text-emerald-700 underline">hwang177@gmail.com</a>
       </p>
     </div>
   )
