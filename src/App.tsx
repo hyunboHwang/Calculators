@@ -1,76 +1,46 @@
-import { useEffect, useState } from 'react'
+import { lazy, Suspense, useEffect, useState } from 'react'
 import routes from './routes.json'
 import AdSlot from './components/AdSlot'
 import InfoSection from './components/InfoSection'
 import { SLOTS, loadAdsense } from './lib/ads'
 import { loadAnalytics, trackPageView } from './lib/analytics'
-import MarginCalculator from './pages/MarginCalculator'
-import SalaryCalculator from './pages/SalaryCalculator'
-import RaiseComparator from './pages/RaiseComparator'
-import SeveranceCalculator from './pages/SeveranceCalculator'
-import YearEndTaxCalculator from './pages/YearEndTaxCalculator'
-import UnemploymentCalculator from './pages/UnemploymentCalculator'
-import ParentalLeaveCalculator from './pages/ParentalLeaveCalculator'
-import FreelanceTaxCalculator from './pages/FreelanceTaxCalculator'
-import AnnualLeaveCalculator from './pages/AnnualLeaveCalculator'
-import DepositCalculator from './pages/DepositCalculator'
-import BizTaxCalculator from './pages/BizTaxCalculator'
-import AgeCalculator from './pages/AgeCalculator'
-import CelebrationCalculator from './pages/CelebrationCalculator'
-import InsuranceAgeCalculator from './pages/InsuranceAgeCalculator'
-import PensionAgeCalculator from './pages/PensionAgeCalculator'
-import LoanCalculator from './pages/LoanCalculator'
-import DsrCalculator from './pages/DsrCalculator'
-import PrepaymentCalculator from './pages/PrepaymentCalculator'
-import RefinanceCalculator from './pages/RefinanceCalculator'
-import DdayCalculator from './pages/DdayCalculator'
-import DateCalculator from './pages/DateCalculator'
-import DischargeCalculator from './pages/DischargeCalculator'
-import DueDateCalculator from './pages/DueDateCalculator'
-import PartTimeCalculator from './pages/PartTimeCalculator'
-import StockReturnCalculator from './pages/StockReturnCalculator'
-import AveragePriceCalculator from './pages/AveragePriceCalculator'
-import DividendCalculator from './pages/DividendCalculator'
-import CompoundCalculator from './pages/CompoundCalculator'
-import UsStockTaxCalculator from './pages/UsStockTaxCalculator'
-import LossRecoveryCalculator from './pages/LossRecoveryCalculator'
-import AboutPage from './pages/AboutPage'
-import PrivacyPage from './pages/PrivacyPage'
 
-const components: Record<string, () => React.JSX.Element> = {
-  margin: MarginCalculator,
-  bizTax: BizTaxCalculator,
-  salary: SalaryCalculator,
-  raise: RaiseComparator,
-  severance: SeveranceCalculator,
-  yearEndTax: YearEndTaxCalculator,
-  unemployment: UnemploymentCalculator,
-  parentalLeave: ParentalLeaveCalculator,
-  freelanceTax: FreelanceTaxCalculator,
-  annualLeave: AnnualLeaveCalculator,
-  age: AgeCalculator,
-  celebration: CelebrationCalculator,
-  insuranceAge: InsuranceAgeCalculator,
-  pensionAge: PensionAgeCalculator,
-  loan: LoanCalculator,
-  dsr: DsrCalculator,
-  prepayment: PrepaymentCalculator,
-  refinance: RefinanceCalculator,
-  partTime: PartTimeCalculator,
-  dday: DdayCalculator,
-  dateCalc: DateCalculator,
-  discharge: DischargeCalculator,
-  dueDate: DueDateCalculator,
-  stockReturn: StockReturnCalculator,
-  averagePrice: AveragePriceCalculator,
-  dividend: DividendCalculator,
-  compound: CompoundCalculator,
-  usStockTax: UsStockTaxCalculator,
-  lossRecovery: LossRecoveryCalculator,
-  deposit: DepositCalculator,
-  about: AboutPage,
-  privacy: PrivacyPage,
+/** 라우트별 코드 스플리팅: 방문한 계산기의 JS만 내려받도록 지연 로드 */
+const components: Record<string, React.LazyExoticComponent<() => React.JSX.Element>> = {
+  margin: lazy(() => import('./pages/MarginCalculator')),
+  bizTax: lazy(() => import('./pages/BizTaxCalculator')),
+  salary: lazy(() => import('./pages/SalaryCalculator')),
+  raise: lazy(() => import('./pages/RaiseComparator')),
+  severance: lazy(() => import('./pages/SeveranceCalculator')),
+  yearEndTax: lazy(() => import('./pages/YearEndTaxCalculator')),
+  unemployment: lazy(() => import('./pages/UnemploymentCalculator')),
+  parentalLeave: lazy(() => import('./pages/ParentalLeaveCalculator')),
+  freelanceTax: lazy(() => import('./pages/FreelanceTaxCalculator')),
+  annualLeave: lazy(() => import('./pages/AnnualLeaveCalculator')),
+  age: lazy(() => import('./pages/AgeCalculator')),
+  celebration: lazy(() => import('./pages/CelebrationCalculator')),
+  insuranceAge: lazy(() => import('./pages/InsuranceAgeCalculator')),
+  pensionAge: lazy(() => import('./pages/PensionAgeCalculator')),
+  loan: lazy(() => import('./pages/LoanCalculator')),
+  dsr: lazy(() => import('./pages/DsrCalculator')),
+  prepayment: lazy(() => import('./pages/PrepaymentCalculator')),
+  refinance: lazy(() => import('./pages/RefinanceCalculator')),
+  partTime: lazy(() => import('./pages/PartTimeCalculator')),
+  dday: lazy(() => import('./pages/DdayCalculator')),
+  dateCalc: lazy(() => import('./pages/DateCalculator')),
+  discharge: lazy(() => import('./pages/DischargeCalculator')),
+  dueDate: lazy(() => import('./pages/DueDateCalculator')),
+  stockReturn: lazy(() => import('./pages/StockReturnCalculator')),
+  averagePrice: lazy(() => import('./pages/AveragePriceCalculator')),
+  dividend: lazy(() => import('./pages/DividendCalculator')),
+  compound: lazy(() => import('./pages/CompoundCalculator')),
+  usStockTax: lazy(() => import('./pages/UsStockTaxCalculator')),
+  lossRecovery: lazy(() => import('./pages/LossRecoveryCalculator')),
+  deposit: lazy(() => import('./pages/DepositCalculator')),
+  about: lazy(() => import('./pages/AboutPage')),
+  privacy: lazy(() => import('./pages/PrivacyPage')),
 }
+const DEFAULT_PAGE = components.stockReturn
 
 /** 사이드바 그룹 표시 순서 ('정보' 그룹은 푸터에만 노출) */
 const GROUP_ORDER = ['주식', '저축', '직장인', '나이', '대출', '날짜', '셀러']
@@ -163,7 +133,7 @@ function App() {
   const { route, navigate } = useRoute()
   useSeo(route)
   useEffect(loadAdsense, []) // 자동 광고 (ADSENSE_CLIENT 설정 시에만 동작)
-  const Current = components[route.id] ?? StockReturnCalculator
+  const Current = components[route.id] ?? DEFAULT_PAGE
 
   const [menuOpen, setMenuOpen] = useState(false)
   useEffect(() => setMenuOpen(false), [route])
@@ -293,7 +263,9 @@ function App() {
         </aside>
 
         <main className="min-w-0 flex-1 px-4 py-8 lg:px-10">
-          <Current />
+          <Suspense fallback={<div className="h-40 animate-pulse rounded-2xl bg-slate-100" />}>
+            <Current />
+          </Suspense>
           <AdSlot key={`${route.id}-mid`} slot={SLOTS.belowResult} />
           <InfoSection pageId={route.id} />
           <AdSlot key={`${route.id}-bottom`} slot={SLOTS.bottomOfPage} />
