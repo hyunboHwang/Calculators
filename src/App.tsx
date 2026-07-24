@@ -7,6 +7,12 @@ import MarginCalculator from './pages/MarginCalculator'
 import SalaryCalculator from './pages/SalaryCalculator'
 import RaiseComparator from './pages/RaiseComparator'
 import SeveranceCalculator from './pages/SeveranceCalculator'
+import YearEndTaxCalculator from './pages/YearEndTaxCalculator'
+import UnemploymentCalculator from './pages/UnemploymentCalculator'
+import ParentalLeaveCalculator from './pages/ParentalLeaveCalculator'
+import FreelanceTaxCalculator from './pages/FreelanceTaxCalculator'
+import AnnualLeaveCalculator from './pages/AnnualLeaveCalculator'
+import DepositCalculator from './pages/DepositCalculator'
 import BizTaxCalculator from './pages/BizTaxCalculator'
 import AgeCalculator from './pages/AgeCalculator'
 import CelebrationCalculator from './pages/CelebrationCalculator'
@@ -36,6 +42,11 @@ const components: Record<string, () => React.JSX.Element> = {
   salary: SalaryCalculator,
   raise: RaiseComparator,
   severance: SeveranceCalculator,
+  yearEndTax: YearEndTaxCalculator,
+  unemployment: UnemploymentCalculator,
+  parentalLeave: ParentalLeaveCalculator,
+  freelanceTax: FreelanceTaxCalculator,
+  annualLeave: AnnualLeaveCalculator,
   age: AgeCalculator,
   celebration: CelebrationCalculator,
   insuranceAge: InsuranceAgeCalculator,
@@ -55,12 +66,13 @@ const components: Record<string, () => React.JSX.Element> = {
   compound: CompoundCalculator,
   usStockTax: UsStockTaxCalculator,
   lossRecovery: LossRecoveryCalculator,
+  deposit: DepositCalculator,
   about: AboutPage,
   privacy: PrivacyPage,
 }
 
 /** 사이드바 그룹 표시 순서 ('정보' 그룹은 푸터에만 노출) */
-const GROUP_ORDER = ['주식', '직장인', '나이', '대출', '날짜', '셀러']
+const GROUP_ORDER = ['주식', '저축', '직장인', '나이', '대출', '날짜', '셀러']
 const groups = GROUP_ORDER.filter((g) => routes.some((r) => r.group === g))
 
 /** 끝 슬래시 제거 정규화 */
@@ -147,27 +159,86 @@ function App() {
   const { route, navigate } = useRoute()
   useSeo(route)
   useEffect(loadAdsense, []) // 자동 광고 (ADSENSE_CLIENT 설정 시에만 동작)
-  const Current = components[route.id] ?? MarginCalculator
+  const Current = components[route.id] ?? StockReturnCalculator
+
+  const [menuOpen, setMenuOpen] = useState(false)
+  useEffect(() => setMenuOpen(false), [route])
+
+  const handleNavigate = (to: string) => {
+    navigate(to)
+    setMenuOpen(false)
+  }
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">
       {/* 모바일 상단 바 */}
-      <header className="sticky top-0 z-10 border-b border-slate-200 bg-white lg:hidden">
-        <div className="flex items-center gap-3 px-4 py-3">
-          <span className="shrink-0 text-lg font-bold">계산기</span>
-          <nav className="flex gap-1 overflow-x-auto" aria-label="계산기 메뉴">
-            {routes.filter((r) => r.group !== '정보').map((r) => (
-              <MenuLink
-                key={r.id}
-                to={r.path}
-                label={r.label}
-                active={route.id === r.id}
-                onNavigate={navigate}
-                compact
+      <header className="sticky top-0 z-20 border-b border-slate-200 bg-white lg:hidden">
+        <div className="flex items-center justify-between gap-3 px-4 py-3">
+          <a
+            href="/"
+            onClick={(e) => {
+              e.preventDefault()
+              handleNavigate('/')
+            }}
+            className="shrink-0 text-lg font-bold"
+          >
+            계산기
+          </a>
+          <button
+            type="button"
+            onClick={() => setMenuOpen((v) => !v)}
+            aria-expanded={menuOpen}
+            aria-label="전체 계산기 메뉴 열기"
+            className="flex min-w-0 items-center gap-1.5 rounded-lg border border-slate-200 px-3 py-1.5 text-sm font-medium text-slate-600"
+          >
+            <span className="max-w-40 truncate">{route.label}</span>
+            <svg
+              viewBox="0 0 20 20"
+              fill="currentColor"
+              className={`h-4 w-4 shrink-0 transition-transform ${menuOpen ? 'rotate-180' : ''}`}
+            >
+              <path
+                fillRule="evenodd"
+                d="M5.23 7.21a.75.75 0 011.06.02L10 11.148l3.71-3.918a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+                clipRule="evenodd"
               />
-            ))}
-          </nav>
+            </svg>
+          </button>
         </div>
+
+        {menuOpen && (
+          <>
+            <div
+              className="fixed inset-0 z-10 bg-slate-900/30"
+              onClick={() => setMenuOpen(false)}
+              aria-hidden="true"
+            />
+            <nav
+              className="absolute inset-x-0 top-full z-20 max-h-[calc(100vh-56px)] overflow-y-auto border-t border-slate-200 bg-white px-4 py-4 shadow-lg"
+              aria-label="계산기 메뉴"
+            >
+              {groups.map((g) => (
+                <div key={g} className="mb-4 last:mb-0">
+                  <p className="mb-1.5 text-xs font-semibold tracking-wide text-slate-400">{g}</p>
+                  <div className="flex flex-wrap gap-1.5">
+                    {routes
+                      .filter((r) => r.group === g)
+                      .map((r) => (
+                        <MenuLink
+                          key={r.id}
+                          to={r.path}
+                          label={r.label}
+                          active={route.id === r.id}
+                          onNavigate={handleNavigate}
+                          compact
+                        />
+                      ))}
+                  </div>
+                </div>
+              ))}
+            </nav>
+          </>
+        )}
       </header>
 
       <div className="mx-auto flex max-w-6xl">

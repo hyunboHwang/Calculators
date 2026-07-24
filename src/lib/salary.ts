@@ -53,7 +53,7 @@ export function insurances(monthlyTaxable: number) {
 /* ---------- 소득세: 간이세액표 산출방식 근사 ---------- */
 
 /** 근로소득공제 (연간 총급여 기준, 한도 2,000만원) */
-function earnedIncomeDeduction(gross: number): number {
+export function earnedIncomeDeduction(gross: number): number {
   let d: number
   if (gross <= 5_000_000) d = gross * 0.7
   else if (gross <= 15_000_000) d = 3_500_000 + (gross - 5_000_000) * 0.4
@@ -107,7 +107,7 @@ export function basicTax(taxBase: number): number {
 }
 
 /** 근로소득세액공제 (한도: 총급여 구간별) */
-function earnedIncomeTaxCredit(calculated: number, gross: number): number {
+export function earnedIncomeTaxCredit(calculated: number, gross: number): number {
   const credit =
     calculated <= 1_300_000
       ? calculated * 0.55
@@ -121,7 +121,7 @@ function earnedIncomeTaxCredit(calculated: number, gross: number): number {
 }
 
 /** 자녀세액공제 (8세 이상 20세 이하, 연간): 1명 25만 / 2명 55만 / 셋째부터 +40만 */
-function childTaxCredit(children: number): number {
+export function childTaxCredit(children: number): number {
   if (children <= 0) return 0
   if (children === 1) return 250_000
   return 550_000 + (children - 2) * 400_000
