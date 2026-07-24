@@ -20,9 +20,10 @@ export const ADSENSE_CLIENT = 'ca-pub-9428641211250390'
  * 비워두면 해당 자리는 렌더링되지 않습니다.
  */
 export const SLOTS = {
-  belowResult: '', // 계산 결과 아래, 설명/FAQ 위
-  bottomOfPage: '', // FAQ 아래 (페이지 최하단)
-  sidebar: '', // 데스크톱 사이드바 하단
+  belowResult: '7070646666', // 계산 결과 아래, 설명/FAQ 위
+  inArticle: '5757564992', // 설명(인트로) 아래, FAQ 위 — 체류시간이 긴 본문 중간 자리
+  bottomOfPage: '8650607631', // FAQ 아래 (페이지 최하단)
+  sidebar: '7337525966', // 데스크톱 사이드바 하단
 }
 
 let loaded = false

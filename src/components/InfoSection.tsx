@@ -1,4 +1,6 @@
 import { pageContent } from '../lib/pageContent'
+import AdSlot from './AdSlot'
+import { SLOTS } from '../lib/ads'
 
 interface PageInfo {
   intro: string[]
@@ -39,6 +41,8 @@ export default function InfoSection({ pageId }: { pageId: string }) {
           </p>
         ))}
       </section>
+
+      <AdSlot key={`${pageId}-article`} slot={SLOTS.inArticle} className="my-8" />
 
       {c.faqs.length > 0 && (
         <section className="mt-8">
