@@ -3,6 +3,7 @@ import routes from './routes.json'
 import AdSlot from './components/AdSlot'
 import InfoSection from './components/InfoSection'
 import { SLOTS, loadAdsense } from './lib/ads'
+import { loadAnalytics, trackPageView } from './lib/analytics'
 import MarginCalculator from './pages/MarginCalculator'
 import SalaryCalculator from './pages/SalaryCalculator'
 import RaiseComparator from './pages/RaiseComparator'
@@ -114,6 +115,9 @@ function useSeo(route: (typeof routes)[number]) {
       .querySelector('meta[property="og:description"]')
       ?.setAttribute('content', route.description)
     document.querySelector('meta[property="og:url"]')?.setAttribute('content', url)
+
+    loadAnalytics()
+    trackPageView(window.location.pathname, route.title)
   }, [route])
 }
 
