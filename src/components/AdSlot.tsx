@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { ADSENSE_CLIENT, loadAdsense } from '../lib/ads'
 
 declare global {
@@ -19,9 +19,12 @@ export default function AdSlot({
   className?: string
 }) {
   const enabled = Boolean(ADSENSE_CLIENT && slot)
+  const pushed = useRef(false)
 
   useEffect(() => {
-    if (!enabled) return
+    // StrictMode(dev)의 effect 이중 실행 시 같은 ins에 두 번 push되는 것 방지
+    if (!enabled || pushed.current) return
+    pushed.current = true
     loadAdsense()
     try {
       ;(window.adsbygoogle = window.adsbygoogle || []).push({})
