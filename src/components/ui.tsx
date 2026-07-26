@@ -34,7 +34,7 @@ export function Field({
 
   return (
     <label className="block">
-      <span className="mb-1 block text-sm font-medium text-slate-700">{label}</span>
+      <span className="mb-1.5 block text-sm font-medium text-slate-700">{label}</span>
       <div className="relative">
         <input
           type="number"
@@ -49,13 +49,13 @@ export function Field({
             if (Number.isFinite(n)) onChange(n)
           }}
           onBlur={() => setText(Number.isFinite(value) ? String(value) : '')}
-          className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 pr-10 text-right text-sm tabular-nums focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 focus:outline-none"
+          className="w-full min-w-0 rounded-lg border border-slate-300 bg-white px-3 py-2.5 pr-11 text-right text-sm tabular-nums transition-colors hover:border-slate-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 focus:outline-none"
         />
         <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-xs text-slate-400">
           {suffix}
         </span>
       </div>
-      {hint && <span className="mt-1 block text-xs leading-snug text-slate-400">{hint}</span>}
+      {hint && <span className="mt-1.5 block text-xs leading-relaxed text-slate-400">{hint}</span>}
     </label>
   )
 }
@@ -74,7 +74,7 @@ export function Row({
   negative?: boolean
 }) {
   return (
-    <div className="flex flex-wrap items-baseline justify-between gap-x-3 py-1.5">
+    <div className="flex flex-wrap items-baseline justify-between gap-x-3 py-2">
       <span
         className={`min-w-0 text-sm ${strong ? 'font-semibold text-slate-800' : 'text-slate-500'}`}
       >
@@ -105,14 +105,14 @@ export function DateField({
 }) {
   return (
     <label className="block">
-      <span className="mb-1 block text-sm font-medium text-slate-700">{label}</span>
+      <span className="mb-1.5 block text-sm font-medium text-slate-700">{label}</span>
       <input
         type="date"
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm tabular-nums focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 focus:outline-none"
+        className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm tabular-nums transition-colors hover:border-slate-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 focus:outline-none"
       />
-      {hint && <span className="mt-1 block text-xs leading-snug text-slate-400">{hint}</span>}
+      {hint && <span className="mt-1.5 block text-xs leading-relaxed text-slate-400">{hint}</span>}
     </label>
   )
 }
@@ -125,8 +125,13 @@ export function Card({
   children: React.ReactNode
 }) {
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-      {title && <h2 className="mb-2 text-base font-semibold">{title}</h2>}
+    <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-shadow hover:shadow-md">
+      {title && (
+        <h2 className="mb-3 flex items-center gap-2 text-base font-semibold">
+          <span className="h-4 w-1 rounded-full bg-emerald-500" aria-hidden="true" />
+          {title}
+        </h2>
+      )}
       {children}
     </div>
   )

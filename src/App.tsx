@@ -114,13 +114,13 @@ function MenuLink({
       aria-current={active ? 'page' : undefined}
       className={
         compact
-          ? `shrink-0 rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
-              active ? 'bg-emerald-600 text-white' : 'text-slate-500 hover:bg-slate-100'
+          ? `shrink-0 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+              active ? 'bg-emerald-600 text-white shadow-sm' : 'bg-slate-100 text-slate-500 hover:bg-slate-200'
             }`
-          : `block rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+          : `block rounded-lg border-l-2 py-2 pr-3 pl-2.5 text-sm font-medium transition-colors ${
               active
-                ? 'bg-emerald-600 text-white'
-                : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+                ? 'border-emerald-500 bg-emerald-50 font-semibold text-emerald-700'
+                : 'border-transparent text-slate-600 hover:bg-slate-100 hover:text-slate-900'
             }`
       }
     >
@@ -146,7 +146,7 @@ function App() {
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">
       {/* 모바일 상단 바 */}
-      <header className="sticky top-0 z-20 border-b border-slate-200 bg-white lg:hidden">
+      <header className="sticky top-0 z-20 border-b border-slate-200 bg-white/90 backdrop-blur-sm lg:hidden">
         <div className="flex items-center justify-between gap-3 px-4 py-3">
           <a
             href="/"
@@ -154,8 +154,9 @@ function App() {
               e.preventDefault()
               handleNavigate('/')
             }}
-            className="shrink-0 text-lg font-bold"
+            className="flex shrink-0 items-center gap-1.5 text-lg font-bold"
           >
+            <img src="/favicon.svg" alt="" className="h-6 w-6" aria-hidden="true" />
             계산기
           </a>
           <button
@@ -163,7 +164,7 @@ function App() {
             onClick={() => setMenuOpen((v) => !v)}
             aria-expanded={menuOpen}
             aria-label="전체 계산기 메뉴 열기"
-            className="flex min-w-0 items-center gap-1.5 rounded-lg border border-slate-200 px-3 py-1.5 text-sm font-medium text-slate-600"
+            className="flex min-w-0 items-center gap-1.5 rounded-lg border border-slate-200 px-3 py-1.5 text-sm font-medium text-slate-600 transition-colors hover:border-slate-300 hover:bg-slate-50"
           >
             <span className="max-w-40 truncate">{route.label}</span>
             <svg
@@ -188,7 +189,7 @@ function App() {
               aria-hidden="true"
             />
             <nav
-              className="absolute inset-x-0 top-full z-20 max-h-[calc(100vh-56px)] overflow-y-auto border-t border-slate-200 bg-white px-4 py-4 shadow-lg"
+              className="animate-menu-in absolute inset-x-0 top-full z-20 max-h-[calc(100vh-56px)] overflow-y-auto border-t border-slate-200 bg-white px-4 py-4 shadow-lg"
               aria-label="계산기 메뉴"
             >
               {groups.map((g) => (
@@ -225,14 +226,15 @@ function App() {
                 e.preventDefault()
                 navigate('/')
               }}
-              className="text-xl font-extrabold tracking-tight"
+              className="flex items-center gap-2 text-xl font-extrabold tracking-tight"
             >
+              <img src="/favicon.svg" alt="" className="h-7 w-7" aria-hidden="true" />
               계산기
             </a>
-            <p className="mt-1 text-xs text-slate-400">돈·나이·날짜, 생활 계산 한곳에서</p>
+            <p className="mt-1.5 text-xs text-slate-400">돈·나이·날짜, 생활 계산 한곳에서</p>
           </div>
           <nav
-            className="min-h-0 flex-1 space-y-6 overflow-y-auto px-3 pb-4"
+            className="sidebar-scroll min-h-0 flex-1 space-y-6 overflow-y-auto px-3 pb-4"
             aria-label="계산기 메뉴"
           >
             {groups.map((g) => (
@@ -262,7 +264,7 @@ function App() {
           </p>
         </aside>
 
-        <main className="min-w-0 flex-1 px-4 py-8 lg:px-10">
+        <main className="min-w-0 flex-1 px-4 py-6 sm:px-6 sm:py-8 lg:px-10">
           <Suspense fallback={<div className="h-40 animate-pulse rounded-2xl bg-slate-100" />}>
             <Current />
           </Suspense>
@@ -271,7 +273,7 @@ function App() {
           <AdSlot key={`${route.id}-bottom`} slot={SLOTS.bottomOfPage} />
 
           <footer className="mt-14 border-t border-slate-200 pt-5 pb-2 text-xs text-slate-400">
-            <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
               {routes
                 .filter((r) => r.group === '정보')
                 .map((r) => (
@@ -282,16 +284,18 @@ function App() {
                       e.preventDefault()
                       navigate(r.path)
                     }}
-                    className="hover:text-slate-600"
+                    className="font-medium text-slate-500 underline decoration-slate-300 underline-offset-2 hover:text-slate-700 hover:decoration-slate-400"
                   >
                     {r.label}
                   </a>
                 ))}
-              <span>© {new Date().getFullYear()} 계산기 · calculators.ai.kr</span>
             </div>
-            <p className="mt-2">
+            <p className="mt-3 leading-relaxed">
               모든 계산 결과는 참고용 추정치이며, 세무·법률·투자 판단의 근거로 사용할 수
               없습니다.
+            </p>
+            <p className="mt-1 text-slate-300">
+              © {new Date().getFullYear()} 계산기 · calculators.ai.kr
             </p>
           </footer>
         </main>

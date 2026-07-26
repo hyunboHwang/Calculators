@@ -32,9 +32,12 @@ export default function InfoSection({ pageId }: { pageId: string }) {
       : null
 
   return (
-    <div className="mt-12 border-t border-slate-200 pt-8">
+    <div className="mt-14 border-t border-slate-200 pt-8">
       <section>
-        <h2 className="text-lg font-bold">알아두면 좋은 것</h2>
+        <h2 className="flex items-center gap-2 text-lg font-bold">
+          <span className="h-4 w-1 rounded-full bg-emerald-500" aria-hidden="true" />
+          알아두면 좋은 것
+        </h2>
         {c.intro.map((p, i) => (
           <p key={i} className="mt-3 text-sm leading-relaxed text-slate-600">
             {p}
@@ -46,13 +49,33 @@ export default function InfoSection({ pageId }: { pageId: string }) {
 
       {c.faqs.length > 0 && (
         <section className="mt-8">
-          <h2 className="text-lg font-bold">자주 묻는 질문</h2>
+          <h2 className="flex items-center gap-2 text-lg font-bold">
+            <span className="h-4 w-1 rounded-full bg-emerald-500" aria-hidden="true" />
+            자주 묻는 질문
+          </h2>
           <div className="mt-3 space-y-2">
             {c.faqs.map((f) => (
-              <details key={f.q} className="group rounded-xl border border-slate-200 bg-white p-4">
-                <summary className="cursor-pointer list-none text-sm font-semibold text-slate-800">
-                  <span className="mr-1.5 text-emerald-600">Q.</span>
-                  {f.q}
+              <details
+                key={f.q}
+                className="group rounded-xl border border-slate-200 bg-white p-4 transition-colors open:border-emerald-200 open:bg-emerald-50/30"
+              >
+                <summary className="flex cursor-pointer list-none items-start justify-between gap-3 text-sm font-semibold text-slate-800 marker:content-none">
+                  <span>
+                    <span className="mr-1.5 text-emerald-600">Q.</span>
+                    {f.q}
+                  </span>
+                  <svg
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                    aria-hidden="true"
+                    className="mt-0.5 h-4 w-4 shrink-0 text-slate-400 transition-transform group-open:rotate-180"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M5.23 7.21a.75.75 0 011.06.02L10 11.148l3.71-3.918a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
                 </summary>
                 <p className="mt-2 pl-6 text-sm leading-relaxed text-slate-600">{f.a}</p>
               </details>
