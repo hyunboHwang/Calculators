@@ -26,3 +26,6 @@ dist-ssr
 # 개인용 파일 (배포/저장소 제외)
 public/stock.html
 middleware.ts
+
+# Claude Code 개인 설정
+.claude/settings.local.json
