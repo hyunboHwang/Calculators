@@ -12,8 +12,9 @@ export function calcBmi(i: BmiInput) {
   const bmi = heightM > 0 ? i.weightKg / (heightM * heightM) : NaN
   const standardWeight = heightM * heightM * 22
 
-  const category =
-    bmi < 18.5
+  const category = !Number.isFinite(bmi)
+    ? '입력값을 확인하세요'
+    : bmi < 18.5
       ? '저체중'
       : bmi < 23
         ? '정상'

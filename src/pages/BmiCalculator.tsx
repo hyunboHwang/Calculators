@@ -8,6 +8,7 @@ const CATEGORY_STYLE: Record<string, string> = {
   과체중: 'border-amber-200 bg-amber-50 text-amber-700',
   비만: 'border-orange-200 bg-orange-50 text-orange-700',
   고도비만: 'border-red-200 bg-red-50 text-red-700',
+  '입력값을 확인하세요': 'border-slate-200 bg-slate-50 text-slate-700',
 }
 
 export default function BmiCalculator() {
