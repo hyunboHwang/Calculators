@@ -272,6 +272,14 @@
     "description": "배기량과 차령(경과연수)으로 비영업용 승용차의 자동차세와 지방교육세를 계산합니다."
   },
   {
+    "id": "carAcquisitionTax",
+    "path": "/car-acquisition-tax",
+    "label": "자동차 취득세",
+    "group": "자동차",
+    "title": "자동차 취득세 계산기 — 비영업용·경차·영업용 세율 | 계산기",
+    "description": "차량가액과 차종으로 자동차 취득세를 계산합니다."
+  },
+  {
     "id": "about",
     "path": "/about",
     "label": "소개",

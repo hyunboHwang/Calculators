@@ -41,6 +41,7 @@ const components: Record<string, React.LazyExoticComponent<() => React.JSX.Eleme
   propertyTax: lazy(() => import('./pages/PropertyTaxCalculator')),
   comprehensiveRealEstateTax: lazy(() => import('./pages/ComprehensiveRealEstateTaxCalculator')),
   carTax: lazy(() => import('./pages/CarTaxCalculator')),
+  carAcquisitionTax: lazy(() => import('./pages/CarAcquisitionTaxCalculator')),
   about: lazy(() => import('./pages/AboutPage')),
   privacy: lazy(() => import('./pages/PrivacyPage')),
 }
