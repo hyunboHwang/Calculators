@@ -37,13 +37,14 @@ const components: Record<string, React.LazyExoticComponent<() => React.JSX.Eleme
   usStockTax: lazy(() => import('./pages/UsStockTaxCalculator')),
   lossRecovery: lazy(() => import('./pages/LossRecoveryCalculator')),
   deposit: lazy(() => import('./pages/DepositCalculator')),
+  acquisitionTax: lazy(() => import('./pages/AcquisitionTaxCalculator')),
   about: lazy(() => import('./pages/AboutPage')),
   privacy: lazy(() => import('./pages/PrivacyPage')),
 }
 const DEFAULT_PAGE = components.stockReturn
 
 /** 사이드바 그룹 표시 순서 ('정보' 그룹은 푸터에만 노출) */
-const GROUP_ORDER = ['주식', '저축', '직장인', '나이', '대출', '날짜', '셀러']
+const GROUP_ORDER = ['주식', '저축', '직장인', '나이', '대출', '날짜', '셀러', '부동산', '자동차', '생활']
 const groups = GROUP_ORDER.filter((g) => routes.some((r) => r.group === g))
 
 /** 끝 슬래시 제거 정규화 */
