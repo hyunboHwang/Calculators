@@ -38,6 +38,7 @@ const components: Record<string, React.LazyExoticComponent<() => React.JSX.Eleme
   lossRecovery: lazy(() => import('./pages/LossRecoveryCalculator')),
   deposit: lazy(() => import('./pages/DepositCalculator')),
   acquisitionTax: lazy(() => import('./pages/AcquisitionTaxCalculator')),
+  propertyTax: lazy(() => import('./pages/PropertyTaxCalculator')),
   about: lazy(() => import('./pages/AboutPage')),
   privacy: lazy(() => import('./pages/PrivacyPage')),
 }
