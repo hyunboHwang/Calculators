@@ -280,6 +280,14 @@
     "description": "차량가액과 차종으로 자동차 취득세를 계산합니다."
   },
   {
+    "id": "bmi",
+    "path": "/bmi",
+    "label": "BMI·표준체중",
+    "group": "생활",
+    "title": "BMI 계산기 — 체질량지수, 표준체중, 비만도 | 계산기",
+    "description": "키와 몸무게로 BMI, 표준체중, 비만도 구간을 계산합니다."
+  },
+  {
     "id": "about",
     "path": "/about",
     "label": "소개",
