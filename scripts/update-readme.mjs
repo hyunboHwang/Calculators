@@ -4,7 +4,7 @@
  */
 import { readFileSync, writeFileSync } from 'node:fs'
 
-const GROUP_ORDER = ['주식', '저축', '직장인', '나이', '대출', '날짜', '셀러']
+const GROUP_ORDER = ['주식', '저축', '직장인', '나이', '대출', '날짜', '셀러', '부동산', '자동차', '생활']
 
 const rootUrl = (p) => new URL(p, import.meta.url)
 const routes = JSON.parse(readFileSync(rootUrl('../src/routes.json'), 'utf8'))

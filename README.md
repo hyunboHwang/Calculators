@@ -2,7 +2,7 @@
 
 주식·저축·직장인·나이·대출·날짜·셀러를 아우르는 생활 계산기 모음. Vite + React + TypeScript + Tailwind CSS.
 
-## 계산기 목록 (30개)
+## 계산기 목록 (37개)
 
 | 그룹 | 계산기 | 경로 |
 |---|---|---|
@@ -36,3 +36,10 @@
 | 날짜 | 출산예정일 | `/due-date/` |
 | 셀러 | 위탁판매 마진 | `/margin/` |
 | 셀러 | 셀러 세금 | `/seller-tax/` |
+| 부동산 | 취득세 | `/acquisition-tax/` |
+| 부동산 | 재산세 | `/property-tax/` |
+| 부동산 | 종합부동산세 | `/comprehensive-real-estate-tax/` |
+| 자동차 | 자동차세 | `/car-tax/` |
+| 자동차 | 자동차 취득세 | `/car-acquisition-tax/` |
+| 생활 | BMI·표준체중 | `/bmi/` |
+| 생활 | 전월세 전환율 | `/jeonse-conversion/` |
