@@ -256,6 +256,14 @@
     "description": "공시가격으로 재산세와 도시지역분, 지방교육세를 계산합니다. 1세대1주택자 특례세율도 반영합니다."
   },
   {
+    "id": "comprehensiveRealEstateTax",
+    "path": "/comprehensive-real-estate-tax",
+    "label": "종합부동산세",
+    "group": "부동산",
+    "title": "종합부동산세(종부세) 계산기 — 공시가격 합산 기준 | 계산기",
+    "description": "공시가격 합산액과 1세대1주택 여부로 종합부동산세와 농어촌특별세를 계산합니다."
+  },
+  {
     "id": "about",
     "path": "/about",
     "label": "소개",
