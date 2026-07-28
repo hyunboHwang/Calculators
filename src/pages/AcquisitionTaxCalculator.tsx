@@ -82,7 +82,7 @@ export default function AcquisitionTaxCalculator() {
             <p className="text-3xl font-extrabold tabular-nums text-emerald-700">
               {fmt(r.total)}원
             </p>
-            <p className="mt-2 text-sm text-slate-600">적용 세율 {r.rate.toFixed(1)}%</p>
+            <p className="mt-2 text-sm text-slate-600">적용 세율 {r.rate.toFixed(2)}%</p>
           </div>
 
           <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">

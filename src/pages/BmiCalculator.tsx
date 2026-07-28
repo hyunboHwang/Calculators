@@ -35,23 +35,31 @@ export default function BmiCalculator() {
         </section>
 
         <section className="space-y-4">
-          <div className={`rounded-2xl border p-5 ${CATEGORY_STYLE[r.category]}`}>
-            <p className="text-sm opacity-80">BMI</p>
-            <p className="text-3xl font-extrabold tabular-nums">{r.bmi.toFixed(1)}</p>
-            <p className="mt-2 text-sm font-semibold">{r.category}</p>
-          </div>
-
-          <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-            <h2 className="mb-2 text-base font-semibold">상세</h2>
-            <div className="divide-y divide-slate-100">
-              <Row label="표준체중" value={`${r.standardWeight}kg`} sub="신장²×22" />
-              <Row
-                label="표준체중과의 차이"
-                value={`${r.diffFromStandard > 0 ? '+' : ''}${r.diffFromStandard}kg`}
-                negative={r.diffFromStandard > 0}
-              />
+          {!Number.isFinite(r.bmi) ? (
+            <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5 text-sm text-slate-600">
+              신장을 입력하면 BMI를 계산합니다.
             </div>
-          </div>
+          ) : (
+            <>
+              <div className={`rounded-2xl border p-5 ${CATEGORY_STYLE[r.category]}`}>
+                <p className="text-sm opacity-80">BMI</p>
+                <p className="text-3xl font-extrabold tabular-nums">{r.bmi.toFixed(1)}</p>
+                <p className="mt-2 text-sm font-semibold">{r.category}</p>
+              </div>
+
+              <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+                <h2 className="mb-2 text-base font-semibold">상세</h2>
+                <div className="divide-y divide-slate-100">
+                  <Row label="표준체중" value={`${r.standardWeight}kg`} sub="신장²×22" />
+                  <Row
+                    label="표준체중과의 차이"
+                    value={`${r.diffFromStandard > 0 ? '+' : ''}${r.diffFromStandard}kg`}
+                    negative={r.diffFromStandard > 0}
+                  />
+                </div>
+              </div>
+            </>
+          )}
 
           <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-xs leading-relaxed text-amber-800">
             <b>이 계산은 참고용입니다.</b> BMI는 근육량·체지방률을 구분하지 않으므로 운동선수

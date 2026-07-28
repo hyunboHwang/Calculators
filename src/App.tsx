@@ -1,5 +1,6 @@
 import { lazy, Suspense, useEffect, useState } from 'react'
 import routes from './routes.json'
+import GROUP_ORDER from './groups.json'
 import AdSlot from './components/AdSlot'
 import InfoSection from './components/InfoSection'
 import { SLOTS, loadAdsense } from './lib/ads'
@@ -50,7 +51,6 @@ const components: Record<string, React.LazyExoticComponent<() => React.JSX.Eleme
 const DEFAULT_PAGE = components.stockReturn
 
 /** 사이드바 그룹 표시 순서 ('정보' 그룹은 푸터에만 노출) */
-const GROUP_ORDER = ['주식', '저축', '직장인', '나이', '대출', '날짜', '셀러', '부동산', '자동차', '생활']
 const groups = GROUP_ORDER.filter((g) => routes.some((r) => r.group === g))
 
 /** 끝 슬래시 제거 정규화 */

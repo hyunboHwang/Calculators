@@ -64,7 +64,9 @@ export default function ComprehensiveRealEstateTaxCalculator() {
 
           <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-xs leading-relaxed text-amber-800">
             <b>이 계산은 예상치입니다.</b> 3주택 이상 중과세율, 세부담 상한, 재산세 중복분
-            공제는 반영하지 않았습니다. 정확한 세액은 국세청 홈택스에서 확인하세요.
+            공제는 반영하지 않았습니다. 1세대1주택자 중 고령자·장기보유자는 세액공제(최대
+            80%)로 실제 부담이 크게 줄어들 수 있습니다. 정확한 세액은 국세청 홈택스에서
+            확인하세요.
           </div>
         </section>
       </div>

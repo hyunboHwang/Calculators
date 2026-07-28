@@ -1,6 +1,6 @@
 # 계산기
 
-주식·저축·직장인·나이·대출·날짜·셀러를 아우르는 생활 계산기 모음. Vite + React + TypeScript + Tailwind CSS.
+주식·저축·직장인·나이·대출·날짜·셀러·부동산·자동차·생활을 아우르는 생활 계산기 모음. Vite + React + TypeScript + Tailwind CSS.
 
 ## 계산기 목록 (37개)
 

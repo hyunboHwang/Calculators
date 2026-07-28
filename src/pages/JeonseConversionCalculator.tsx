@@ -50,19 +50,26 @@ export default function JeonseConversionCalculator() {
         </section>
 
         <section className="space-y-4">
-          <div
-            className={`rounded-2xl border p-5 ${
-              r.isOverCap ? 'border-red-200 bg-red-50' : 'border-emerald-200 bg-emerald-50'
-            }`}
-          >
-            <p className="text-sm text-slate-500">현재 조건의 전환율</p>
-            <p className="text-3xl font-extrabold tabular-nums text-slate-800">
-              {fmtPct(r.actualRate)}
-            </p>
-            <p className="mt-2 text-sm text-slate-600">
-              법정 상한 {fmtPct(r.legalCapRate)} {r.isOverCap ? '초과' : '이내'}
-            </p>
-          </div>
+          {r.depositDiff <= 0 ? (
+            <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5 text-sm text-slate-600">
+              보증금 차액이 없어 전환율을 계산할 수 없습니다. 전세보증금이 월세 전환 시
+              보증금보다 커야 합니다.
+            </div>
+          ) : (
+            <div
+              className={`rounded-2xl border p-5 ${
+                r.isOverCap ? 'border-red-200 bg-red-50' : 'border-emerald-200 bg-emerald-50'
+              }`}
+            >
+              <p className="text-sm text-slate-500">현재 조건의 전환율</p>
+              <p className="text-3xl font-extrabold tabular-nums text-slate-800">
+                {fmtPct(r.actualRate)}
+              </p>
+              <p className="mt-2 text-sm text-slate-600">
+                법정 상한 {fmtPct(r.legalCapRate)} {r.isOverCap ? '초과' : '이내'}
+              </p>
+            </div>
+          )}
 
           <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
             <h2 className="mb-2 text-base font-semibold">상세</h2>
