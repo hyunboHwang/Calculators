@@ -288,6 +288,14 @@
     "description": "키와 몸무게로 BMI, 표준체중, 비만도 구간을 계산합니다."
   },
   {
+    "id": "jeonseConversion",
+    "path": "/jeonse-conversion",
+    "label": "전월세 전환율",
+    "group": "생활",
+    "title": "전월세 전환율 계산기 — 법정 상한 대비 확인 | 계산기",
+    "description": "전세보증금과 월세 전환 조건을 비교해 법정 전환율 상한을 넘는지 확인합니다."
+  },
+  {
     "id": "about",
     "path": "/about",
     "label": "소개",
