@@ -3,6 +3,7 @@ import routes from './routes.json'
 import GROUP_ORDER from './groups.json'
 import AdSlot from './components/AdSlot'
 import InfoSection from './components/InfoSection'
+import Sidebar, { MenuLink } from './components/Sidebar'
 import { SLOTS, loadAdsense } from './lib/ads'
 import { loadAnalytics, trackPageView } from './lib/analytics'
 
@@ -96,44 +97,6 @@ function useSeo(route: (typeof routes)[number]) {
     loadAnalytics()
     trackPageView(window.location.pathname, route.title)
   }, [route])
-}
-
-function MenuLink({
-  to,
-  label,
-  active,
-  onNavigate,
-  compact,
-}: {
-  to: string
-  label: string
-  active: boolean
-  onNavigate: (to: string) => void
-  compact?: boolean
-}) {
-  return (
-    <a
-      href={to === '/' ? '/' : `${to}/`}
-      onClick={(e) => {
-        e.preventDefault()
-        onNavigate(to)
-      }}
-      aria-current={active ? 'page' : undefined}
-      className={
-        compact
-          ? `shrink-0 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
-              active ? 'bg-emerald-600 text-white shadow-sm' : 'bg-slate-100 text-slate-500 hover:bg-slate-200'
-            }`
-          : `block rounded-lg border-l-2 py-2 pr-3 pl-2.5 text-sm font-medium transition-colors ${
-              active
-                ? 'border-emerald-500 bg-emerald-50 font-semibold text-emerald-700'
-                : 'border-transparent text-slate-600 hover:bg-slate-100 hover:text-slate-900'
-            }`
-      }
-    >
-      {label}
-    </a>
-  )
 }
 
 function App() {
@@ -240,31 +203,7 @@ function App() {
             </a>
             <p className="mt-1.5 text-xs text-slate-400">돈·나이·날짜, 생활 계산 한곳에서</p>
           </div>
-          <nav
-            className="sidebar-scroll min-h-0 flex-1 space-y-6 overflow-y-auto px-3 pb-4"
-            aria-label="계산기 메뉴"
-          >
-            {groups.map((g) => (
-              <div key={g}>
-                <p className="mb-1 px-3 text-xs font-semibold tracking-wide text-slate-400">
-                  {g}
-                </p>
-                <div className="space-y-0.5">
-                  {routes
-                    .filter((r) => r.group === g)
-                    .map((r) => (
-                      <MenuLink
-                        key={r.id}
-                        to={r.path}
-                        label={r.label}
-                        active={route.id === r.id}
-                        onNavigate={navigate}
-                      />
-                    ))}
-                </div>
-              </div>
-            ))}
-          </nav>
+          <Sidebar activeRouteId={route.id} activeGroup={route.group} onNavigate={navigate} />
           <AdSlot slot={SLOTS.sidebar} className="min-h-[250px] shrink-0 px-3 pt-2" />
           <p className="px-5 py-4 text-[11px] leading-relaxed text-slate-300">
             모든 결과는 참고용 추정치입니다.
