@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import routes from '../routes.json'
 import GROUP_ORDER from '../groups.json'
 
@@ -47,7 +47,7 @@ function ChevronIcon({ expanded }: { expanded: boolean }) {
     <svg
       viewBox="0 0 20 20"
       fill="currentColor"
-      className={`h-3.5 w-3.5 shrink-0 text-slate-400 transition-transform ${expanded ? 'rotate-180' : ''}`}
+      className={`h-3.5 w-3.5 shrink-0 text-slate-500 transition-transform ${expanded ? 'rotate-180' : ''}`}
       aria-hidden="true"
     >
       <path
@@ -69,10 +69,14 @@ export default function Sidebar({
   onNavigate: (to: string) => void
 }) {
   const [query, setQuery] = useState('')
-  const [expandedGroups, setExpandedGroups] = useState<Set<string>>(() => new Set([activeGroup]))
+  const inputRef = useRef<HTMLInputElement>(null)
+  const [expandedGroups, setExpandedGroups] = useState<Set<string>>(() =>
+    new Set([groups.includes(activeGroup) ? activeGroup : groups[0]]),
+  )
 
   // 다른 계산기로 이동하면 그 그룹을 펼침 목록에 추가한다 (기존에 펼친 그룹은 접지 않음)
   useEffect(() => {
+    if (!groups.includes(activeGroup)) return
     setExpandedGroups((prev) => {
       if (prev.has(activeGroup)) return prev
       const next = new Set(prev)
@@ -97,6 +101,11 @@ export default function Sidebar({
   const visibleGroups = groups.filter((g) => routesForGroup(g).length > 0)
   const isExpanded = (g: string) => isSearching || expandedGroups.has(g)
 
+  const handleSelect = (to: string) => {
+    setQuery('')
+    onNavigate(to)
+  }
+
   return (
     <nav
       className="sidebar-scroll min-h-0 flex-1 space-y-6 overflow-y-auto px-3 pb-4"
@@ -104,6 +113,7 @@ export default function Sidebar({
     >
       <div className="relative">
         <input
+          ref={inputRef}
           type="text"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
@@ -114,7 +124,10 @@ export default function Sidebar({
         {query && (
           <button
             type="button"
-            onClick={() => setQuery('')}
+            onClick={() => {
+              setQuery('')
+              inputRef.current?.focus()
+            }}
             aria-label="검색어 지우기"
             className="absolute inset-y-0 right-2 flex items-center text-slate-400 hover:text-slate-600"
           >
@@ -133,28 +146,28 @@ export default function Sidebar({
           <div key={g}>
             <button
               type="button"
-              onClick={() => toggleGroup(g)}
-              disabled={isSearching}
+              onClick={() => {
+                if (!isSearching) toggleGroup(g)
+              }}
+              aria-disabled={isSearching}
               aria-expanded={expanded}
               aria-controls={`sidebar-group-${g}`}
-              className="flex w-full items-center justify-between px-3 py-1 text-xs font-semibold tracking-wide text-slate-400 disabled:cursor-default"
+              className={`flex w-full items-center justify-between px-3 py-1 text-xs font-semibold tracking-wide text-slate-500 hover:text-slate-700 ${isSearching ? 'cursor-default' : ''}`}
             >
               {g}
               {!isSearching && <ChevronIcon expanded={expanded} />}
             </button>
-            {expanded && (
-              <div id={`sidebar-group-${g}`} className="mt-1 space-y-0.5">
-                {routesForGroup(g).map((r) => (
-                  <MenuLink
-                    key={r.id}
-                    to={r.path}
-                    label={r.label}
-                    active={activeRouteId === r.id}
-                    onNavigate={onNavigate}
-                  />
-                ))}
-              </div>
-            )}
+            <div id={`sidebar-group-${g}`} className="mt-1 space-y-0.5" hidden={!expanded}>
+              {routesForGroup(g).map((r) => (
+                <MenuLink
+                  key={r.id}
+                  to={r.path}
+                  label={r.label}
+                  active={activeRouteId === r.id}
+                  onNavigate={handleSelect}
+                />
+              ))}
+            </div>
           </div>
         )
       })}
