@@ -246,7 +246,7 @@ function App() {
             <Current />
           </Suspense>
           <AdSlot key={`${route.id}-mid`} slot={SLOTS.belowResult} />
-          <InfoSection pageId={route.id} />
+          {route.group !== '가이드' && <InfoSection pageId={route.id} />}
           <AdSlot key={`${route.id}-bottom`} slot={SLOTS.bottomOfPage} />
 
           <footer className="mt-14 border-t border-slate-200 pt-5 pb-2 text-xs text-slate-400">

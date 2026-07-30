@@ -1,9 +1,10 @@
 import { pageContent } from '../lib/pageContent'
 import routes from '../routes.json'
+import GROUP_ORDER from '../groups.json'
 
 export default function AboutPage() {
   const paras: string[] = pageContent.about.intro
-  const groups = [...new Set(routes.filter((r) => r.group !== '정보').map((r) => r.group))]
+  const groups = [...new Set(routes.filter((r) => GROUP_ORDER.includes(r.group)).map((r) => r.group))]
 
   return (
     <div className="max-w-3xl">
