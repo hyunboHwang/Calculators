@@ -1903,6 +1903,20 @@ export const pageContent = {
       { label: '찾기쉬운 생활법령정보 — 구직급여 수급신청', url: 'https://easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=722&ccfNo=2&cciNo=2&cnpClsNo=1' },
       { label: '고용노동부', url: 'https://www.moel.go.kr' },
     ],
+    highlights: [
+      { icon: '📋', label: '5단계절차', text: '정해진 5단계를 순서대로 밟아야 지급이 시작됩니다.' },
+      { icon: '⏰', label: '12개월기한', text: '이직일 다음 날부터 12개월 내에 신청해야 합니다.' },
+      { icon: '💻', label: '온라인교육', text: '약 1시간, 신청 후 7일 내 완료 필수입니다.' },
+      { icon: '✅', label: '무제출대응', text: '회사 미제출 시 고용센터에 설명하고 신청 진행 가능합니다.' },
+    ],
+    stepChips: [
+      { icon: '📋', label: '처리확인' },
+      { icon: '📝', label: '구직등록' },
+      { icon: '💻', label: '온라인교육' },
+      { icon: '🏢', label: '센터방문' },
+      { icon: '🎖️', label: '자격인정' },
+      { icon: '💰', label: '활동보고' },
+    ],
   },
 
   youthRentSubsidyGuide: {
