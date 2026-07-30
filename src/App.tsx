@@ -52,6 +52,7 @@ const components: Record<string, React.LazyExoticComponent<() => React.JSX.Eleme
   severanceInterimGuide: lazy(() => import('./pages/guides/SeveranceInterimGuide')),
   unemploymentApplicationGuide: lazy(() => import('./pages/guides/UnemploymentApplicationGuide')),
   youthRentSubsidyGuide: lazy(() => import('./pages/guides/YouthRentSubsidyGuide')),
+  youthLeapAccountGuide: lazy(() => import('./pages/guides/YouthLeapAccountGuide')),
   about: lazy(() => import('./pages/AboutPage')),
   privacy: lazy(() => import('./pages/PrivacyPage')),
 }
