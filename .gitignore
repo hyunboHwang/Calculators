@@ -29,3 +29,6 @@ middleware.ts
 
 # Claude Code 개인 설정
 .claude/settings.local.json
+
+# superpowers 스킬 작업용 스크래치 (SDD 워크스페이스, 브레인스토밍 목업 등)
+.superpowers/
