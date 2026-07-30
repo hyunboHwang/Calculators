@@ -2020,6 +2020,20 @@ export const pageContent = {
       { label: '금융위원회 — 청년도약계좌 기여금 확대 보도자료', url: 'https://www.fsc.go.kr/no010101/83729' },
       { label: '대한민국 정책브리핑 — 청년미래적금 6월 출시', url: 'https://www.korea.kr/news/policyNewsView.do?newsId=148963384' },
     ],
+    highlights: [
+      { icon: '🚪', label: '가입 종료', text: '신규가입은 2025년 12월 5일 마감되었습니다.' },
+      { icon: '✅', label: '기존 가입자', text: '이미 가입한 사람은 5년 만기까지 혜택이 유지됩니다.' },
+      { icon: '🆕', label: '후속 상품', text: '2026년 6월 청년미래적금이 출시되었습니다(월 50만원, 3년).' },
+      { icon: '📋', label: '공식 확인', text: '서민금융진흥원과 금융위원회 공식 발표로 확인하세요.' },
+    ],
+    stepChips: [
+      { icon: '🚪', label: '가입 여부' },
+      { icon: '✅', label: '계좌 유지' },
+      { icon: '📋', label: '자격 조건' },
+      { icon: '🆕', label: '후속 상품' },
+      { icon: '🔄', label: '상품 전환' },
+      { icon: '📞', label: '공식 확인' },
+    ],
   },
 
   youthJeonseLoanGuide: {
