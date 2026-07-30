@@ -1780,6 +1780,20 @@ export const pageContent = {
       { label: '주택도시보증공사(HUG) — 전세보증금반환보증 이용절차', url: 'https://www.khug.or.kr/hug/web/ig/dr/igdr000002.jsp' },
       { label: '대한법률구조공단', url: 'https://www.klac.or.kr/pil/main' },
     ],
+    highlights: [
+      { icon: '⚠️', label: '이사 전 필수', text: '임차권등기명령을 먼저 등기해야 대항력이 유지됩니다.' },
+      { icon: '📬', label: '내용증명', text: '반환을 요구하는 사실을 명확히 기록으로 남겨야 합니다.' },
+      { icon: '🛡️', label: '권리보전', text: '대항력과 우선변제권을 지키려면 이사 전에 등기해야 합니다.' },
+      { icon: '📞', label: '무료상담', text: '법률구조공단에서 무료로 법률상담을 받을 수 있습니다.' },
+    ],
+    stepChips: [
+      { icon: '📬', label: '내용증명' },
+      { icon: '🏛️', label: '등기신청' },
+      { icon: '🏦', label: '보증청구' },
+      { icon: '⚖️', label: '법정청구' },
+      { icon: '🔨', label: '강제경매' },
+      { icon: '🆘', label: '법률지원' },
+    ],
   },
 
   severanceInterimGuide: {
