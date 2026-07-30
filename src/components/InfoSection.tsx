@@ -14,7 +14,7 @@ interface PageInfo {
 
 const content = pageContent as Record<string, PageInfo>
 
-const stripStepNumber = (s: string) => s.replace(/^\d+\.\s*/, '')
+const stripStepNumber = (s: string) => s.replace(/^\d+\.\s+/, '')
 
 /**
  * 페이지 하단 설명 + FAQ 섹션.

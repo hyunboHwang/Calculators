@@ -42,7 +42,7 @@ function prerenderBody(route) {
       html += `<h2 class="mt-6 text-lg font-bold text-slate-900">${esc(c.formula.title)}</h2>`
       html += `<ol class="mt-2 list-decimal pl-5">`
       html += c.formula.steps
-        .map((s) => `<li class="mt-1">${esc(s.replace(/^\d+\.\s*/, ''))}</li>`)
+        .map((s) => `<li class="mt-1">${esc(s.replace(/^\d+\.\s+/, ''))}</li>`)
         .join('')
       html += `</ol>`
     }
