@@ -2079,6 +2079,20 @@ export const pageContent = {
       { label: '주택도시기금 - 이용절차 및 제출서류', url: 'https://nhuf.molit.go.kr/FP/FP05/FP0502/FP05020302.jsp' },
       { label: '기금e든든(온라인 신청)', url: 'https://enhuf.molit.go.kr' },
     ],
+    highlights: [
+      { icon: '👤', label: '연령기준', text: '만 19세 이상 34세 이하 신청 가능' },
+      { icon: '💰', label: '대출한도', text: '최대 1억 5,000만원(25세 미만 1억 2,000만원)' },
+      { icon: '📊', label: '금리범위', text: '연 2.2~3.3% 소득별 변동금리' },
+      { icon: '⏰', label: '신청기한', text: '이사일로부터 3개월 이내 신청' },
+    ],
+    stepChips: [
+      { icon: '👤', label: '자격확인' },
+      { icon: '📝', label: '신청접수' },
+      { icon: '🔍', label: '자산심사' },
+      { icon: '📱', label: '결과통보' },
+      { icon: '📄', label: '서류제출' },
+      { icon: '✅', label: '대출실행' },
+    ],
   },
 
   nationalEmploymentSupportGuide: {
