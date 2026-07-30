@@ -9,6 +9,8 @@ interface PageInfo {
   glossary?: { term: string; definition: string }[]
   examples?: { title: string; result: string }[]
   sources?: { label: string; url: string }[]
+  highlights?: { icon: string; label: string; text: string }[]
+  stepChips?: { icon: string; label: string }[]
   hidden?: boolean
 }
 
@@ -51,6 +53,20 @@ export default function InfoSection({ pageId }: { pageId: string }) {
 
   return (
     <div className="mt-14 border-t border-slate-200 pt-8">
+      {c.highlights && c.highlights.length > 0 && (
+        <section className="mb-8 grid grid-cols-2 gap-3">
+          {c.highlights.map((h, i) => (
+            <div key={i} className="rounded-xl border border-slate-200 bg-white p-3">
+              <span className="text-base" aria-hidden="true">
+                {h.icon}
+              </span>
+              <p className="mt-1 text-xs font-bold text-slate-800">{h.label}</p>
+              <p className="mt-0.5 text-xs leading-relaxed text-slate-500">{h.text}</p>
+            </div>
+          ))}
+        </section>
+      )}
+
       <section>
         <h2 className="flex items-center gap-2 text-lg font-bold">
           <span className="h-4 w-1 rounded-full bg-emerald-500" aria-hidden="true" />
@@ -69,7 +85,19 @@ export default function InfoSection({ pageId }: { pageId: string }) {
             <span className="h-4 w-1 rounded-full bg-emerald-500" aria-hidden="true" />
             {c.formula.title}
           </h2>
-          <ol className="mt-3 space-y-2">
+          {c.stepChips && c.stepChips.length > 0 && (
+            <div className="mt-3 flex gap-2 overflow-x-auto pb-1">
+              {c.stepChips.map((chip, i) => (
+                <span
+                  key={i}
+                  className="shrink-0 whitespace-nowrap rounded-lg bg-slate-800 px-3 py-1.5 text-xs font-semibold text-white"
+                >
+                  {chip.icon} {chip.label}
+                </span>
+              ))}
+            </div>
+          )}
+          <ol className={c.stepChips && c.stepChips.length > 0 ? 'mt-4 space-y-2' : 'mt-3 space-y-2'}>
             {c.formula.steps.map((step, i) => (
               <li key={i} className="flex gap-2 text-sm leading-relaxed text-slate-600">
                 <span className="shrink-0 font-semibold text-emerald-600">{i + 1}.</span>
