@@ -27,6 +27,8 @@ export default function AboutPage() {
         ))}
       </div>
 
+      <p className="mt-6 text-xs text-slate-400">최근 업데이트: 2026년 7월</p>
+
       <p className="mt-8 text-sm text-slate-500">
         문의: <a href="mailto:hwang177@gmail.com" className="text-emerald-700 underline">hwang177@gmail.com</a>
       </p>

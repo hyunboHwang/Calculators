@@ -37,6 +37,36 @@ function prerenderBody(route) {
 
   if (c) {
     html += c.intro.map((p) => `<p class="mt-3">${esc(p)}</p>`).join('')
+
+    if (c.formula) {
+      html += `<h2 class="mt-6 text-lg font-bold text-slate-900">${esc(c.formula.title)}</h2>`
+      html += `<ol class="mt-2 list-decimal pl-5">`
+      html += c.formula.steps
+        .map((s) => `<li class="mt-1">${esc(s.replace(/^\d+\.\s+/, ''))}</li>`)
+        .join('')
+      html += `</ol>`
+    }
+
+    if (c.glossary?.length) {
+      html += `<h2 class="mt-6 text-lg font-bold text-slate-900">용어 설명</h2>`
+      html += c.glossary
+        .map(
+          (g) =>
+            `<h3 class="mt-3 font-semibold text-slate-800">${esc(g.term)}</h3><p class="mt-1">${esc(g.definition)}</p>`,
+        )
+        .join('')
+    }
+
+    if (c.examples?.length) {
+      html += `<h2 class="mt-6 text-lg font-bold text-slate-900">숫자로 보는 예시</h2>`
+      html += c.examples
+        .map(
+          (ex) =>
+            `<h3 class="mt-3 font-semibold text-slate-800">${esc(ex.title)}</h3><p class="mt-1">${esc(ex.result)}</p>`,
+        )
+        .join('')
+    }
+
     if (c.faqs?.length) {
       html += `<h2 class="mt-6 text-lg font-bold text-slate-900">자주 묻는 질문</h2>`
       html += c.faqs
@@ -45,6 +75,15 @@ function prerenderBody(route) {
             `<h3 class="mt-3 font-semibold text-slate-800">${esc(f.q)}</h3><p class="mt-1">${esc(f.a)}</p>`,
         )
         .join('')
+    }
+
+    if (c.sources?.length) {
+      html += `<h2 class="mt-6 text-lg font-bold text-slate-900">참고 자료</h2>`
+      html += `<ul class="mt-2 list-disc pl-5">`
+      html += c.sources
+        .map((s) => `<li class="mt-1"><a href="${esc(s.url)}">${esc(s.label)}</a></li>`)
+        .join('')
+      html += `</ul>`
     }
   }
 
