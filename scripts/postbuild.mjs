@@ -87,6 +87,19 @@ function prerenderBody(route) {
     }
   }
 
+  if (route.id === 'guidesIndex') {
+    const guideRoutes = routes.filter((r) => r.group === '가이드' && r.id !== 'guidesIndex')
+    html += `<h2 class="mt-6 text-lg font-bold text-slate-900">전체 가이드</h2>`
+    html += `<ul class="mt-2 list-disc pl-5">`
+    html += guideRoutes
+      .map(
+        (r) =>
+          `<li class="mt-1"><a href="${urlOf(r.path)}">${esc(r.label)}</a> — ${esc(r.description)}</li>`,
+      )
+      .join('')
+    html += `</ul>`
+  }
+
   // 내부 링크 (크롤러의 페이지 발견용)
   html += `<nav class="mt-8 text-xs" aria-label="전체 계산기">`
   html += routes
