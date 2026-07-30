@@ -46,6 +46,7 @@ const components: Record<string, React.LazyExoticComponent<() => React.JSX.Eleme
   carAcquisitionTax: lazy(() => import('./pages/CarAcquisitionTaxCalculator')),
   bmi: lazy(() => import('./pages/BmiCalculator')),
   jeonseConversion: lazy(() => import('./pages/JeonseConversionCalculator')),
+  guidesIndex: lazy(() => import('./pages/GuidesIndexPage')),
   about: lazy(() => import('./pages/AboutPage')),
   privacy: lazy(() => import('./pages/PrivacyPage')),
 }
@@ -162,6 +163,16 @@ function App() {
               className="animate-menu-in absolute inset-x-0 top-full z-20 max-h-[calc(100vh-56px)] overflow-y-auto border-t border-slate-200 bg-white px-4 py-4 shadow-lg"
               aria-label="계산기 메뉴"
             >
+              <a
+                href="/guides/"
+                onClick={(e) => {
+                  e.preventDefault()
+                  handleNavigate('/guides')
+                }}
+                className="mb-4 flex items-center gap-1.5 rounded-lg border border-slate-200 px-3 py-2 text-sm font-medium text-slate-600"
+              >
+                📖 가이드
+              </a>
               {groups.map((g) => (
                 <div key={g} className="mb-4 last:mb-0">
                   <p className="mb-1.5 text-xs font-semibold tracking-wide text-slate-400">{g}</p>
@@ -202,6 +213,18 @@ function App() {
               계산기
             </a>
             <p className="mt-1.5 text-xs text-slate-400">돈·나이·날짜, 생활 계산 한곳에서</p>
+          </div>
+          <div className="px-5 pb-3">
+            <a
+              href="/guides/"
+              onClick={(e) => {
+                e.preventDefault()
+                navigate('/guides')
+              }}
+              className="flex items-center gap-1.5 rounded-lg border border-slate-200 px-3 py-2 text-sm font-medium text-slate-600 transition-colors hover:border-emerald-300 hover:bg-emerald-50/40"
+            >
+              📖 가이드
+            </a>
           </div>
           <Sidebar activeRouteId={route.id} activeGroup={route.group} onNavigate={navigate} />
           <AdSlot slot={SLOTS.sidebar} className="min-h-[250px] shrink-0 px-3 pt-2" />

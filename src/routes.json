@@ -296,6 +296,78 @@
     "description": "전세보증금과 월세 전환 조건을 비교해 법정 전환율 상한을 넘는지 확인합니다."
   },
   {
+    "id": "guidesIndex",
+    "path": "/guides",
+    "label": "가이드",
+    "group": "가이드",
+    "title": "가이드 — 계산기 활용법과 정부지원금·청년정책 안내 | 계산기",
+    "description": "연말정산·퇴직금·실업급여 같은 절차 가이드와 청년월세·청년도약계좌 같은 정부지원금 정보를 한곳에 모았습니다."
+  },
+  {
+    "id": "yearEndTaxProcedureGuide",
+    "path": "/guides/yearend-tax-procedure",
+    "label": "연말정산 신고 절차 A to Z",
+    "group": "가이드",
+    "title": "2026년 연말정산 신고 절차 A to Z, 간소화서비스 제출부터 회사 정산·환급까지 | 계산기",
+    "description": "홈택스 간소화서비스 개통일, 자료 제출, 회사 정산, 2월 급여 반영까지 2026년 연말정산 신고 절차를 순서대로 정리했습니다. 놓친 공제를 나중에 챙기는 방법도 안내합니다."
+  },
+  {
+    "id": "jeonseDepositRecoveryGuide",
+    "path": "/guides/jeonse-deposit-recovery",
+    "label": "전세보증금 못 받았을 때 대처법",
+    "group": "가이드",
+    "title": "전세보증금 못 받았을 때 대처법 — 임차권등기명령·HUG 청구·강제경매 순서 | 계산기",
+    "description": "전세보증금을 못 받았을 때 내용증명, 임차권등기명령, HUG 보증금반환보증 청구, 지급명령·소송, 강제경매까지 이어지는 실제 대응 순서와 방법을 정리했습니다."
+  },
+  {
+    "id": "severanceInterimGuide",
+    "path": "/guides/severance-interim-settlement",
+    "label": "퇴직금 중간정산 가능한 경우",
+    "group": "가이드",
+    "title": "퇴직금 중간정산 가능한 경우 9가지 정리 — 주택구입·요양·개인회생·임금피크제까지 | 계산기",
+    "description": "퇴직금 중간정산은 원칙적으로 금지이며 시행령이 정한 법정 사유가 있을 때만 예외적으로 가능합니다. 주택구입·전세보증금·요양·개인회생 등 9가지 사유와 필요 서류, 세금까지 정리했습니다."
+  },
+  {
+    "id": "unemploymentApplicationGuide",
+    "path": "/guides/unemployment-application",
+    "label": "실업급여 신청 절차·준비서류",
+    "group": "가이드",
+    "title": "실업급여 신청 절차와 준비 서류 총정리 — 이직확인서·수급자격 인정부터 첫 지급까지 | 계산기",
+    "description": "퇴사 후 이직확인서 처리 확인부터 고용24 구직등록, 고용센터 수급자격 인정 신청, 실업인정일 재취업활동 신고까지 실업급여 신청 절차와 준비 서류를 순서대로 정리했습니다."
+  },
+  {
+    "id": "youthRentSubsidyGuide",
+    "path": "/guides/youth-rent-subsidy",
+    "label": "2026년 청년월세 지원 총정리",
+    "group": "가이드",
+    "title": "2026년 청년월세 지원 총정리 — 신청자격·소득기준·월 20만원 지원금액·신청기간 | 계산기",
+    "description": "2026년 청년월세 지원(월 20만원, 최대 24개월) 신청 대상, 소득·재산 기준, 신청 기간과 방법을 정부24·복지로 공식 정보로 정리했습니다."
+  },
+  {
+    "id": "youthLeapAccountGuide",
+    "path": "/guides/youth-leap-account",
+    "label": "청년도약계좌 총정리",
+    "group": "가이드",
+    "title": "청년도약계좌 가입조건·정부기여금·중도해지 총정리 2026 | 계산기",
+    "description": "청년도약계좌 가입조건(만 19~34세, 소득기준), 정부기여금 매칭 구조, 중도해지 불이익을 정리하고 2025년 12월 신규가입 종료 및 후속 상품 청년미래적금 전환 방법까지 안내합니다."
+  },
+  {
+    "id": "youthJeonseLoanGuide",
+    "path": "/guides/youth-jeonse-loan",
+    "label": "청년 전세자금대출(버팀목) 총정리",
+    "group": "가이드",
+    "title": "청년전용 버팀목전세자금대출 자격·한도·금리 총정리 — 2026년 기준 신청방법까지 | 계산기",
+    "description": "만 19~34세 무주택 청년을 위한 청년전용 버팀목전세자금대출의 소득·자산·나이 요건, 대출한도, 소득구간별 금리, 신청 절차와 필요서류를 주택도시기금 공식 자료 기준으로 정리했습니다."
+  },
+  {
+    "id": "nationalEmploymentSupportGuide",
+    "path": "/guides/national-employment-support",
+    "label": "국민취업지원제도 신청 조건",
+    "group": "가이드",
+    "title": "2026년 국민취업지원제도 I유형·II유형 신청 조건과 구직촉진수당 지급액 | 계산기",
+    "description": "국민취업지원제도 I유형·II유형의 소득·재산·연령 기준과 구직촉진수당 월 지급액·지급기간, 신청 절차·준비서류를 고용24·정부24 공식 정보로 정리하고 최신 공고 확인 방법도 안내합니다."
+  },
+  {
     "id": "about",
     "path": "/about",
     "label": "소개",
