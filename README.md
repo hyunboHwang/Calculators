@@ -12,7 +12,7 @@
 | 주식 | 복리 | `/compound/` |
 | 주식 | 본전 (손실 복구) | `/loss-recovery/` |
 | 주식 | 미국주식 양도세 | `/us-stock-tax/` |
-| 저축 | 예적금 이자 | `/deposit/` |
+| 주식 | 예적금 이자 | `/deposit/` |
 | 직장인 | 연봉 실수령액 | `/salary/` |
 | 직장인 | 연봉 인상 비교 | `/raise/` |
 | 직장인 | 퇴직금 | `/severance/` |
@@ -20,7 +20,6 @@
 | 직장인 | 연말정산 환급액 | `/year-end-tax/` |
 | 직장인 | 실업급여 | `/unemployment/` |
 | 직장인 | 육아휴직급여 | `/parental-leave/` |
-| 직장인 | 프리랜서 3.3% | `/freelance-tax/` |
 | 직장인 | 연차수당 | `/annual-leave/` |
 | 나이 | 나이 계산기 | `/age/` |
 | 나이 | 환갑·칠순·팔순 | `/celebration/` |
@@ -36,10 +35,11 @@
 | 날짜 | 출산예정일 | `/due-date/` |
 | 셀러 | 위탁판매 마진 | `/margin/` |
 | 셀러 | 셀러 세금 | `/seller-tax/` |
+| 셀러 | 프리랜서 3.3% | `/freelance-tax/` |
 | 부동산 | 취득세 | `/acquisition-tax/` |
 | 부동산 | 재산세 | `/property-tax/` |
 | 부동산 | 종합부동산세 | `/comprehensive-real-estate-tax/` |
+| 부동산 | 전월세 전환율 | `/jeonse-conversion/` |
 | 자동차 | 자동차세 | `/car-tax/` |
 | 자동차 | 자동차 취득세 | `/car-acquisition-tax/` |
 | 생활 | BMI·표준체중 | `/bmi/` |
-| 생활 | 전월세 전환율 | `/jeonse-conversion/` |
