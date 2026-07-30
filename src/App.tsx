@@ -47,6 +47,7 @@ const components: Record<string, React.LazyExoticComponent<() => React.JSX.Eleme
   bmi: lazy(() => import('./pages/BmiCalculator')),
   jeonseConversion: lazy(() => import('./pages/JeonseConversionCalculator')),
   guidesIndex: lazy(() => import('./pages/GuidesIndexPage')),
+  yearEndTaxProcedureGuide: lazy(() => import('./pages/guides/YearEndTaxProcedureGuide')),
   about: lazy(() => import('./pages/AboutPage')),
   privacy: lazy(() => import('./pages/PrivacyPage')),
 }
