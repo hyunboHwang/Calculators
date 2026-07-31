@@ -1,5 +1,21 @@
 import routes from '../routes.json'
 
+const GUIDE_ICONS: Record<string, string> = {
+  yearEndTaxProcedureGuide: '🧾',
+  jeonseDepositRecoveryGuide: '🔑',
+  severanceInterimGuide: '💼',
+  unemploymentApplicationGuide: '📋',
+  pensionTaxCreditGuide: '💰',
+  youthRentSubsidyGuide: '🏠',
+  youthLeapAccountGuide: '📈',
+  youthJeonseLoanGuide: '🏦',
+  nationalEmploymentSupportGuide: '🧑‍💼',
+  inheritanceTaxProcedureGuide: '⚖️',
+  giftTaxProcedureGuide: '🎁',
+  subscriptionScoreGuide: '🏆',
+  subscriptionRankGuide: '📊',
+}
+
 const TRACK1_IDS = [
   'yearEndTaxProcedureGuide',
   'jeonseDepositRecoveryGuide',
@@ -32,15 +48,17 @@ function GuideList({ ids, title }: { ids: string[]; title: string }) {
   return (
     <section className="mt-8">
       <h2 className="text-lg font-bold">{title}</h2>
-      <div className="mt-3 space-y-2">
+      <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-3">
         {items.map((r) => (
           <a
             key={r.id}
             href={`${r.path}/`}
-            className="block rounded-xl border border-slate-200 bg-white p-4 transition-colors hover:border-emerald-300 hover:bg-emerald-50/30"
+            className="flex flex-col items-center gap-2 rounded-xl border border-slate-200 bg-white p-4 text-center transition-colors hover:border-emerald-300 hover:bg-emerald-50/30"
           >
+            <span className="text-4xl" aria-hidden="true">
+              {GUIDE_ICONS[r.id] ?? '📖'}
+            </span>
             <p className="text-sm font-semibold text-slate-800">{r.label}</p>
-            <p className="mt-1 text-sm leading-relaxed text-slate-500">{r.description}</p>
           </a>
         ))}
       </div>
