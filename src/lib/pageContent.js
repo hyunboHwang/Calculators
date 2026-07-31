@@ -1700,9 +1700,9 @@ export const pageContent = {
       ],
     },
     highlights: [
-      { icon: '📅', label: '1월~2월', text: '1월 15일부터 이용 가능하며, 결과는 2월 급여에 반영됩니다.' },
+      { icon: '📅', label: '개통일', text: '홈택스 안내 기준 1월 15일 개통(매년 국세청 공지 확인)' },
       { icon: '📋', label: '추가항목', text: '안경, 교복, 월세 등은 직접 영수증을 준비해 제출해야 합니다.' },
-      { icon: '💰', label: '2월환급', text: '정산 결과는 대부분 2월분 급여에 환급액 또는 추가납부액으로 반영됩니다.' },
+      { icon: '🧾', label: '지급명세서', text: '회사는 매년 3월 10일까지 지급명세서를 국세청에 제출합니다.' },
       { icon: '🔄', label: '구제수단', text: '5월 신고나 경정청구로 최대 5년 이내 추가 환급을 받을 수 있습니다.' },
     ],
     stepChips: [
@@ -1783,7 +1783,7 @@ export const pageContent = {
     highlights: [
       { icon: '⚠️', label: '이사 전 필수', text: '임차권등기명령을 먼저 등기해야 대항력이 유지됩니다.' },
       { icon: '📬', label: '내용증명', text: '반환을 요구하는 사실을 명확히 기록으로 남겨야 합니다.' },
-      { icon: '🛡️', label: '권리보전', text: '대항력과 우선변제권을 지키려면 이사 전에 등기해야 합니다.' },
+      { icon: '⏳', label: 'HUG 이행청구', text: '심사 등을 거쳐 대위변제까지 평균 6~8주 걸립니다.' },
       { icon: '📞', label: '무료상담', text: '법률구조공단에서 무료로 법률상담을 받을 수 있습니다.' },
     ],
     stepChips: [
@@ -1904,7 +1904,7 @@ export const pageContent = {
       { label: '고용노동부', url: 'https://www.moel.go.kr' },
     ],
     highlights: [
-      { icon: '📋', label: '5단계절차', text: '정해진 5단계를 순서대로 밟아야 지급이 시작됩니다.' },
+      { icon: '📋', label: '단계별 절차', text: '정해진 순서를 차례로 밟아야 지급이 시작됩니다.' },
       { icon: '⏰', label: '12개월기한', text: '이직일 다음 날부터 12개월 내에 신청해야 합니다.' },
       { icon: '💻', label: '온라인교육', text: '약 1시간, 신청 후 7일 내 완료 필수입니다.' },
       { icon: '✅', label: '무제출대응', text: '회사 미제출 시 고용센터에 설명하고 신청 진행 가능합니다.' },
@@ -2083,7 +2083,7 @@ export const pageContent = {
       { icon: '👤', label: '연령기준', text: '만 19세 이상 34세 이하 신청 가능' },
       { icon: '💰', label: '대출한도', text: '최대 1억 5,000만원(25세 미만 1억 2,000만원)' },
       { icon: '📊', label: '금리범위', text: '연 2.2~3.3% 소득별 변동금리' },
-      { icon: '⏰', label: '신청기한', text: '이사일로부터 3개월 이내 신청' },
+      { icon: '⏰', label: '신청기한', text: '잔금일·전입일 중 빠른 날부터 3개월' },
     ],
     stepChips: [
       { icon: '👤', label: '자격확인' },
@@ -2120,7 +2120,7 @@ export const pageContent = {
       { icon: '💰', label: 'I형·II형', text: 'I형은 현금수당, II형은 훈련비용' },
       { icon: '📋', label: '신청자격', text: '소득·재산 기준 충족 시 신청 가능' },
       { icon: '💵', label: '수당금액', text: '월 60만원(확인 시점 기준)' },
-      { icon: '🎓', label: '청년특례', text: '만 34세 이하면 취업경험 무관' },
+      { icon: '🎓', label: '청년특례', text: '만 15~34세, 중위소득 120%·재산 5억 이하면 취업경험 무관' },
     ],
     stepChips: [
       { icon: '📝', label: '회원가입' },

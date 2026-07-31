@@ -92,7 +92,7 @@ export default function InfoSection({ pageId }: { pageId: string }) {
                   key={i}
                   className="shrink-0 whitespace-nowrap rounded-lg bg-slate-800 px-3 py-1.5 text-xs font-semibold text-white"
                 >
-                  {chip.icon} {chip.label}
+                  <span aria-hidden="true">{chip.icon}</span> {chip.label}
                 </span>
               ))}
             </div>
