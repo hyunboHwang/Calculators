@@ -384,6 +384,14 @@
     "description": "국민취업지원제도 I유형·II유형의 소득·재산·연령 기준과 구직촉진수당 월 지급액·지급기간, 신청 절차·준비서류를 고용24·정부24 공식 정보로 정리하고 최신 공고 확인 방법도 안내합니다."
   },
   {
+    "id": "inheritanceTaxProcedureGuide",
+    "path": "/guides/inheritance-tax-procedure",
+    "label": "상속세 신고 절차 총정리",
+    "group": "가이드",
+    "title": "상속세 신고 절차 총정리 — 신고기한 6개월, 재산평가부터 공제 적용까지 | 계산기",
+    "description": "상속개시일이 속한 달 말일로부터 6개월 이내 상속세 신고 절차를 재산 파악, 평가, 공제 적용, 신고서 제출 순서로 정리했습니다."
+  },
+  {
     "id": "about",
     "path": "/about",
     "label": "소개",
