@@ -16,6 +16,7 @@ export default function GiftTaxCalculator() {
   const [isMinor, setIsMinor] = useState(false)
   const [isGenerationSkip, setIsGenerationSkip] = useState(false)
   const [priorGiftSum, setPriorGiftSum] = useState(0)
+  const [priorGiftPaidTax, setPriorGiftPaidTax] = useState(0)
   const [marriageOrBirthDeduction, setMarriageOrBirthDeduction] = useState(false)
 
   const r = useMemo(
@@ -26,9 +27,10 @@ export default function GiftTaxCalculator() {
         isMinor,
         isGenerationSkip,
         priorGiftSum,
+        priorGiftPaidTax,
         marriageOrBirthDeduction,
       }),
-    [giftValue, relation, isMinor, isGenerationSkip, priorGiftSum, marriageOrBirthDeduction],
+    [giftValue, relation, isMinor, isGenerationSkip, priorGiftSum, priorGiftPaidTax, marriageOrBirthDeduction],
   )
 
   return (
@@ -48,7 +50,15 @@ export default function GiftTaxCalculator() {
               <span className="mb-1.5 block text-sm font-medium text-slate-700">증여자와의 관계</span>
               <select
                 value={relation}
-                onChange={(e) => setRelation(e.target.value as GiftRelation)}
+                onChange={(e) => {
+                  const next = e.target.value as GiftRelation
+                  setRelation(next)
+                  if (next !== 'ancestorToDescendant') {
+                    setIsMinor(false)
+                    setMarriageOrBirthDeduction(false)
+                    setIsGenerationSkip(false)
+                  }
+                }}
                 className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm focus:border-emerald-500 focus:outline-none"
               >
                 {(Object.keys(RELATION_LABELS) as GiftRelation[]).map((key) => (
@@ -78,25 +88,30 @@ export default function GiftTaxCalculator() {
                   />
                   혼인·출산 증여재산공제 해당 (추가 1억원, 2024-01-01 이후 증여분부터)
                 </label>
+                <label className="flex items-center gap-2 text-sm text-slate-700">
+                  <input
+                    type="checkbox"
+                    checked={isGenerationSkip}
+                    onChange={(e) => setIsGenerationSkip(e.target.checked)}
+                    className="h-4 w-4 rounded border-slate-300 accent-emerald-600"
+                  />
+                  세대생략 증여 (조부모 → 손자녀 등, 30~40% 할증)
+                </label>
               </div>
             )}
-            <div className="rounded-xl bg-slate-50 p-3">
-              <label className="flex items-center gap-2 text-sm text-slate-700">
-                <input
-                  type="checkbox"
-                  checked={isGenerationSkip}
-                  onChange={(e) => setIsGenerationSkip(e.target.checked)}
-                  className="h-4 w-4 rounded border-slate-300 accent-emerald-600"
-                />
-                세대생략 증여 (조부모 → 손자녀 등, 30~40% 할증)
-              </label>
-            </div>
             <Field
               label="최근 10년 내 동일인 증여 합산액"
               value={priorGiftSum}
               onChange={setPriorGiftSum}
               step={1_000_000}
               hint="같은 사람에게 10년 이내 받은 다른 증여재산가액"
+            />
+            <Field
+              label="이전 증여 시 이미 납부한 증여세액"
+              value={priorGiftPaidTax}
+              onChange={setPriorGiftPaidTax}
+              step={100_000}
+              hint="위 합산액에 대해 10년 이내 이미 신고·납부한 증여세(기납부세액공제)"
             />
           </div>
         </section>

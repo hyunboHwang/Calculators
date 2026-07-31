@@ -38,6 +38,7 @@ export interface GiftTaxInput {
   isMinor: boolean // 수증자 미성년 여부 (ancestorToDescendant일 때만 의미 있음)
   isGenerationSkip: boolean // 세대생략 증여 여부
   priorGiftSum: number // 최근 10년 내 동일인 증여 합산액
+  priorGiftPaidTax: number // 10년 내 동일인 이전 증여 시 이미 납부한 증여세액 (기납부세액공제)
   marriageOrBirthDeduction: boolean // 혼인·출산 증여재산공제 해당 여부
 }
 
@@ -65,9 +66,10 @@ export function calcGiftTax(i: GiftTaxInput) {
   const taxBase = Math.max(taxableValue - deduction, 0)
   const calculatedTax = calcTax(taxBase)
 
-  const surchargeRate = i.isGenerationSkip ? (i.isMinor && i.giftValue > 2_000_000_000 ? 0.4 : 0.3) : 0
+  const isEligibleGenerationSkip = i.isGenerationSkip && i.relation === 'ancestorToDescendant'
+  const surchargeRate = isEligibleGenerationSkip ? (i.isMinor && i.giftValue > 2_000_000_000 ? 0.4 : 0.3) : 0
   const taxWithSurcharge = calculatedTax * (1 + surchargeRate)
-  const finalTax = taxWithSurcharge * 0.97 // 신고세액공제 3%
+  const finalTax = Math.max(taxWithSurcharge - i.priorGiftPaidTax, 0) * 0.97 // 기납부세액공제 반영 후 신고세액공제 3%
 
   return {
     taxableValue: Math.round(taxableValue),
