@@ -232,7 +232,7 @@ function App() {
               <img src="/favicon.svg" alt="" className="h-7 w-7" aria-hidden="true" />
               계산기
             </a>
-            <p className="mt-1.5 text-xs text-slate-400">돈·나이·날짜, 생활 계산 한곳에서</p>
+            <p className="mt-1.5 text-xs text-slate-400">돈·나이·날짜 계산부터 생활 가이드까지, 한곳에서</p>
           </div>
           <div className="px-5 pb-3">
             <a
