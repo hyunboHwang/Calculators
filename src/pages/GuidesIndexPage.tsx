@@ -38,6 +38,13 @@ const TRACK3_IDS = [
   'subscriptionRankGuide',
 ]
 
+/** AboutPage 등 다른 페이지에서 가이드를 트랙별로 나열할 때 재사용 */
+export const GUIDE_TRACKS = [
+  { title: '계산기 활용 가이드', ids: TRACK1_IDS },
+  { title: '정부지원금·청년정책', ids: TRACK2_IDS },
+  { title: '세금·부동산 절차', ids: TRACK3_IDS },
+]
+
 function GuideList({ ids, title }: { ids: string[]; title: string }) {
   const items = ids
     .map((id) => routes.find((r) => r.id === id))

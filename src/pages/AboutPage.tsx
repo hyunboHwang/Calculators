@@ -1,6 +1,7 @@
 import { pageContent } from '../lib/pageContent'
 import routes from '../routes.json'
 import GROUP_ORDER from '../groups.json'
+import { GUIDE_TRACKS } from './GuidesIndexPage'
 
 export default function AboutPage() {
   const paras: string[] = pageContent.about.intro
@@ -23,6 +24,19 @@ export default function AboutPage() {
             {routes
               .filter((r) => r.group === g)
               .map((r) => r.label)
+              .join(', ')}
+          </p>
+        ))}
+      </div>
+
+      <h2 className="mt-8 text-lg font-bold">제공하는 가이드</h2>
+      <div className="mt-3 space-y-3">
+        {GUIDE_TRACKS.map((track) => (
+          <p key={track.title} className="text-sm leading-relaxed text-slate-600">
+            <b className="text-slate-800">{track.title}</b> —{' '}
+            {track.ids
+              .map((id) => routes.find((r) => r.id === id)?.label)
+              .filter(Boolean)
               .join(', ')}
           </p>
         ))}
