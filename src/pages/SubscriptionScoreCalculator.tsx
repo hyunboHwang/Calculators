@@ -76,19 +76,27 @@ export default function SubscriptionScoreCalculator() {
         </section>
 
         <section className="space-y-4">
-          <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-5">
-            <p className="text-sm text-slate-500">청약가점 총점 (84점 만점)</p>
-            <p className="text-3xl font-extrabold tabular-nums text-emerald-700">{r.totalScore}점</p>
-          </div>
-
-          <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-            <h2 className="mb-2 text-base font-semibold">항목별 점수</h2>
-            <div className="divide-y divide-slate-100">
-              <Row label="무주택기간 (32점 만점)" value={`${r.noHouseScore}점`} />
-              <Row label="부양가족수 (35점 만점)" value={`${r.dependentsScore}점`} />
-              <Row label="청약통장 가입기간 (17점 만점)" value={`${r.subscriptionScore}점`} strong />
+          {!r.valid ? (
+            <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-5 text-sm text-slate-600">
+              날짜를 확인해주세요.
             </div>
-          </div>
+          ) : (
+            <>
+              <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-5">
+                <p className="text-sm text-slate-500">청약가점 총점 (84점 만점)</p>
+                <p className="text-3xl font-extrabold tabular-nums text-emerald-700">{r.totalScore}점</p>
+              </div>
+
+              <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+                <h2 className="mb-2 text-base font-semibold">항목별 점수</h2>
+                <div className="divide-y divide-slate-100">
+                  <Row label="무주택기간 (32점 만점)" value={`${r.noHouseScore}점`} />
+                  <Row label="부양가족수 (35점 만점)" value={`${r.dependentsScore}점`} />
+                  <Row label="청약통장 가입기간 (17점 만점)" value={`${r.subscriptionScore}점`} strong />
+                </div>
+              </div>
+            </>
+          )}
 
           <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-xs leading-relaxed text-amber-800">
             <b>이 계산은 예상치입니다.</b> 무주택세대구성원 자격 자체(배우자를 포함한 세대 전원의

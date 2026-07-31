@@ -4,7 +4,10 @@
  *   재당첨제한(주택공급에 관한 규칙 제54조, 지역별 5~10년)과는 별개 제도이며 반영하지 않음
  * - 지역 지정 현황은 수시로 바뀌므로 사용자가 지역 유형을 직접 선택하게 함(도시명 하드코딩 없음)
  * - 저축총액/납입횟수는 사용자가 이미 월 25만원 인정한도를 반영해 파악한 값을 그대로 입력받음
+ * - 날짜는 달력 기준(연/월)으로 계산하며, 일수 근사(/30)는 사용하지 않음
  */
+
+import { parseDate, monthsBetween } from './age'
 
 export type RegionType = 'speculation' | 'metro' | 'nonMetro' | 'shrinking'
 
@@ -19,7 +22,6 @@ export interface SubscriptionRankInput {
   unitSizeOver40: boolean // 희망 평형 40㎡ 초과 여부
 }
 
-const DAY = 86_400_000
 const REGION_REQUIREMENTS: Record<RegionType, { months: number; payments: number }> = {
   speculation: { months: 24, payments: 24 },
   metro: { months: 12, payments: 12 },
@@ -32,8 +34,12 @@ export function calcSubscriptionRank(i: SubscriptionRankInput, asOf: Date) {
     return { eligible: false as const, reason: '무주택 요건 미충족' }
   }
 
-  const joined = new Date(`${i.subscriptionJoinDate}T00:00:00`)
-  const months = Math.max(0, (asOf.getTime() - joined.getTime()) / DAY) / 30
+  const joined = parseDate(i.subscriptionJoinDate)
+  if (!joined) {
+    return { eligible: false as const, reason: '청약통장 가입일을 입력하세요' }
+  }
+
+  const months = Math.max(0, monthsBetween(joined, asOf))
   const req = REGION_REQUIREMENTS[i.regionType]
   const meetsJoinPeriod = months >= req.months
   const meetsPaymentCount = i.paymentCount >= req.payments

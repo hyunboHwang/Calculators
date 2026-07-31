@@ -31,6 +31,11 @@ export function ageParts(birth: Date, ref: Date) {
   return { years: y, months: m, days: d }
 }
 
+export function monthsBetween(from: Date, to: Date): number {
+  const { years, months } = ageParts(from, to)
+  return years * 12 + months
+}
+
 export const koreanAges = (birth: Date, ref: Date) => ({
   man: ageParts(birth, ref).years, // 만 나이
   yeon: ref.getFullYear() - birth.getFullYear(), // 연 나이
