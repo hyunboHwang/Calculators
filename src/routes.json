@@ -296,6 +296,14 @@
     "description": "전세보증금과 월세 전환 조건을 비교해 법정 전환율 상한을 넘는지 확인합니다."
   },
   {
+    "id": "inheritanceTax",
+    "path": "/inheritance-tax",
+    "label": "상속세",
+    "group": "부동산",
+    "title": "상속세 계산기 — 배우자공제·일괄공제·금융재산공제 반영 | 계산기",
+    "description": "상속재산가액과 상속인 구성으로 상속세를 추정합니다. 배우자공제, 일괄공제 5억원, 금융재산공제를 반영한 간이 계산기입니다."
+  },
+  {
     "id": "guidesIndex",
     "path": "/guides",
     "label": "가이드",
