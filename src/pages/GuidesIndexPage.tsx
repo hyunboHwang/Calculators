@@ -5,6 +5,7 @@ const TRACK1_IDS = [
   'jeonseDepositRecoveryGuide',
   'severanceInterimGuide',
   'unemploymentApplicationGuide',
+  'pensionTaxCreditGuide',
 ]
 
 const TRACK2_IDS = [

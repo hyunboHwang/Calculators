@@ -2,7 +2,7 @@
 
 주식·저축·직장인·나이·대출·날짜·셀러·부동산·자동차·생활을 아우르는 생활 계산기 모음. Vite + React + TypeScript + Tailwind CSS.
 
-## 계산기 목록 (41개)
+## 계산기 목록 (44개)
 
 | 그룹 | 계산기 | 경로 |
 |---|---|---|
@@ -13,6 +13,7 @@
 | 주식 | 본전 (손실 복구) | `/loss-recovery/` |
 | 주식 | 미국주식 양도세 | `/us-stock-tax/` |
 | 주식 | 예적금 이자 | `/deposit/` |
+| 주식 | 연금저축·IRP 세액공제 | `/pension-tax-credit/` |
 | 직장인 | 연봉 실수령액 | `/salary/` |
 | 직장인 | 연봉 인상 비교 | `/raise/` |
 | 직장인 | 퇴직금 | `/severance/` |
@@ -47,3 +48,5 @@
 | 자동차 | 자동차세 | `/car-tax/` |
 | 자동차 | 자동차 취득세 | `/car-acquisition-tax/` |
 | 생활 | BMI·표준체중 | `/bmi/` |
+| 생활 | 관리비 | `/management-fee/` |
+| 생활 | 이사비용 | `/moving-cost/` |
