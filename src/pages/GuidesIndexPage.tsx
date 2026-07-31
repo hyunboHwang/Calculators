@@ -14,6 +14,8 @@ const TRACK2_IDS = [
   'nationalEmploymentSupportGuide',
 ]
 
+const TRACK3_IDS = ['inheritanceTaxProcedureGuide', 'giftTaxProcedureGuide']
+
 function GuideList({ ids, title }: { ids: string[]; title: string }) {
   const items = ids
     .map((id) => routes.find((r) => r.id === id))
@@ -51,6 +53,7 @@ export default function GuidesIndexPage() {
       </p>
       <GuideList ids={TRACK1_IDS} title="계산기 활용 가이드" />
       <GuideList ids={TRACK2_IDS} title="정부지원금·청년정책" />
+      <GuideList ids={TRACK3_IDS} title="세금·부동산 절차" />
     </div>
   )
 }
