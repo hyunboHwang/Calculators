@@ -50,6 +50,7 @@ const components: Record<string, React.LazyExoticComponent<() => React.JSX.Eleme
   giftTax: lazy(() => import('./pages/GiftTaxCalculator')),
   subscriptionScore: lazy(() => import('./pages/SubscriptionScoreCalculator')),
   subscriptionRank: lazy(() => import('./pages/SubscriptionRankCalculator')),
+  managementFee: lazy(() => import('./pages/ManagementFeeCalculator')),
   guidesIndex: lazy(() => import('./pages/GuidesIndexPage')),
   yearEndTaxProcedureGuide: lazy(() => import('./pages/guides/YearEndTaxProcedureGuide')),
   jeonseDepositRecoveryGuide: lazy(() => import('./pages/guides/JeonseDepositRecoveryGuide')),
