@@ -14,7 +14,12 @@ const TRACK2_IDS = [
   'nationalEmploymentSupportGuide',
 ]
 
-const TRACK3_IDS = ['inheritanceTaxProcedureGuide', 'giftTaxProcedureGuide']
+const TRACK3_IDS = [
+  'inheritanceTaxProcedureGuide',
+  'giftTaxProcedureGuide',
+  'subscriptionScoreGuide',
+  'subscriptionRankGuide',
+]
 
 function GuideList({ ids, title }: { ids: string[]; title: string }) {
   const items = ids

@@ -2,7 +2,7 @@
 
 주식·저축·직장인·나이·대출·날짜·셀러·부동산·자동차·생활을 아우르는 생활 계산기 모음. Vite + React + TypeScript + Tailwind CSS.
 
-## 계산기 목록 (39개)
+## 계산기 목록 (41개)
 
 | 그룹 | 계산기 | 경로 |
 |---|---|---|
@@ -42,6 +42,8 @@
 | 부동산 | 전월세 전환율 | `/jeonse-conversion/` |
 | 부동산 | 상속세 | `/inheritance-tax/` |
 | 부동산 | 증여세 | `/gift-tax/` |
+| 부동산 | 청약가점 | `/subscription-score/` |
+| 부동산 | 청약순위 | `/subscription-rank/` |
 | 자동차 | 자동차세 | `/car-tax/` |
 | 자동차 | 자동차 취득세 | `/car-acquisition-tax/` |
 | 생활 | BMI·표준체중 | `/bmi/` |
