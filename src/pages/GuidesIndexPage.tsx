@@ -14,6 +14,7 @@ const GUIDE_ICONS: Record<string, string> = {
   giftTaxProcedureGuide: '🎁',
   subscriptionScoreGuide: '🏆',
   subscriptionRankGuide: '📊',
+  holdingTaxGuide: '🏠',
 }
 
 const TRACK1_IDS = [
@@ -36,6 +37,7 @@ const TRACK3_IDS = [
   'giftTaxProcedureGuide',
   'subscriptionScoreGuide',
   'subscriptionRankGuide',
+  'holdingTaxGuide',
 ]
 
 /** AboutPage 등 다른 페이지에서 가이드를 트랙별로 나열할 때 재사용 */
