@@ -46,7 +46,7 @@ function creditCardDeduction(gross: number, credit: number, debitOrCash: number)
   const remainThreshold = Math.max(threshold - credit, 0)
   const debitExcess = Math.max(debitOrCash - remainThreshold, 0)
   const raw = creditExcess * 0.15 + debitExcess * 0.3
-  const cap = gross <= 70_000_000 ? 3_000_000 : gross <= 120_000_000 ? 2_500_000 : 2_000_000
+  const cap = gross <= 70_000_000 ? 3_000_000 : 2_500_000
   return Math.min(raw, cap)
 }
 
