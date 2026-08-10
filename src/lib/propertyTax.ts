@@ -1,6 +1,12 @@
 /**
  * 주택 재산세 추정 — 공시가격 기준
- * - 공정시장가액비율: 일반 60%, 1세대1주택 특례(공시 9억 이하) 45%
+ * - 공정시장가액비율: 1세대1주택은 공시가격 제한 없이 구간별로 3억원 이하 43%,
+ *   3억원 초과 6억원 이하 44%, 6억원 초과 45%가 적용되고(2026년도 지방세법 시행령
+ *   제109조, 9억원 초과 주택도 포함), 다주택·법인은 60%가 적용됨
+ * - 4단계 누진세율 중 더 낮은 특례세율(0.05~0.35%)은 1세대1주택이면서 공시가격
+ *   9억원 이하인 경우에만 적용되고, 9억원 초과 1세대1주택은 낮은 비율(43~45%)은
+ *   그대로 받으면서 세율은 일반세율(0.1~0.4%)을 적용받음 — 비율과 세율의 특례 적용
+ *   기준이 서로 다름에 주의
  * - 과세표준 누진세율 4구간 + 도시지역분(0.14%) + 지방교육세(재산세 본세의 20%)
  * - 위택스 고시 기준 단순화 모델이며 실제 고지 세액과 다를 수 있음
  */
@@ -35,9 +41,19 @@ export interface PropertyTaxInput {
   isSingleHouse: boolean // 1세대1주택 여부
 }
 
+/** 1세대1주택 특례 공정시장가액비율 — 공시가격 구간별로 다름 */
+function specialRatio(publicPrice: number): number {
+  if (publicPrice <= 300_000_000) return 0.43
+  if (publicPrice <= 600_000_000) return 0.44
+  return 0.45
+}
+
 export function calcPropertyTax(i: PropertyTaxInput) {
+  // 공정시장가액비율 특례는 1세대1주택이면 공시가격 제한 없이 적용된다.
+  const ratioIsSpecial = i.isSingleHouse
+  // 반면 더 낮은 특례세율(세율 구간표)은 공시가격 9억원 이하일 때만 적용된다.
   const useSpecial = i.isSingleHouse && i.publicPrice <= 900_000_000
-  const ratio = useSpecial ? 0.45 : 0.6
+  const ratio = ratioIsSpecial ? specialRatio(i.publicPrice) : 0.6
   const taxBase = i.publicPrice * ratio
   const propertyTax = progressiveTax(taxBase, useSpecial ? SPECIAL_BRACKETS : GENERAL_BRACKETS)
   const urbanTax = taxBase * 0.0014

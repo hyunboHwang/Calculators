@@ -39,15 +39,25 @@ export interface YearEndTaxInput {
   monthlyRent: number // 월세액 (무주택 세대주 요건 가정)
 }
 
-/** 신용카드 등 소득공제 (신용카드분 우선 차감 방식) */
-function creditCardDeduction(gross: number, credit: number, debitOrCash: number) {
+/**
+ * 신용카드 등 소득공제 (신용카드분 우선 차감 방식)
+ *
+ * 2025년 세법개정(2025.12.2 국회 본회의 의결, 2026.1.1 이후 개시 과세기간부터 적용)으로
+ * 기본한도에 자녀 수에 따른 추가한도가 신설됐습니다: 총급여 7천만원 이하는 자녀 1인당
+ * 50만원(최대 100만원), 초과는 자녀 1인당 25만원(최대 50만원). 법 조문상 대상은
+ * "자녀·손자녀 등 부양가족"이며 세부 연령 기준은 하위법령 확인이 필요해, 이 계산기는
+ * 입력값인 8~20세 자녀 수로 근사합니다.
+ */
+function creditCardDeduction(gross: number, credit: number, debitOrCash: number, children: number) {
   const threshold = gross * 0.25
   const creditExcess = Math.max(credit - threshold, 0)
   const remainThreshold = Math.max(threshold - credit, 0)
   const debitExcess = Math.max(debitOrCash - remainThreshold, 0)
   const raw = creditExcess * 0.15 + debitExcess * 0.3
-  const cap = gross <= 70_000_000 ? 3_000_000 : 2_500_000
-  return Math.min(raw, cap)
+  const baseCap = gross <= 70_000_000 ? 3_000_000 : 2_500_000
+  const childBonus =
+    gross <= 70_000_000 ? Math.min(children * 500_000, 1_000_000) : Math.min(children * 250_000, 500_000)
+  return Math.min(raw, baseCap + childBonus)
 }
 
 /** 연금계좌세액공제 (연금저축+IRP 합산 한도 900만) */
@@ -75,7 +85,7 @@ export function calcYearEndTax(i: YearEndTaxInput) {
 
   // 2. 소득공제
   const personalDeduction = family * 1_500_000
-  const cardDeduction = creditCardDeduction(gross, i.creditCard, i.debitCashReceipt)
+  const cardDeduction = creditCardDeduction(gross, i.creditCard, i.debitCashReceipt, i.children)
   const totalIncomeDeduction =
     personalDeduction + annualInsurance.pension + annualInsurance.healthAndEmployment + cardDeduction
 
@@ -92,7 +102,7 @@ export function calcYearEndTax(i: YearEndTaxInput) {
   const educationCredit = i.educationExpense * 0.15
   const donationCredit =
     i.donation <= 10_000_000 ? i.donation * 0.15 : 10_000_000 * 0.15 + (i.donation - 10_000_000) * 0.3
-  const rentAnnual = Math.min(i.monthlyRent * 12, 7_500_000)
+  const rentAnnual = Math.min(i.monthlyRent * 12, 10_000_000)
   const rentRate = gross <= 55_000_000 ? 0.17 : gross <= 80_000_000 ? 0.15 : 0
   const rentCredit = rentAnnual * rentRate
 

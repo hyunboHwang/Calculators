@@ -2,9 +2,17 @@
 
 export const DAY = 86_400_000
 
+/** YYYY-MM-DD 형식이면서 실제로 존재하는 달력 날짜만 허용 (2026-02-31 등은 거부) */
 export const parseDate = (s: string): Date | null => {
-  const d = new Date(`${s}T00:00:00`)
-  return Number.isNaN(d.getTime()) ? null : d
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(s)
+  if (!m) return null
+  const [, yStr, moStr, dStr] = m
+  const y = Number(yStr)
+  const mo = Number(moStr)
+  const da = Number(dStr)
+  const d = new Date(y, mo - 1, da)
+  if (d.getFullYear() !== y || d.getMonth() !== mo - 1 || d.getDate() !== da) return null
+  return d
 }
 
 const stripTime = (d: Date) => new Date(d.getFullYear(), d.getMonth(), d.getDate())
@@ -15,20 +23,36 @@ export const todayStr = () => {
   return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}`
 }
 
-/** 만 나이를 년/월/일로 분해 */
+const daysInMonth = (year: number, monthIndex0: number) => new Date(year, monthIndex0 + 1, 0).getDate()
+
+/** birth에 n개월을 더하되, 대상 월에 birth의 '일'이 없으면 그 달의 말일로 고정(clamp) */
+function addMonthsClamped(d: Date, n: number): Date {
+  const total = d.getMonth() + n
+  const year = d.getFullYear() + Math.floor(total / 12)
+  const month = ((total % 12) + 12) % 12
+  const day = Math.min(d.getDate(), daysInMonth(year, month))
+  return new Date(year, month, day)
+}
+
+/**
+ * 만 나이를 년/월/일로 분해.
+ *
+ * 단순히 년/월/일 필드를 각각 빼고 부족분을 한 달치만 빌려오는 방식은, 생일이
+ * 31일처럼 큰 날짜이고 빌려오는 달이 그보다 짧을 때(예: 1월 31일 → 3월 1일,
+ * 2월을 거침) 빌려온 값이 충분하지 않아 일수가 음수로 남는 오류가 있었습니다.
+ * 대신 "생일을 기준으로 몇 번째 월 기념일이 지났는지"를 먼저 구하고(말일 clamp
+ * 적용), 그 기준일로부터 남은 일수를 계산하는 방식을 사용합니다.
+ */
 export function ageParts(birth: Date, ref: Date) {
-  let y = ref.getFullYear() - birth.getFullYear()
-  let m = ref.getMonth() - birth.getMonth()
-  let d = ref.getDate() - birth.getDate()
-  if (d < 0) {
-    m -= 1
-    d += new Date(ref.getFullYear(), ref.getMonth(), 0).getDate()
+  let months = (ref.getFullYear() - birth.getFullYear()) * 12 + (ref.getMonth() - birth.getMonth())
+  let anchor = addMonthsClamped(birth, months)
+  if (anchor.getTime() > ref.getTime()) {
+    months -= 1
+    anchor = addMonthsClamped(birth, months)
   }
-  if (m < 0) {
-    y -= 1
-    m += 12
-  }
-  return { years: y, months: m, days: d }
+  const days = Math.round((ref.getTime() - anchor.getTime()) / DAY)
+  const years = Math.floor(months / 12)
+  return { years, months: months - years * 12, days }
 }
 
 export function monthsBetween(from: Date, to: Date): number {
