@@ -175,6 +175,15 @@ export default function SalaryCalculator() {
             {fmt(RATES_2026.pensionFloorMonthly)}원 / 상한 {fmt(RATES_2026.pensionCapMonthly)}원
             (2026.7~2027.6)을 반영했습니다.
           </div>
+
+          <div className="rounded-2xl border border-slate-200 bg-white p-4 text-sm">
+            <a
+              href="/salary-table/"
+              className="font-medium text-emerald-700 underline decoration-emerald-300 underline-offset-2 hover:text-emerald-800"
+            >
+              연봉 2,000만원~2억원 구간별 실수령액표 보기 →
+            </a>
+          </div>
         </section>
       </div>
     </div>
