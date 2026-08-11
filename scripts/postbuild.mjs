@@ -10,6 +10,7 @@
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs'
 import { join } from 'node:path'
 import { pageContent } from '../src/lib/pageContent.js'
+import { buildSalaryTable } from '../src/lib/salary.ts'
 
 const SITE_URL = 'https://www.calculators.ai.kr'
 
@@ -98,6 +99,21 @@ function prerenderBody(route) {
       )
       .join('')
     html += `</ul>`
+  }
+
+  if (route.id === 'salaryTable') {
+    const rows = buildSalaryTable()
+    html += `<h2 class="mt-6 text-lg font-bold text-slate-900">연봉대별 월 실수령액표</h2>`
+    html += `<table class="mt-2 w-full text-sm"><thead><tr>`
+    html += `<th>연봉</th><th>월급(세전)</th><th>1인 가구</th><th>2인 가구</th><th>3인 가구</th><th>4인 가구+</th>`
+    html += `</tr></thead><tbody>`
+    html += rows
+      .map(
+        (r) =>
+          `<tr><td>${r.annualSalary.toLocaleString('ko-KR')}</td><td>${r.monthlyGross.toLocaleString('ko-KR')}</td><td>${r.net[0].toLocaleString('ko-KR')}</td><td>${r.net[1].toLocaleString('ko-KR')}</td><td>${r.net[2].toLocaleString('ko-KR')}</td><td>${r.net[3].toLocaleString('ko-KR')}</td></tr>`,
+      )
+      .join('')
+    html += `</tbody></table>`
   }
 
   // 내부 링크 (크롤러의 페이지 발견용)
