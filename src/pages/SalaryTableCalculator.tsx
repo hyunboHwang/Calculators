@@ -27,15 +27,32 @@ export default function SalaryTableCalculator() {
       </div>
 
       <div className="mt-4 overflow-x-auto rounded-2xl border border-slate-200 bg-white shadow-sm">
-        <table className="w-full min-w-[640px] text-right text-sm tabular-nums">
+        <table className="w-full min-w-[920px] text-right text-sm tabular-nums">
           <thead className="bg-slate-50 text-xs text-slate-500">
+            <tr>
+              <th className="py-2 pl-4 pr-2 text-left font-medium" rowSpan={2}>
+                연봉
+              </th>
+              <th className="px-2 py-2 font-medium" rowSpan={2}>
+                월급(세전)
+              </th>
+              <th className="border-l border-slate-200 px-2 py-1 text-center font-medium" colSpan={5}>
+                공제 내역(1인 가구 기준)
+              </th>
+              <th className="border-l border-slate-200 px-2 py-1 text-center font-medium" colSpan={4}>
+                월 실수령액
+              </th>
+            </tr>
             <tr className="border-b border-slate-200">
-              <th className="py-2 pl-4 pr-2 text-left font-medium">연봉</th>
-              <th className="px-2 py-2 font-medium">월급(세전)</th>
-              <th className="px-2 py-2 font-medium">1인 가구</th>
-              <th className="px-2 py-2 font-medium">2인 가구</th>
-              <th className="px-2 py-2 font-medium">3인 가구</th>
-              <th className="py-2 pl-2 pr-4 font-medium">4인 가구+</th>
+              <th className="border-l border-slate-200 px-2 py-1.5 font-medium">국민연금</th>
+              <th className="px-2 py-1.5 font-medium">건강보험</th>
+              <th className="px-2 py-1.5 font-medium">고용보험</th>
+              <th className="px-2 py-1.5 font-medium">소득세</th>
+              <th className="px-2 py-1.5 font-medium">공제 합계</th>
+              <th className="border-l border-slate-200 px-2 py-1.5 font-medium">1인</th>
+              <th className="px-2 py-1.5 font-medium">2인</th>
+              <th className="px-2 py-1.5 font-medium">3인</th>
+              <th className="py-1.5 pl-2 pr-4 font-medium">4인+</th>
             </tr>
           </thead>
           <tbody>
@@ -45,7 +62,14 @@ export default function SalaryTableCalculator() {
                   {fmt(r.annualSalary)}
                 </td>
                 <td className="px-2 py-1.5 text-slate-500">{fmt(r.monthlyGross)}</td>
-                <td className="px-2 py-1.5">{fmt(r.net[0])}</td>
+                <td className="border-l border-slate-100 px-2 py-1.5 text-slate-500">
+                  -{fmt(r.pension)}
+                </td>
+                <td className="px-2 py-1.5 text-slate-500">-{fmt(r.health)}</td>
+                <td className="px-2 py-1.5 text-slate-500">-{fmt(r.employment)}</td>
+                <td className="px-2 py-1.5 text-slate-500">-{fmt(r.incomeTaxTotal)}</td>
+                <td className="px-2 py-1.5 font-medium text-slate-600">-{fmt(r.totalDeduction)}</td>
+                <td className="border-l border-slate-100 px-2 py-1.5">{fmt(r.net[0])}</td>
                 <td className="px-2 py-1.5">{fmt(r.net[1])}</td>
                 <td className="px-2 py-1.5">{fmt(r.net[2])}</td>
                 <td className="py-1.5 pl-2 pr-4 font-medium text-emerald-700">{fmt(r.net[3])}</td>
@@ -55,7 +79,9 @@ export default function SalaryTableCalculator() {
         </table>
       </div>
       <p className="mt-2 text-xs text-slate-400">
-        단위: 원(월 실수령액). 가구원 수는 본인을 포함한 부양가족 수입니다.
+        단위: 원(월 기준). 가구원 수는 본인을 포함한 부양가족 수입니다. 국민연금·건강보험·고용보험은
+        가구원 수와 무관하게 급여에만 연동되지만, 소득세는 가구원 수에 따라 달라져 공제 내역은
+        1인 가구 기준으로만 표시합니다.
       </p>
     </div>
   )

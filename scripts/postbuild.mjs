@@ -103,14 +103,15 @@ function prerenderBody(route) {
 
   if (route.id === 'salaryTable') {
     const rows = buildSalaryTable()
+    const won = (n) => n.toLocaleString('ko-KR')
     html += `<h2 class="mt-6 text-lg font-bold text-slate-900">연봉대별 월 실수령액표</h2>`
     html += `<table class="mt-2 w-full text-sm"><thead><tr>`
-    html += `<th>연봉</th><th>월급(세전)</th><th>1인 가구</th><th>2인 가구</th><th>3인 가구</th><th>4인 가구+</th>`
+    html += `<th>연봉</th><th>월급(세전)</th><th>국민연금(1인 가구 기준)</th><th>건강보험(1인 가구 기준)</th><th>고용보험(1인 가구 기준)</th><th>소득세(1인 가구 기준)</th><th>공제 합계(1인 가구 기준)</th><th>월 실수령액(1인)</th><th>월 실수령액(2인)</th><th>월 실수령액(3인)</th><th>월 실수령액(4인+)</th>`
     html += `</tr></thead><tbody>`
     html += rows
       .map(
         (r) =>
-          `<tr><td>${r.annualSalary.toLocaleString('ko-KR')}</td><td>${r.monthlyGross.toLocaleString('ko-KR')}</td><td>${r.net[0].toLocaleString('ko-KR')}</td><td>${r.net[1].toLocaleString('ko-KR')}</td><td>${r.net[2].toLocaleString('ko-KR')}</td><td>${r.net[3].toLocaleString('ko-KR')}</td></tr>`,
+          `<tr><td>${won(r.annualSalary)}</td><td>${won(r.monthlyGross)}</td><td>-${won(r.pension)}</td><td>-${won(r.health)}</td><td>-${won(r.employment)}</td><td>-${won(r.incomeTaxTotal)}</td><td>-${won(r.totalDeduction)}</td><td>${won(r.net[0])}</td><td>${won(r.net[1])}</td><td>${won(r.net[2])}</td><td>${won(r.net[3])}</td></tr>`,
       )
       .join('')
     html += `</tbody></table>`
