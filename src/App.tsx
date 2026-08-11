@@ -12,6 +12,7 @@ const components: Record<string, React.LazyExoticComponent<() => React.JSX.Eleme
   margin: lazy(() => import('./pages/MarginCalculator')),
   bizTax: lazy(() => import('./pages/BizTaxCalculator')),
   salary: lazy(() => import('./pages/SalaryCalculator')),
+  salaryTable: lazy(() => import('./pages/SalaryTableCalculator')),
   raise: lazy(() => import('./pages/RaiseComparator')),
   severance: lazy(() => import('./pages/SeveranceCalculator')),
   yearEndTax: lazy(() => import('./pages/YearEndTaxCalculator')),
