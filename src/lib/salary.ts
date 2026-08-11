@@ -195,3 +195,40 @@ export function calcSalary(i: SalaryInput) {
     netRatio: i.annualSalary > 0 ? (monthlyNet * 12) / i.annualSalary : NaN,
   }
 }
+
+/* ---------- 연봉 실수령액표 (레퍼런스 페이지용) ---------- */
+
+export interface SalaryTableRow {
+  annualSalary: number
+  monthlyGross: number
+  net: [number, number, number, number] // 1인·2인·3인·4인 가구 월 실수령액
+}
+
+/**
+ * 연봉 구간별 실수령액표를 생성한다.
+ * 2,000만원~1억원: 100만원 단위(81행), 1억500만원~2억원: 500만원 단위(20행).
+ * 계산 가정: 비과세 0원, 8~20세 자녀 0명, 원천징수비율 100%.
+ */
+export function buildSalaryTable(): SalaryTableRow[] {
+  const salaries: number[] = []
+  for (let s = 20_000_000; s <= 100_000_000; s += 1_000_000) salaries.push(s)
+  for (let s = 105_000_000; s <= 200_000_000; s += 5_000_000) salaries.push(s)
+
+  return salaries.map((annualSalary) => {
+    const net = [1, 2, 3, 4].map(
+      (dependents) =>
+        calcSalary({
+          annualSalary,
+          nonTaxableMonthly: 0,
+          dependents,
+          children: 0,
+          withholdingRatio: 100,
+        }).monthlyNet,
+    ) as [number, number, number, number]
+    return {
+      annualSalary,
+      monthlyGross: Math.round(annualSalary / 12),
+      net,
+    }
+  })
+}
