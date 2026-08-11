@@ -201,6 +201,12 @@ export function calcSalary(i: SalaryInput) {
 export interface SalaryTableRow {
   annualSalary: number
   monthlyGross: number
+  /** 아래 4개 공제 항목은 1인 가구(부양가족 1명) 기준. 4대보험은 가구원 수와 무관해 모든 가구에 동일하게 적용됨 */
+  pension: number
+  health: number // 건강보험 + 장기요양보험 합산
+  employment: number
+  incomeTaxTotal: number // 소득세 + 지방소득세 (1인 가구 기준. 가구원 수가 늘면 공제가 커져 실제로는 이보다 작아짐)
+  totalDeduction: number // 공제 합계 (1인 가구 기준)
   net: [number, number, number, number] // 1인·2인·3인·4인 가구 월 실수령액
 }
 
@@ -215,19 +221,23 @@ export function buildSalaryTable(): SalaryTableRow[] {
   for (let s = 105_000_000; s <= 200_000_000; s += 5_000_000) salaries.push(s)
 
   return salaries.map((annualSalary) => {
-    const net = [1, 2, 3, 4].map(
-      (dependents) =>
-        calcSalary({
-          annualSalary,
-          nonTaxableMonthly: 0,
-          dependents,
-          children: 0,
-          withholdingRatio: 100,
-        }).monthlyNet,
-    ) as [number, number, number, number]
+    const calcFor = (dependents: number) =>
+      calcSalary({ annualSalary, nonTaxableMonthly: 0, dependents, children: 0, withholdingRatio: 100 })
+    const base = calcFor(1)
+    const net: [number, number, number, number] = [
+      base.monthlyNet,
+      calcFor(2).monthlyNet,
+      calcFor(3).monthlyNet,
+      calcFor(4).monthlyNet,
+    ]
     return {
       annualSalary,
-      monthlyGross: Math.round(annualSalary / 12),
+      monthlyGross: base.monthlyGross,
+      pension: base.pension,
+      health: base.health + base.care,
+      employment: base.employment,
+      incomeTaxTotal: base.incomeTax + base.localTax,
+      totalDeduction: base.totalDeduction,
       net,
     }
   })
