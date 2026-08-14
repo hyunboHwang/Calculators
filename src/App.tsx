@@ -69,6 +69,7 @@ const components: Record<string, React.LazyExoticComponent<() => React.JSX.Eleme
   subscriptionRankGuide: lazy(() => import('./pages/guides/SubscriptionRankGuide')),
   pensionTaxCreditGuide: lazy(() => import('./pages/guides/PensionTaxCreditGuide')),
   holdingTaxGuide: lazy(() => import('./pages/guides/HoldingTaxGuide')),
+  glossaryHub: lazy(() => import('./pages/GlossaryPage')),
   about: lazy(() => import('./pages/AboutPage')),
   privacy: lazy(() => import('./pages/PrivacyPage')),
 }
