@@ -1,8 +1,9 @@
 import { useMemo, useState } from 'react'
 import { buildGlossaryIndex } from '../lib/glossaryIndex'
+import routes from '../routes.json'
 
 export default function GlossaryPage() {
-  const entries = useMemo(() => buildGlossaryIndex(), [])
+  const entries = useMemo(() => buildGlossaryIndex(routes), [])
   const [query, setQuery] = useState('')
 
   const filtered = useMemo(() => {

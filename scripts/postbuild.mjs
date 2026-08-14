@@ -11,6 +11,7 @@ import { readFileSync, writeFileSync, mkdirSync } from 'node:fs'
 import { join } from 'node:path'
 import { pageContent } from '../src/lib/pageContent.js'
 import { buildSalaryTable } from '../src/lib/salary.ts'
+import { buildGlossaryIndex } from '../src/lib/glossaryIndex.ts'
 
 const SITE_URL = 'https://www.calculators.ai.kr'
 
@@ -115,6 +116,26 @@ function prerenderBody(route) {
       )
       .join('')
     html += `</tbody></table>`
+  }
+
+  if (route.id === 'glossaryHub') {
+    const entries = buildGlossaryIndex(routes)
+    html += `<h2 class="mt-6 text-lg font-bold text-slate-900">전체 용어 (${entries.length}개)</h2>`
+    html += `<dl class="mt-2">`
+    html += entries
+      .map((e) => {
+        const defs = e.definitions
+          .map(
+            (d) =>
+              `<p class="mt-1">${esc(d.text)} — 관련: ${d.sources
+                .map((s) => `<a href="${urlOf(s.path)}">${esc(s.label)}</a>`)
+                .join(', ')}</p>`,
+          )
+          .join('')
+        return `<dt class="mt-3 font-semibold text-slate-800">${esc(e.term)}</dt>${defs}`
+      })
+      .join('')
+    html += `</dl>`
   }
 
   // 내부 링크 (크롤러의 페이지 발견용)
