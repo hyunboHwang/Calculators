@@ -71,6 +71,7 @@ const components: Record<string, React.LazyExoticComponent<() => React.JSX.Eleme
   holdingTaxGuide: lazy(() => import('./pages/guides/HoldingTaxGuide')),
   glossaryHub: lazy(() => import('./pages/GlossaryPage')),
   about: lazy(() => import('./pages/AboutPage')),
+  verificationProcess: lazy(() => import('./pages/VerificationProcessPage')),
   privacy: lazy(() => import('./pages/PrivacyPage')),
 }
 const DEFAULT_PAGE = components.stockReturn

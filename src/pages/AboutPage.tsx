@@ -4,6 +4,7 @@ import GROUP_ORDER from '../groups.json'
 import { GUIDE_TRACKS } from './GuidesIndexPage'
 
 export default function AboutPage() {
+  const operatorParas: string[] = pageContent.about.operatorIntro
   const paras: string[] = pageContent.about.intro
   const faqs: { q: string; a: string }[] = pageContent.about.faqs
   const groups = [...new Set(routes.filter((r) => GROUP_ORDER.includes(r.group)).map((r) => r.group))]
@@ -24,6 +25,22 @@ export default function AboutPage() {
   return (
     <div className="max-w-3xl">
       <h1 className="text-2xl font-bold">계산기 소개</h1>
+
+      <section className="mt-6 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+        <h2 className="text-lg font-bold">운영자 소개</h2>
+        {operatorParas.map((p, i) => (
+          <p key={i} className="mt-3 text-sm leading-relaxed text-slate-600">
+            {p}
+          </p>
+        ))}
+        <a
+          href="/verification/"
+          className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-emerald-700 underline decoration-emerald-300 underline-offset-2 hover:text-emerald-800"
+        >
+          계산기 검증 방식 자세히 보기 →
+        </a>
+      </section>
+
       {paras.map((p, i) => (
         <p key={i} className="mt-4 text-sm leading-relaxed text-slate-600">
           {p}

@@ -38,7 +38,31 @@ function prerenderBody(route) {
   html += `<p class="mt-2">${esc(route.description)}</p>`
 
   if (c) {
+    if (c.operatorIntro?.length) {
+      html += `<h2 class="mt-6 text-lg font-bold text-slate-900">운영자 소개</h2>`
+      html += c.operatorIntro.map((p) => `<p class="mt-3">${esc(p)}</p>`).join('')
+    }
+
     html += c.intro.map((p) => `<p class="mt-3">${esc(p)}</p>`).join('')
+
+    if (c.steps?.length) {
+      html += `<h2 class="mt-6 text-lg font-bold text-slate-900">검증 5단계</h2>`
+      html += `<ol class="mt-2 list-decimal pl-5">`
+      html += c.steps
+        .map((s) => `<li class="mt-1"><b>${esc(s.title)}</b> — ${esc(s.desc)}</li>`)
+        .join('')
+      html += `</ol>`
+    }
+
+    if (c.corrections?.length) {
+      html += `<h2 class="mt-6 text-lg font-bold text-slate-900">실제 오류 발견·수정 사례</h2>`
+      html += c.corrections
+        .map(
+          (item) =>
+            `<h3 class="mt-3 font-semibold text-slate-800">${esc(item.title)}</h3><p class="mt-1">${esc(item.desc)}</p>`,
+        )
+        .join('')
+    }
 
     if (c.formula) {
       html += `<h2 class="mt-6 text-lg font-bold text-slate-900">${esc(c.formula.title)}</h2>`
