@@ -126,6 +126,9 @@ export const pageContent = {
     sources: [
       { label: '국세청 홈택스', url: 'https://www.hometax.go.kr' },
     ],
+    relatedGuides: [
+      { label: '연말정산 신고 절차 A to Z', path: '/guides/yearend-tax-procedure' },
+    ],
     verification: {
       basis: '2026년 4대보험료율 및 소득세법 시행령 별표2(근로소득 간이세액표) 산출방식 기준',
       lastVerified: '2026-08-19',
@@ -279,6 +282,9 @@ export const pageContent = {
     sources: [
       { label: '고용노동부', url: 'https://www.moel.go.kr' },
     ],
+    relatedGuides: [
+      { label: '퇴직금 중간정산 가능한 경우', path: '/guides/severance-interim-settlement' },
+    ],
     verification: {
       basis: '고용노동부 평균임금 산정 방식(근로기준법) 기준',
       lastVerified: '2026-08-19',
@@ -350,6 +356,9 @@ export const pageContent = {
     sources: [
       { label: '국세청 홈택스', url: 'https://www.hometax.go.kr' },
     ],
+    relatedGuides: [
+      { label: '연말정산 신고 절차 A to Z', path: '/guides/yearend-tax-procedure' },
+    ],
     verification: {
       basis: '2026년 소득세법 기준(2025년 세법개정에 따른 신용카드 소득공제 자녀 추가한도 반영)',
       lastVerified: '2026-08-19',
@@ -420,6 +429,9 @@ export const pageContent = {
     ],
     sources: [
       { label: '고용보험', url: 'https://www.ei.go.kr' },
+    ],
+    relatedGuides: [
+      { label: '실업급여 신청 절차·준비서류', path: '/guides/unemployment-application' },
     ],
     verification: {
       basis: '2026년 고용보험법 시행령 기준(구직급여 상한액 68,100원/일, 2026.1.1 이직자부터 적용)',
@@ -1561,6 +1573,9 @@ export const pageContent = {
     sources: [
       { label: '위택스', url: 'https://www.wetax.go.kr' },
     ],
+    relatedGuides: [
+      { label: '재산세·종부세(보유세) 완벽정리', path: '/guides/holding-tax' },
+    ],
     verification: {
       basis: '2026년 지방세법 기준',
       lastVerified: '2026-08-19',
@@ -1606,6 +1621,9 @@ export const pageContent = {
     ],
     sources: [
       { label: '위택스', url: 'https://www.wetax.go.kr' },
+    ],
+    relatedGuides: [
+      { label: '재산세·종부세(보유세) 완벽정리', path: '/guides/holding-tax' },
     ],
     verification: {
       basis: '2026년 지방세법(시행령 제109조) 기준',
@@ -1655,6 +1673,9 @@ export const pageContent = {
     sources: [
       { label: '국세청 홈택스', url: 'https://www.hometax.go.kr' },
     ],
+    relatedGuides: [
+      { label: '재산세·종부세(보유세) 완벽정리', path: '/guides/holding-tax' },
+    ],
     verification: {
       basis: '2026년 종합부동산세 세율(7단계 누진세율 0.5~2.7%) 기준',
       lastVerified: '2026-08-19',
@@ -1702,6 +1723,9 @@ export const pageContent = {
     sources: [
       { label: '국세청 상속세 항목별설명', url: 'https://www.nts.go.kr/nts/cm/cntnts/cntntsView.do?mi=6528&cntntsId=7956' },
       { label: '국세청 세액계산흐름도', url: 'https://www.nts.go.kr/nts/cm/cntnts/cntntsView.do?mi=2326&cntntsId=7720' },
+    ],
+    relatedGuides: [
+      { label: '상속세 신고 절차 총정리', path: '/guides/inheritance-tax-procedure' },
     ],
     verification: {
       basis: '2026년 상속세및증여세법 기준(2024년 발의된 자녀공제 확대·최고세율 인하 개정안은 국회 부결로 미시행)',
@@ -1751,6 +1775,9 @@ export const pageContent = {
       { label: '국세상담센터 혼인·출산 증여재산공제', url: 'https://call.nts.go.kr/call/qna/selectQnaInfo.do?mi=2787&ctgId=CTG12222' },
       { label: '국세청 세액계산흐름도', url: 'https://www.nts.go.kr/nts/cm/cntnts/cntntsView.do?mi=2326&cntntsId=7720' },
     ],
+    relatedGuides: [
+      { label: '증여세 신고 절차 총정리', path: '/guides/gift-tax-procedure' },
+    ],
     verification: {
       basis: '2026년 상속세및증여세법 기준(혼인·출산 증여재산공제는 2024년 시행분 반영)',
       lastVerified: '2026-08-19',
@@ -1797,6 +1824,9 @@ export const pageContent = {
       { label: 'HUG 주택청약도우미', url: 'https://www.khug.or.kr/khmb/m/hg/lg/hglg000019.jsp' },
       { label: '청약홈', url: 'https://www.applyhome.co.kr' },
     ],
+    relatedGuides: [
+      { label: '청약순위·저축액 기준 완벽정리', path: '/guides/subscription-rank' },
+    ],
     verification: {
       basis: '2026년 청약가점제 기준(배우자 통장 가입기간 합산제, 2024년 3월 25일 시행분 반영)',
       lastVerified: '2026-08-19',
@@ -1842,6 +1872,9 @@ export const pageContent = {
     sources: [
       { label: '청약홈', url: 'https://www.applyhome.co.kr' },
       { label: 'KB생각 — 청약 1순위 조건', url: 'https://kbthink.com/subscription/first-priority.html' },
+    ],
+    relatedGuides: [
+      { label: '청약 가점제 완벽정리', path: '/guides/subscription-score' },
     ],
     verification: {
       basis: '주택공급에 관한 규칙 기준(월 납입 인정 한도 2024년 11월 1일부터 25만원)',
@@ -1958,6 +1991,9 @@ export const pageContent = {
     ],
     sources: [
       { label: '국세청 — 연금계좌 세액공제', url: 'https://www.nts.go.kr/nts/cm/cntnts/cntntsView.do?cntntsId=7875' },
+    ],
+    relatedGuides: [
+      { label: '세액공제 한도·공제율 완벽정리', path: '/guides/pension-tax-credit' },
     ],
     verification: {
       basis: '2023년 세법개정 기준 연금계좌 세액공제 한도(연금저축 600만원, 합산 900만원)',
@@ -2143,6 +2179,9 @@ export const pageContent = {
       { label: '렌트홈', url: 'https://www.renthome.go.kr' },
       { label: '국토교통부', url: 'https://www.molit.go.kr' },
     ],
+    relatedGuides: [
+      { label: '전세보증금 못 받았을 때 대처법', path: '/guides/jeonse-deposit-recovery' },
+    ],
     verification: {
       basis: '주택임대차보호법상 전월세 전환율 법정 상한(기준금리+2%p와 연 10% 중 낮은 값) 기준',
       lastVerified: '2026-08-19',
@@ -2217,6 +2256,13 @@ export const pageContent = {
       { label: '국세청 - 2025년 귀속 연말정산 종합안내', url: 'https://www.nts.go.kr/nts/cm/cntnts/cntntsView.do?mi=2304&cntntsId=238938' },
       { label: '대한민국 정책브리핑 - 연말정산 간소화자료 일괄제공 서비스', url: 'https://www.korea.kr/news/policyNewsView.do?newsId=148955097' },
     ],
+    relatedCalculators: [
+      { label: '연말정산 환급액 계산기', path: '/year-end-tax' },
+      { label: '연봉 실수령액 계산기', path: '/salary' },
+    ],
+    relatedGuides: [
+      { label: '세액공제 한도·공제율 완벽정리', path: '/guides/pension-tax-credit' },
+    ],
   },
 
   jeonseDepositRecoveryGuide: {
@@ -2261,6 +2307,9 @@ export const pageContent = {
       { label: '찾기쉬운 생활법령정보 — 보증금의 회수', url: 'https://easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=629&ccfNo=5&cciNo=2&cnpClsNo=1' },
       { label: '주택도시보증공사(HUG) — 전세보증금반환보증 이용절차', url: 'https://www.khug.or.kr/hug/web/ig/dr/igdr000002.jsp' },
       { label: '대한법률구조공단', url: 'https://www.klac.or.kr/pil/main' },
+    ],
+    relatedCalculators: [
+      { label: '전월세 전환율 계산기', path: '/jeonse-conversion' },
     ],
     highlights: [
       { icon: '⚠️', label: '이사 전 필수', text: '임차권등기명령을 먼저 등기해야 대항력이 유지됩니다.' },
@@ -2340,6 +2389,12 @@ export const pageContent = {
       { label: '고용노동부 FAQ — 퇴직금 중간정산 사유', url: 'https://www.moel.go.kr/faq/faqView.do?seqRepeat=111' },
       { label: '찾기쉬운 생활법령정보(법제처) — 퇴직금 중간정산', url: 'https://easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=999&ccfNo=2&cciNo=1&cnpClsNo=1' },
     ],
+    relatedCalculators: [
+      { label: '퇴직금 계산기', path: '/severance' },
+    ],
+    relatedGuides: [
+      { label: '실업급여 신청 절차·준비서류', path: '/guides/unemployment-application' },
+    ],
   },
 
   unemploymentApplicationGuide: {
@@ -2384,6 +2439,12 @@ export const pageContent = {
       { label: '고용24(고용보험·실업급여)', url: 'https://www.work24.go.kr' },
       { label: '찾기쉬운 생활법령정보 — 구직급여 수급신청', url: 'https://easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=722&ccfNo=2&cciNo=2&cnpClsNo=1' },
       { label: '고용노동부', url: 'https://www.moel.go.kr' },
+    ],
+    relatedCalculators: [
+      { label: '실업급여 계산기', path: '/unemployment' },
+    ],
+    relatedGuides: [
+      { label: '퇴직금 중간정산 가능한 경우', path: '/guides/severance-interim-settlement' },
     ],
     highlights: [
       { icon: '📋', label: '단계별 절차', text: '정해진 순서를 차례로 밟아야 지급이 시작됩니다.' },
@@ -2456,6 +2517,11 @@ export const pageContent = {
       { label: '정부24 — 청년월세 지원 서비스 상세', url: 'https://www.gov.kr/portal/rcvfvrSvc/dtlEx/161300000099' },
       { label: '복지로 공식 블로그 — 2026년 청년월세 지원 신청 안내', url: 'https://blog.bokjiro.go.kr/1828' },
     ],
+    relatedGuides: [
+      { label: '청년도약계좌 총정리', path: '/guides/youth-leap-account' },
+      { label: '청년 전세자금대출(버팀목) 총정리', path: '/guides/youth-jeonse-loan' },
+      { label: '국민취업지원제도 신청 조건', path: '/guides/national-employment-support' },
+    ],
   },
 
   youthLeapAccountGuide: {
@@ -2500,6 +2566,11 @@ export const pageContent = {
       { label: '금융위원회 — 청년미래적금 가입절차·심사일정 안내', url: 'https://www.fsc.go.kr/no010101/87106' },
       { label: '금융위원회 — 청년도약계좌 기여금 확대 보도자료', url: 'https://www.fsc.go.kr/no010101/83729' },
       { label: '대한민국 정책브리핑 — 청년미래적금 6월 출시', url: 'https://www.korea.kr/news/policyNewsView.do?newsId=148963384' },
+    ],
+    relatedGuides: [
+      { label: '2026년 청년월세 지원 총정리', path: '/guides/youth-rent-subsidy' },
+      { label: '청년 전세자금대출(버팀목) 총정리', path: '/guides/youth-jeonse-loan' },
+      { label: '국민취업지원제도 신청 조건', path: '/guides/national-employment-support' },
     ],
     highlights: [
       { icon: '🚪', label: '가입 종료', text: '신규가입은 2025년 12월 5일 마감되었습니다.' },
@@ -2559,6 +2630,11 @@ export const pageContent = {
       { label: '주택도시기금 - 청년전용 버팀목전세자금 상품안내', url: 'https://nhuf.molit.go.kr/FP/FP05/FP0502/FP05020301.jsp' },
       { label: '주택도시기금 - 이용절차 및 제출서류', url: 'https://nhuf.molit.go.kr/FP/FP05/FP0502/FP05020302.jsp' },
       { label: '기금e든든(온라인 신청)', url: 'https://enhuf.molit.go.kr' },
+    ],
+    relatedGuides: [
+      { label: '2026년 청년월세 지원 총정리', path: '/guides/youth-rent-subsidy' },
+      { label: '청년도약계좌 총정리', path: '/guides/youth-leap-account' },
+      { label: '국민취업지원제도 신청 조건', path: '/guides/national-employment-support' },
     ],
     highlights: [
       { icon: '👤', label: '연령기준', text: '만 19세 이상 34세 이하 신청 가능' },
@@ -2633,6 +2709,11 @@ export const pageContent = {
       { label: '정부24 - 국민취업지원제도 취업지원신청', url: 'https://www.gov.kr/portal/rcvfvrSvc/dtlEx/149200005007' },
       { label: '고용노동부 - 청년 3만 명, 취업 경험 없어도 국민취업지원제도 지원', url: 'https://www.moel.go.kr/news/enews/report/enewsView.do?news_seq=19309' },
     ],
+    relatedGuides: [
+      { label: '2026년 청년월세 지원 총정리', path: '/guides/youth-rent-subsidy' },
+      { label: '청년도약계좌 총정리', path: '/guides/youth-leap-account' },
+      { label: '청년 전세자금대출(버팀목) 총정리', path: '/guides/youth-jeonse-loan' },
+    ],
   },
 
   inheritanceTaxProcedureGuide: {
@@ -2674,6 +2755,12 @@ export const pageContent = {
       { label: '국세청 상속세 항목별설명', url: 'https://www.nts.go.kr/nts/cm/cntnts/cntntsView.do?mi=6528&cntntsId=7956' },
       { label: '뉴스1 — 상속세법 개정안 국회 부결 (2024-12-10)', url: 'https://www.news1.kr/politics/assembly/5627380' },
       { label: '한국일보 — 유산취득세 전환 추진 (2025-03-11)', url: 'https://www.hankookilbo.com/News/Read/A2025031113130002381' },
+    ],
+    relatedCalculators: [
+      { label: '상속세 계산기', path: '/inheritance-tax' },
+    ],
+    relatedGuides: [
+      { label: '증여세 신고 절차 총정리', path: '/guides/gift-tax-procedure' },
     ],
     highlights: [
       { icon: '⏰', label: '신고기한', text: '사망일 속한 달 말일부터 6개월 이내(국외는 9개월)' },
@@ -2732,6 +2819,12 @@ export const pageContent = {
       { label: '국세청 세액계산흐름도', url: 'https://www.nts.go.kr/nts/cm/cntnts/cntntsView.do?mi=2326&cntntsId=7720' },
       { label: '국세청 홈택스', url: 'https://www.hometax.go.kr' },
     ],
+    relatedCalculators: [
+      { label: '증여세 계산기', path: '/gift-tax' },
+    ],
+    relatedGuides: [
+      { label: '상속세 신고 절차 총정리', path: '/guides/inheritance-tax-procedure' },
+    ],
     highlights: [
       { icon: '⏰', label: '신고기한', text: '증여일 속한 달 말일부터 3개월 이내' },
       { icon: '💐', label: '혼인·출산공제', text: '2024년 이후 증여분부터 최대 1억원 추가 공제(합산 한도)' },
@@ -2787,6 +2880,12 @@ export const pageContent = {
       { label: 'HUG 주택청약도우미', url: 'https://www.khug.or.kr/khmb/m/hg/lg/hglg000019.jsp' },
       { label: '청약홈', url: 'https://www.applyhome.co.kr' },
       { label: '대한민국 정책브리핑', url: 'https://www.korea.kr' },
+    ],
+    relatedCalculators: [
+      { label: '청약가점 계산기', path: '/subscription-score' },
+    ],
+    relatedGuides: [
+      { label: '청약순위·저축액 기준 완벽정리', path: '/guides/subscription-rank' },
     ],
     highlights: [
       { icon: '🏆', label: '만점기준', text: '무주택기간32+부양가족35+통장가입17=84점 만점' },
@@ -2844,6 +2943,12 @@ export const pageContent = {
       { label: 'KB생각 — 청약 1순위 조건', url: 'https://kbthink.com/subscription/first-priority.html' },
       { label: '뱅크샐러드 — 청약 25만원 인정 금액', url: 'https://www.banksalad.com/articles/%EC%A3%BC%ED%83%9D%EC%B2%AD%EC%95%BD-25%EB%A7%8C%EC%9B%90-1%EC%88%9C%EC%9C%84-%EC%A1%B0%EA%B1%B4-%EC%9D%B8%EC%A0%95-%EA%B8%88%EC%95%A1' },
     ],
+    relatedCalculators: [
+      { label: '청약순위 계산기', path: '/subscription-rank' },
+    ],
+    relatedGuides: [
+      { label: '청약 가점제 완벽정리', path: '/guides/subscription-score' },
+    ],
     highlights: [
       { icon: '📊', label: '순차제 기준', text: '40㎡ 초과는 저축총액, 40㎡ 이하는 납입횟수 순' },
       { icon: '🗺️', label: '규제지역 확대', text: '2025.10.15부터 서울 전역+경기 12개 지역 투기과열·조정대상 지정' },
@@ -2899,6 +3004,12 @@ export const pageContent = {
       { label: '국세청 — 연금계좌 세액공제', url: 'https://www.nts.go.kr/nts/cm/cntnts/cntntsView.do?cntntsId=7875' },
       { label: 'KB — 연금저축펀드, IRP 차이', url: 'https://kbthink.com/year-end-tax/pension-savings-vs-irp.html' },
       { label: '뱅크샐러드 — 연금저축·IRP 세액공제 총정리', url: 'https://www.banksalad.com/articles/%EC%86%8C%EB%93%9D%EA%B3%B5%EC%A0%9C-%EC%84%B8%EC%95%A1%EA%B3%B5%EC%A0%9C-%EA%B0%9C%EC%9D%B8%EC%97%B0%EA%B8%88-%EC%97%B0%EB%B4%89%EB%B3%84-%EB%B9%84%EA%B5%90' },
+    ],
+    relatedCalculators: [
+      { label: '연금저축·IRP 세액공제 계산기', path: '/pension-tax-credit' },
+    ],
+    relatedGuides: [
+      { label: '연말정산 신고 절차 A to Z', path: '/guides/yearend-tax-procedure' },
     ],
     highlights: [
       { icon: '💰', label: '세액공제 한도', text: '연금저축 단독 600만원, 합산(IRP포함) 900만원' },
@@ -2956,6 +3067,11 @@ export const pageContent = {
       { label: '국세청 — 종합부동산세 안내', url: 'https://www.nts.go.kr/nts/cm/cntnts/cntntsView.do?mi=2354&cntntsId=7736' },
       { label: '찾기쉬운 생활법령정보 — 재산세', url: 'https://easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=1259&ccfNo=4&cciNo=1&cnpClsNo=3' },
       { label: '헤럴드경제 — 2026년 세제개편안', url: 'https://biz.heraldcorp.com/article/10803483' },
+    ],
+    relatedCalculators: [
+      { label: '재산세 계산기', path: '/property-tax' },
+      { label: '종합부동산세 계산기', path: '/comprehensive-real-estate-tax' },
+      { label: '취득세 계산기', path: '/acquisition-tax' },
     ],
     highlights: [
       { icon: '📅', label: '과세기준일', text: '재산세·종부세 모두 매년 6월 1일 기준' },

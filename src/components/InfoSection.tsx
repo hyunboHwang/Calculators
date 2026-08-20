@@ -12,6 +12,8 @@ interface PageInfo {
   highlights?: { icon: string; label: string; text: string }[]
   stepChips?: { icon: string; label: string }[]
   verification?: { basis: string; lastVerified: string; scope: string; excludes: string }
+  relatedGuides?: { label: string; path: string }[]
+  relatedCalculators?: { label: string; path: string }[]
   hidden?: boolean
 }
 
@@ -255,6 +257,46 @@ export default function InfoSection({ pageId }: { pageId: string }) {
                   className="text-sm text-emerald-700 underline decoration-emerald-300 underline-offset-2 hover:text-emerald-800"
                 >
                   {s.label} ↗
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      {c.relatedGuides && c.relatedGuides.length > 0 && (
+        <section className="mt-8 rounded-2xl border border-emerald-200 bg-emerald-50/40 p-5">
+          <h2 className="flex items-center gap-2 text-base font-bold text-slate-800">
+            <span aria-hidden="true">📖</span> 관련 가이드
+          </h2>
+          <ul className="mt-3 space-y-1">
+            {c.relatedGuides.map((g) => (
+              <li key={g.path}>
+                <a
+                  href={`${g.path}/`}
+                  className="text-sm font-medium text-emerald-700 underline decoration-emerald-300 underline-offset-2 hover:text-emerald-800"
+                >
+                  {g.label} →
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      {c.relatedCalculators && c.relatedCalculators.length > 0 && (
+        <section className="mt-8 rounded-2xl border border-emerald-200 bg-emerald-50/40 p-5">
+          <h2 className="flex items-center gap-2 text-base font-bold text-slate-800">
+            <span aria-hidden="true">🧮</span> 관련 계산기
+          </h2>
+          <ul className="mt-3 space-y-1">
+            {c.relatedCalculators.map((cal) => (
+              <li key={cal.path}>
+                <a
+                  href={`${cal.path}/`}
+                  className="text-sm font-medium text-emerald-700 underline decoration-emerald-300 underline-offset-2 hover:text-emerald-800"
+                >
+                  {cal.label} →
                 </a>
               </li>
             ))}

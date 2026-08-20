@@ -124,6 +124,24 @@ function prerenderBody(route) {
         .join('')
       html += `</ul>`
     }
+
+    if (c.relatedGuides?.length) {
+      html += `<h2 class="mt-6 text-lg font-bold text-slate-900">관련 가이드</h2>`
+      html += `<ul class="mt-2 list-disc pl-5">`
+      html += c.relatedGuides
+        .map((g) => `<li class="mt-1"><a href="${urlOf(g.path)}">${esc(g.label)}</a></li>`)
+        .join('')
+      html += `</ul>`
+    }
+
+    if (c.relatedCalculators?.length) {
+      html += `<h2 class="mt-6 text-lg font-bold text-slate-900">관련 계산기</h2>`
+      html += `<ul class="mt-2 list-disc pl-5">`
+      html += c.relatedCalculators
+        .map((cal) => `<li class="mt-1"><a href="${urlOf(cal.path)}">${esc(cal.label)}</a></li>`)
+        .join('')
+      html += `</ul>`
+    }
   }
 
   if (route.id === 'guidesIndex') {
