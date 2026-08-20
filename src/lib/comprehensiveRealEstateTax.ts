@@ -28,8 +28,12 @@ export interface ComprehensiveRealEstateTaxInput {
   isSingleHouse: boolean // 1세대1주택 여부
 }
 
+function getDeduction(isSingleHouse: boolean): number {
+  return isSingleHouse ? 1_200_000_000 : 900_000_000
+}
+
 export function calcComprehensiveRealEstateTax(i: ComprehensiveRealEstateTaxInput) {
-  const deduction = i.isSingleHouse ? 1_200_000_000 : 900_000_000
+  const deduction = getDeduction(i.isSingleHouse)
   const excess = Math.max(i.totalPublicPrice - deduction, 0)
   const taxBase = excess * 0.6
   const bracket = BRACKETS.find((b) => taxBase <= b.limit) ?? BRACKETS[BRACKETS.length - 1]
@@ -45,6 +49,8 @@ export function calcComprehensiveRealEstateTax(i: ComprehensiveRealEstateTaxInpu
   }
 }
 
+// 타입 전용 import 유지 필수 — postbuild.mjs가 이 파일을 Node 타입 스트리핑으로 직접
+// import하므로, 값 import로 바뀌면 React 컴포넌트 파일을 Node가 로드하려다 빌드가 깨진다.
 import type { Verdict } from '../components/VerdictBanner'
 
 const won = (n: number) => `${n.toLocaleString('ko-KR')}원`
@@ -53,7 +59,7 @@ export function getComprehensiveRealEstateTaxVerdict(
   i: ComprehensiveRealEstateTaxInput,
   r: ReturnType<typeof calcComprehensiveRealEstateTax>,
 ): Verdict {
-  const deduction = i.isSingleHouse ? 1_200_000_000 : 900_000_000
+  const deduction = getDeduction(i.isSingleHouse)
   if (i.totalPublicPrice <= deduction) {
     return {
       tone: 'good',

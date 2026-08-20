@@ -243,23 +243,28 @@ export function buildSalaryTable(): SalaryTableRow[] {
   })
 }
 
+// 타입 전용 import 유지 필수 — postbuild.mjs가 이 파일을 Node 타입 스트리핑으로 직접
+// import하므로, 값 import로 바뀌면 React 컴포넌트 파일을 Node가 로드하려다 빌드가 깨진다.
 import type { Verdict } from '../components/VerdictBanner'
 
-/** 동일 연봉을 표준조건(비과세 0원·부양가족 1명·원천징수 100%)으로 계산한 실수령률과 비교한다. */
+/** 동일 연봉을 표준조건(비과세 0원·부양가족 1명·동일 원천징수 비율)으로 계산한 실수령률과 비교한다. */
 export function getSalaryVerdict(
   input: SalaryInput,
   result: ReturnType<typeof calcSalary>,
 ): Verdict | null {
-  if (!Number.isFinite(result.netRatio)) return null
+  if (!Number.isFinite(result.netRatio) || result.netRatio < 0 || result.netRatio > 1) return null
 
+  // withholdingRatio는 사용자가 선택한 값 그대로 유지한다.
+  // 표준조건 비교는 비과세 항목·부양가족 수 차이만 격리해서 보기 위한 것이므로,
+  // 원천징수 비율까지 100으로 고정하면 그 선택 자체가 diff에 섞여 들어가 버린다.
   const baseline = calcSalary({
     annualSalary: input.annualSalary,
     nonTaxableMonthly: 0,
     dependents: 1,
     children: 0,
-    withholdingRatio: 100,
+    withholdingRatio: input.withholdingRatio,
   })
-  if (!Number.isFinite(baseline.netRatio)) return null
+  if (!Number.isFinite(baseline.netRatio) || baseline.netRatio < 0 || baseline.netRatio > 1) return null
 
   const netRatioPct = result.netRatio * 100
   const baselinePct = baseline.netRatio * 100

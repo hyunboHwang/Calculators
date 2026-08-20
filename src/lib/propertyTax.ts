@@ -70,6 +70,8 @@ export function calcPropertyTax(i: PropertyTaxInput) {
   }
 }
 
+// 타입 전용 import 유지 필수 — postbuild.mjs가 이 파일을 Node 타입 스트리핑으로 직접
+// import하므로, 값 import로 바뀌면 React 컴포넌트 파일을 Node가 로드하려다 빌드가 깨진다.
 import type { Verdict } from '../components/VerdictBanner'
 
 const won = (n: number) => `${n.toLocaleString('ko-KR')}원`
