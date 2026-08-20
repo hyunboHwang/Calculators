@@ -43,6 +43,19 @@ function prerenderBody(route) {
       html += c.operatorIntro.map((p) => `<p class="mt-3">${esc(p)}</p>`).join('')
     }
 
+    if (c.verification) {
+      html += `<h2 class="mt-6 text-lg font-bold text-slate-900">계산 기준</h2>`
+      html += `<ul class="mt-2 list-disc pl-5">`
+      html += `<li class="mt-1">적용 기준: ${esc(c.verification.basis)}</li>`
+      html += `<li class="mt-1">마지막 검증: ${esc(c.verification.lastVerified)}</li>`
+      if (c.sources?.length) {
+        html += `<li class="mt-1">공식 자료: ${esc(c.sources.map((s) => s.label).join(' / '))}</li>`
+      }
+      html += `<li class="mt-1">계산 대상: ${esc(c.verification.scope)}</li>`
+      html += `<li class="mt-1">제외 사항: ${esc(c.verification.excludes)}</li>`
+      html += `</ul>`
+    }
+
     html += c.intro.map((p) => `<p class="mt-3">${esc(p)}</p>`).join('')
 
     if (c.steps?.length) {

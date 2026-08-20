@@ -11,10 +11,14 @@ interface PageInfo {
   sources?: { label: string; url: string }[]
   highlights?: { icon: string; label: string; text: string }[]
   stepChips?: { icon: string; label: string }[]
+  verification?: { basis: string; lastVerified: string; scope: string; excludes: string }
   hidden?: boolean
 }
 
 const content = pageContent as Record<string, PageInfo>
+const verificationSteps: { title: string; desc: string }[] =
+  (pageContent as Record<string, { steps?: { title: string; desc: string }[] }>).verificationProcess
+    ?.steps ?? []
 
 const stripStepNumber = (s: string) => s.replace(/^\d+\.\s+/, '')
 
@@ -53,6 +57,60 @@ export default function InfoSection({ pageId }: { pageId: string }) {
 
   return (
     <div className="mt-14 border-t border-slate-200 pt-8">
+      {c.verification && (
+        <section className="mb-8 rounded-2xl border border-emerald-200 bg-emerald-50/40 p-5">
+          <h2 className="flex items-center gap-2 text-base font-bold text-slate-800">
+            <span aria-hidden="true">🔎</span> 계산 기준
+          </h2>
+          <dl className="mt-3 space-y-1.5 text-sm">
+            <div className="flex gap-2">
+              <dt className="w-24 shrink-0 text-slate-500">적용 기준</dt>
+              <dd className="text-slate-700">{c.verification.basis}</dd>
+            </div>
+            <div className="flex gap-2">
+              <dt className="w-24 shrink-0 text-slate-500">마지막 검증</dt>
+              <dd className="text-slate-700">{c.verification.lastVerified}</dd>
+            </div>
+            {c.sources && c.sources.length > 0 && (
+              <div className="flex gap-2">
+                <dt className="w-24 shrink-0 text-slate-500">공식 자료</dt>
+                <dd className="text-slate-700">{c.sources.map((s) => s.label).join(' / ')}</dd>
+              </div>
+            )}
+            <div className="flex gap-2">
+              <dt className="w-24 shrink-0 text-slate-500">계산 대상</dt>
+              <dd className="text-slate-700">{c.verification.scope}</dd>
+            </div>
+            <div className="flex gap-2">
+              <dt className="w-24 shrink-0 text-slate-500">제외 사항</dt>
+              <dd className="text-slate-700">{c.verification.excludes}</dd>
+            </div>
+          </dl>
+
+          {verificationSteps.length > 0 && (
+            <details className="group mt-4 rounded-lg border border-emerald-200 bg-white p-3">
+              <summary className="cursor-pointer list-none text-sm font-semibold text-slate-700 marker:content-none">
+                이 계산기는 어떻게 검증했나요?{' '}
+                <span className="text-emerald-600 transition-transform group-open:rotate-180">▾</span>
+              </summary>
+              <ol className="mt-2 list-decimal space-y-1 pl-5 text-xs leading-relaxed text-slate-600">
+                {verificationSteps.map((s, i) => (
+                  <li key={i}>
+                    <b>{s.title}</b> — {s.desc}
+                  </li>
+                ))}
+              </ol>
+              <a
+                href="/verification/"
+                className="mt-2 inline-block text-xs font-medium text-emerald-700 underline decoration-emerald-300 underline-offset-2 hover:text-emerald-800"
+              >
+                전체 검증 방식·실제 수정 사례 보기 →
+              </a>
+            </details>
+          )}
+        </section>
+      )}
+
       {c.highlights && c.highlights.length > 0 && (
         <section className="mb-8 grid grid-cols-2 gap-3">
           {c.highlights.map((h, i) => (
