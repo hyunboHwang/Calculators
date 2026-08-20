@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
-import { calcSalary, RATES_2026, type SalaryInput } from '../lib/salary'
+import { calcSalary, getSalaryVerdict, RATES_2026, type SalaryInput } from '../lib/salary'
 import { Field, Row, fmt } from '../components/ui'
+import VerdictBanner from '../components/VerdictBanner'
 
 /* ---------- 페이지 ---------- */
 
@@ -19,6 +20,7 @@ export default function SalaryCalculator() {
     setInput((prev) => ({ ...prev, [k]: v }))
 
   const r = useMemo(() => calcSalary(input), [input])
+  const verdict = useMemo(() => getSalaryVerdict(input, r), [input, r])
 
   return (
     <div>
@@ -125,6 +127,8 @@ export default function SalaryCalculator() {
               <b>{fmt(r.totalDeduction)}원</b>이 공제됩니다.
             </p>
           </div>
+
+          {verdict && <VerdictBanner verdict={verdict} />}
 
           {/* 공제 내역 */}
           <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">

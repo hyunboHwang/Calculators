@@ -242,3 +242,45 @@ export function buildSalaryTable(): SalaryTableRow[] {
     }
   })
 }
+
+import type { Verdict } from '../components/VerdictBanner'
+
+/** 동일 연봉을 표준조건(비과세 0원·부양가족 1명·원천징수 100%)으로 계산한 실수령률과 비교한다. */
+export function getSalaryVerdict(
+  input: SalaryInput,
+  result: ReturnType<typeof calcSalary>,
+): Verdict | null {
+  if (!Number.isFinite(result.netRatio)) return null
+
+  const baseline = calcSalary({
+    annualSalary: input.annualSalary,
+    nonTaxableMonthly: 0,
+    dependents: 1,
+    children: 0,
+    withholdingRatio: 100,
+  })
+  if (!Number.isFinite(baseline.netRatio)) return null
+
+  const netRatioPct = result.netRatio * 100
+  const baselinePct = baseline.netRatio * 100
+  const diff = netRatioPct - baselinePct
+  const headline = `${netRatioPct.toFixed(1)}%`
+
+  if (Math.abs(diff) < 0.5) {
+    return {
+      tone: 'neutral',
+      badgeLabel: '표준 수준',
+      headline,
+      headlineUnit: '실수령률',
+      description: `동일 연봉을 표준조건(비과세 0원·부양가족 1명)으로 계산한 ${baselinePct.toFixed(1)}%와 비슷한 수준입니다.`,
+    }
+  }
+  const better = diff > 0
+  return {
+    tone: better ? 'good' : 'neutral',
+    badgeLabel: better ? '표준보다 유리' : '표준보다 낮음',
+    headline,
+    headlineUnit: '실수령률',
+    description: `동일 연봉 표준조건(비과세 0원·부양가족 1명) 기준 ${baselinePct.toFixed(1)}%보다 ${Math.abs(diff).toFixed(1)}%p ${better ? '높습니다' : '낮습니다'}. 비과세 항목·부양가족 수 차이 때문입니다.`,
+  }
+}
