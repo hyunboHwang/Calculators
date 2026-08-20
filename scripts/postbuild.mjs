@@ -193,12 +193,19 @@ function prerenderBody(route) {
     html += `</dl>`
   }
 
-  // 내부 링크 (크롤러의 페이지 발견용)
-  html += `<nav class="mt-8 text-xs" aria-label="전체 계산기">`
-  html += routes
-    .map((r) => `<a href="${urlOf(r.path)}">${esc(r.label)}</a>`)
-    .join(' · ')
-  html += `</nav></div>`
+  // 내부 링크 — 전체 라우트를 나열하지 않고, 실제로 연관 있는 같은 카테고리
+  // 계산기만 남깁니다(가이드/정보/용어사전은 그룹 규모가 다르거나 이미 자체
+  // relatedGuides/relatedCalculators로 연결되어 있어 제외).
+  if (!['가이드', '정보', '용어사전'].includes(route.group)) {
+    const siblings = routes.filter((r) => r.group === route.group && r.id !== route.id)
+    if (siblings.length > 0) {
+      html += `<h2 class="mt-6 text-lg font-bold text-slate-900">${esc(route.group)} 관련 계산기</h2>`
+      html += `<nav class="mt-2 text-xs" aria-label="${esc(route.group)} 계산기">`
+      html += siblings.map((r) => `<a href="${urlOf(r.path)}">${esc(r.label)}</a>`).join(' · ')
+      html += `</nav>`
+    }
+  }
+  html += `</div>`
   return html
 }
 
@@ -210,6 +217,10 @@ function renderHead(html, route) {
     .replace(
       /(<meta[\s\n]+name="description"[\s\n]+content=")[^"]*(")/,
       `$1${esc(route.description)}$2`,
+    )
+    .replace(
+      /(<meta name="robots" content=")[^"]*(")/,
+      route.noindex ? '$1noindex,follow$2' : '$1index,follow$2',
     )
     .replace(/(<link rel="canonical" href=")[^"]*(")/, `$1${url}$2`)
     .replace(
@@ -243,6 +254,7 @@ const today = new Date().toISOString().slice(0, 10)
 const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${routes
+  .filter((r) => !r.noindex)
   .map((r) => {
     const url = SITE_URL + (r.path === '/' ? '/' : `${r.path}/`)
     return `  <url>\n    <loc>${url}</loc>\n    <lastmod>${today}</lastmod>\n    <changefreq>monthly</changefreq>\n  </url>`
