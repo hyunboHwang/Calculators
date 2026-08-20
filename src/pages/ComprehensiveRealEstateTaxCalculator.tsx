@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
-import { calcComprehensiveRealEstateTax } from '../lib/comprehensiveRealEstateTax'
+import { calcComprehensiveRealEstateTax, getComprehensiveRealEstateTaxVerdict } from '../lib/comprehensiveRealEstateTax'
 import { Field, Row, fmt } from '../components/ui'
+import VerdictBanner from '../components/VerdictBanner'
 
 export default function ComprehensiveRealEstateTaxCalculator() {
   const [totalPublicPrice, setTotalPublicPrice] = useState(1_500_000_000)
@@ -9,6 +10,11 @@ export default function ComprehensiveRealEstateTaxCalculator() {
   const r = useMemo(
     () => calcComprehensiveRealEstateTax({ totalPublicPrice, isSingleHouse }),
     [totalPublicPrice, isSingleHouse],
+  )
+
+  const verdict = useMemo(
+    () => getComprehensiveRealEstateTaxVerdict({ totalPublicPrice, isSingleHouse }, r),
+    [totalPublicPrice, isSingleHouse, r],
   )
 
   return (
@@ -45,12 +51,7 @@ export default function ComprehensiveRealEstateTaxCalculator() {
         </section>
 
         <section className="space-y-4">
-          <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-5">
-            <p className="text-sm text-slate-500">예상 총 납부액</p>
-            <p className="text-3xl font-extrabold tabular-nums text-emerald-700">
-              {fmt(r.total)}원
-            </p>
-          </div>
+          <VerdictBanner verdict={verdict} />
 
           <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
             <h2 className="mb-2 text-base font-semibold">상세 내역</h2>

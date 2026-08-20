@@ -44,3 +44,30 @@ export function calcComprehensiveRealEstateTax(i: ComprehensiveRealEstateTaxInpu
     total: Math.round(total),
   }
 }
+
+import type { Verdict } from '../components/VerdictBanner'
+
+const won = (n: number) => `${n.toLocaleString('ko-KR')}원`
+
+export function getComprehensiveRealEstateTaxVerdict(
+  i: ComprehensiveRealEstateTaxInput,
+  r: ReturnType<typeof calcComprehensiveRealEstateTax>,
+): Verdict {
+  const deduction = i.isSingleHouse ? 1_200_000_000 : 900_000_000
+  if (i.totalPublicPrice <= deduction) {
+    return {
+      tone: 'good',
+      badgeLabel: '종부세 비과세 대상',
+      headline: '0원',
+      headlineUnit: '예상 종부세',
+      description: `공시가격 합산액이 기본공제(${i.isSingleHouse ? '1세대1주택 12억원' : '9억원'}) 이하라 종합부동산세가 없습니다.`,
+    }
+  }
+  return {
+    tone: 'neutral',
+    badgeLabel: '종부세 과세 대상',
+    headline: won(r.total),
+    headlineUnit: '예상 종부세',
+    description: `공시가격 합산액이 기본공제(${i.isSingleHouse ? '1세대1주택 12억원' : '9억원'})를 초과해 과세 대상입니다.`,
+  }
+}
