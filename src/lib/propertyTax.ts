@@ -69,3 +69,40 @@ export function calcPropertyTax(i: PropertyTaxInput) {
     total: Math.round(total),
   }
 }
+
+import type { Verdict } from '../components/VerdictBanner'
+
+const won = (n: number) => `${n.toLocaleString('ko-KR')}원`
+
+export function getPropertyTaxVerdict(
+  i: PropertyTaxInput,
+  r: ReturnType<typeof calcPropertyTax>,
+): Verdict {
+  if (r.useSpecial) {
+    return {
+      tone: 'good',
+      badgeLabel: '1세대1주택 특례 적용',
+      headline: won(r.total),
+      headlineUnit: '예상 재산세',
+      description:
+        '공시가격 9억원 이하 1세대1주택으로 낮은 공정시장가액비율(43~45%)과 특례세율(0.05~0.35%)을 모두 적용받습니다.',
+    }
+  }
+  if (i.isSingleHouse) {
+    return {
+      tone: 'neutral',
+      badgeLabel: '특례세율 미적용 (9억원 초과)',
+      headline: won(r.total),
+      headlineUnit: '예상 재산세',
+      description:
+        '1세대1주택으로 공정시장가액비율(43~45%)은 낮게 적용되지만, 공시가격이 9억원을 초과해 특례세율은 적용되지 않습니다.',
+    }
+  }
+  return {
+    tone: 'warn',
+    badgeLabel: '다주택 기준',
+    headline: won(r.total),
+    headlineUnit: '예상 재산세',
+    description: '1세대1주택이 아니라 공정시장가액비율 60%와 일반세율이 적용됩니다.',
+  }
+}

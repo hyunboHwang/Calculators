@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
-import { calcPropertyTax } from '../lib/propertyTax'
+import { calcPropertyTax, getPropertyTaxVerdict } from '../lib/propertyTax'
 import { Field, Row, fmt } from '../components/ui'
+import VerdictBanner from '../components/VerdictBanner'
 
 export default function PropertyTaxCalculator() {
   const [publicPrice, setPublicPrice] = useState(500_000_000)
@@ -10,6 +11,7 @@ export default function PropertyTaxCalculator() {
     () => calcPropertyTax({ publicPrice, isSingleHouse }),
     [publicPrice, isSingleHouse],
   )
+  const verdict = useMemo(() => getPropertyTaxVerdict({ publicPrice, isSingleHouse }, r), [publicPrice, isSingleHouse, r])
 
   return (
     <div>
@@ -44,15 +46,7 @@ export default function PropertyTaxCalculator() {
         </section>
 
         <section className="space-y-4">
-          <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-5">
-            <p className="text-sm text-slate-500">예상 총 납부액</p>
-            <p className="text-3xl font-extrabold tabular-nums text-emerald-700">
-              {fmt(r.total)}원
-            </p>
-            <p className="mt-2 text-sm text-slate-600">
-              {r.useSpecial ? '1세대1주택 특례세율 적용' : '일반세율 적용'}
-            </p>
-          </div>
+          <VerdictBanner verdict={verdict} />
 
           <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
             <h2 className="mb-2 text-base font-semibold">상세 내역</h2>
