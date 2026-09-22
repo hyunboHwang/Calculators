@@ -438,6 +438,32 @@ function PlayingScreen({
               ))}
             </div>
           )}
+
+          {state.awaitingMove && (
+            <div className="mt-2 rounded-2xl border border-amber-200 bg-amber-50 p-4">
+              <p className="text-sm font-semibold text-amber-800">
+                {THROW_LABELS[state.awaitingMove.result]} — 움직일 말을 고르세요
+              </p>
+              <div className="mt-2 flex flex-wrap gap-2">
+                {state.awaitingMove.options.map((opt, i) => (
+                  <button
+                    key={i}
+                    type="button"
+                    onClick={() => dispatch({ type: 'CHOOSE_MOVE', option: opt })}
+                    onMouseEnter={() =>
+                      setPreviewAt(previewDestination(state.pieces, opt, state.awaitingMove!.result))
+                    }
+                    onMouseLeave={() => setPreviewAt(null)}
+                    onFocus={() => setPreviewAt(previewDestination(state.pieces, opt, state.awaitingMove!.result))}
+                    onBlur={() => setPreviewAt(null)}
+                    className="rounded-lg bg-white px-3 py-2 text-sm font-medium text-slate-700 shadow-sm hover:bg-slate-50"
+                  >
+                    {nodeLabel(opt.at)} {opt.pieceIds.length > 1 ? `(${opt.pieceIds.length}개 업힘)` : ''}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
         </YutnoriBoard>
       </div>
 
@@ -477,30 +503,6 @@ function PlayingScreen({
           </div>
         )}
       </div>
-
-      {state.awaitingMove && (
-        <div className="mt-4 rounded-2xl border border-amber-200 bg-amber-50 p-4">
-          <p className="text-sm font-semibold text-amber-800">
-            {THROW_LABELS[state.awaitingMove.result]} — 움직일 말을 고르세요
-          </p>
-          <div className="mt-2 flex flex-wrap gap-2">
-            {state.awaitingMove.options.map((opt, i) => (
-              <button
-                key={i}
-                type="button"
-                onClick={() => dispatch({ type: 'CHOOSE_MOVE', option: opt })}
-                onMouseEnter={() => setPreviewAt(previewDestination(state.pieces, opt, state.awaitingMove!.result))}
-                onMouseLeave={() => setPreviewAt(null)}
-                onFocus={() => setPreviewAt(previewDestination(state.pieces, opt, state.awaitingMove!.result))}
-                onBlur={() => setPreviewAt(null)}
-                className="rounded-lg bg-white px-3 py-2 text-sm font-medium text-slate-700 shadow-sm hover:bg-slate-50"
-              >
-                {nodeLabel(opt.at)} {opt.pieceIds.length > 1 ? `(${opt.pieceIds.length}개 업힘)` : ''}
-              </button>
-            ))}
-          </div>
-        </div>
-      )}
 
       {state.awaitingShortcut &&
         (() => {
