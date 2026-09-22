@@ -432,6 +432,7 @@ function PlayingScreen({
           teams={state.teams}
           previewAt={previewAt}
           previewTeamId={currentTeam.id}
+          currentTeamId={currentTeam.id}
         />
       </div>
 

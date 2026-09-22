@@ -74,11 +74,13 @@ export default function YutnoriBoard({
   teams,
   previewAt,
   previewTeamId,
+  currentTeamId,
 }: {
   pieces: Piece[]
   teams: Team[]
   previewAt?: BoardNode | null
   previewTeamId?: number
+  currentTeamId?: number
 }) {
   const colorOf = (teamId: number): TeamColor => teams.find((t) => t.id === teamId)?.color ?? 'red'
   const nameOf = (p: Piece): string => {
@@ -158,13 +160,22 @@ export default function YutnoriBoard({
           const teamPieces = pieces.filter((p) => p.teamId === t.id)
           const home = teamPieces.filter((p) => p.position.status === 'home').length
           const finished = teamPieces.filter((p) => p.position.status === 'finished').length
+          const isCurrent = t.id === currentTeamId
           return (
-            <li key={t.id} className="flex items-center gap-2">
+            <li
+              key={t.id}
+              className={`flex items-center gap-2 rounded-lg px-2 py-1 ${
+                isCurrent ? 'bg-emerald-50 ring-1 ring-emerald-300' : ''
+              }`}
+            >
               <span className={`h-2.5 w-2.5 shrink-0 rounded-full ${COLOR_BG[t.color]}`} aria-hidden="true" />
               <b className="shrink-0">{t.name}</b>
               <span className="text-slate-400">
                 대기 {home} · 완주 {finished}
               </span>
+              {isCurrent && (
+                <span className="ml-auto shrink-0 text-xs font-bold text-emerald-600">◀ 차례</span>
+              )}
             </li>
           )
         })}
