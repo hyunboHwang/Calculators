@@ -269,32 +269,34 @@ function App() {
           {route.group !== '가이드' && <InfoSection pageId={route.id} />}
           {!hideChrome && <AdSlot key={`${route.id}-bottom`} slot={SLOTS.bottomOfPage} />}
 
-          <footer className="mt-14 border-t border-slate-200 pt-5 pb-2 text-xs text-slate-400">
-            <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
-              {routes
-                .filter((r) => r.group === '정보')
-                .map((r) => (
-                  <a
-                    key={r.id}
-                    href={`${r.path}/`}
-                    onClick={(e) => {
-                      e.preventDefault()
-                      navigate(r.path)
-                    }}
-                    className="font-medium text-slate-500 underline decoration-slate-300 underline-offset-2 hover:text-slate-700 hover:decoration-slate-400"
-                  >
-                    {r.label}
-                  </a>
-                ))}
-            </div>
-            <p className="mt-3 leading-relaxed">
-              모든 계산 결과는 참고용 추정치이며, 세무·법률·투자 판단의 근거로 사용할 수
-              없습니다.
-            </p>
-            <p className="mt-1 text-slate-300">
-              © {new Date().getFullYear()} 계산기 · calculators.ai.kr
-            </p>
-          </footer>
+          {!hideChrome && (
+            <footer className="mt-14 border-t border-slate-200 pt-5 pb-2 text-xs text-slate-400">
+              <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+                {routes
+                  .filter((r) => r.group === '정보')
+                  .map((r) => (
+                    <a
+                      key={r.id}
+                      href={`${r.path}/`}
+                      onClick={(e) => {
+                        e.preventDefault()
+                        navigate(r.path)
+                      }}
+                      className="font-medium text-slate-500 underline decoration-slate-300 underline-offset-2 hover:text-slate-700 hover:decoration-slate-400"
+                    >
+                      {r.label}
+                    </a>
+                  ))}
+              </div>
+              <p className="mt-3 leading-relaxed">
+                모든 계산 결과는 참고용 추정치이며, 세무·법률·투자 판단의 근거로 사용할 수
+                없습니다.
+              </p>
+              <p className="mt-1 text-slate-300">
+                © {new Date().getFullYear()} 계산기 · calculators.ai.kr
+              </p>
+            </footer>
+          )}
         </main>
       </div>
     </div>
