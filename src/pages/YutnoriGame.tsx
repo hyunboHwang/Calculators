@@ -1,4 +1,4 @@
-import { useEffect, useReducer, useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
   createPieces,
   applyMove,
@@ -316,8 +316,23 @@ function SetupScreen({ onStart }: { onStart: (teams: Team[], endMode: EndMode, t
   )
 }
 
+/** action을 적용할 때마다 이전 state를 쌓아두고, undo로 한 단계씩 되돌린다. */
+function useUndoableReducer<S, A>(reducer: (state: S, action: A) => S, initial: S) {
+  const [history, setHistory] = useState<{ present: S; past: S[] }>({ present: initial, past: [] })
+
+  const dispatch = (action: A) =>
+    setHistory(({ present, past }) => ({ present: reducer(present, action), past: [...past, present] }))
+
+  const undo = () =>
+    setHistory(({ present, past }) =>
+      past.length === 0 ? { present, past } : { present: past[past.length - 1], past: past.slice(0, -1) },
+    )
+
+  return [history.present, dispatch, undo, history.past.length > 0] as const
+}
+
 export default function YutnoriGame() {
-  const [state, dispatch] = useReducer(gameReducer, initialState)
+  const [state, dispatch, undo, canUndo] = useUndoableReducer(gameReducer, initialState)
 
   if (state.phase === 'setup') {
     return (
@@ -328,10 +343,10 @@ export default function YutnoriGame() {
   }
 
   if (state.phase === 'playing') {
-    return <PlayingScreen state={state} dispatch={dispatch} />
+    return <PlayingScreen state={state} dispatch={dispatch} undo={undo} canUndo={canUndo} />
   }
 
-  return <ResultsScreen state={state} />
+  return <ResultsScreen state={state} undo={undo} canUndo={canUndo} />
 }
 
 const THROW_BUTTONS: ThrowResult[] = ['do', 'gae', 'geol', 'yut', 'mo', 'baekdo']
@@ -341,7 +356,17 @@ function nodeLabel(at: 'home' | BoardNode): string {
   return `${at}번 칸`
 }
 
-function PlayingScreen({ state, dispatch }: { state: GameState; dispatch: (a: GameAction) => void }) {
+function PlayingScreen({
+  state,
+  dispatch,
+  undo,
+  canUndo,
+}: {
+  state: GameState
+  dispatch: (a: GameAction) => void
+  undo: () => void
+  canUndo: boolean
+}) {
   const [remainingSec, setRemainingSec] = useState(() => state.timeLimitMin * 60)
 
   useEffect(() => {
@@ -365,8 +390,16 @@ function PlayingScreen({ state, dispatch }: { state: GameState; dispatch: (a: Ga
         </p>
       )}
 
-      <div className="mt-4 rounded-2xl border border-emerald-200 bg-emerald-50 p-4">
+      <div className="mt-4 flex items-center justify-between gap-3 rounded-2xl border border-emerald-200 bg-emerald-50 p-4">
         <p className="text-sm font-semibold text-emerald-800">지금 차례: {currentTeam.name}</p>
+        <button
+          type="button"
+          disabled={!canUndo}
+          onClick={undo}
+          className="shrink-0 rounded-lg bg-white px-3 py-1.5 text-xs font-semibold text-slate-600 shadow-sm disabled:opacity-40"
+        >
+          되돌리기
+        </button>
       </div>
 
       <div className="mt-4">
@@ -439,7 +472,7 @@ function PlayingScreen({ state, dispatch }: { state: GameState; dispatch: (a: Ga
   )
 }
 
-function ResultsScreen({ state }: { state: GameState }) {
+function ResultsScreen({ state, undo, canUndo }: { state: GameState; undo: () => void; canUndo: boolean }) {
   const remainingTeamIds = state.teams.map((t) => t.id).filter((id) => !state.finishedOrder.includes(id))
   const rankedRemaining = teamRank(state.pieces, remainingTeamIds)
   const finalOrder = [...state.finishedOrder, ...rankedRemaining]
@@ -464,8 +497,16 @@ function ResultsScreen({ state }: { state: GameState }) {
       </ol>
       <button
         type="button"
+        disabled={!canUndo}
+        onClick={undo}
+        className="mt-4 w-full rounded-xl bg-white py-3 text-sm font-semibold text-slate-600 shadow-sm disabled:opacity-40"
+      >
+        되돌리기
+      </button>
+      <button
+        type="button"
         onClick={() => window.location.reload()}
-        className="mt-6 w-full rounded-xl bg-emerald-600 py-3 text-sm font-bold text-white"
+        className="mt-3 w-full rounded-xl bg-emerald-600 py-3 text-sm font-bold text-white"
       >
         다시 시작
       </button>
