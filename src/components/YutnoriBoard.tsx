@@ -131,7 +131,7 @@ export default function YutnoriBoard({
           return (
             <div
               key={node}
-              className="absolute flex w-12 -translate-x-1/2 -translate-y-1/2 flex-wrap items-center justify-center gap-1"
+              className="absolute flex w-24 -translate-x-1/2 -translate-y-1/2 flex-wrap items-center justify-center gap-1"
               style={{ top: `${top}%`, left: `${left}%` }}
             >
               {group.map((p) => {
@@ -139,7 +139,7 @@ export default function YutnoriBoard({
                 return (
                   <span
                     key={p.id}
-                    className={`relative block h-7 w-7 overflow-hidden rounded-full border-[3px] border-white shadow-md ring-1 ring-black/10 ${PIECE_COLOR_BG[colorOf(p.teamId)]}`}
+                    className={`relative block h-12 w-12 overflow-hidden rounded-full border-[3px] border-white shadow-md ring-1 ring-black/10 ${PIECE_COLOR_BG[colorOf(p.teamId)]}`}
                     title={name}
                   >
                     <img
