@@ -20,11 +20,23 @@ for (const [result, expected] of [
 
 // 5번 칸에서 지름길을 타면 대각선을 거쳐 4칸 만에 15번 칸에 도착한다
 {
-  let p = piece(1, 't', { status: 'onBoard', at: 5 })
-  p = movePiece(p, 'yut', true) // 4칸: a1→a2→a3까지
-  assert.equal(p.position.at, 'a3')
-  p = movePiece(p, 'do', true) // 1칸 더: 15번 칸 합류 (takeShortcut은 이제 무의미)
+  const p = movePiece(piece(1, 't', { status: 'onBoard', at: 5 }), 'yut', true) // 4칸: a1→a2→a3→15
   assert.equal(p.position.at, 15)
+}
+
+// 대각선 위 칸(a3)에 멈춘 말도 남은 걸음 수만큼 정확히 더 나아간다 (지름길 합류 이후 걸음이 사라지지 않는지 확인)
+{
+  assert.equal(movePiece(piece(1, 't', { status: 'onBoard', at: 'a3' }), 'do', false).position.at, 15)
+  assert.equal(movePiece(piece(1, 't', { status: 'onBoard', at: 'a3' }), 'gae', false).position.at, 16)
+  assert.equal(movePiece(piece(1, 't', { status: 'onBoard', at: 'a3' }), 'mo', false).position.at, 19)
+}
+
+// 5번 칸 지름길에서 모(5칸)를 던지면 15번 칸을 지나 16번 칸까지 간다 (윷과 결과가 달라야 함)
+{
+  const viaYut = movePiece(piece(1, 't', { status: 'onBoard', at: 5 }), 'yut', true)
+  const viaMo = movePiece(piece(1, 't', { status: 'onBoard', at: 5 }), 'mo', true)
+  assert.equal(viaYut.position.at, 15)
+  assert.equal(viaMo.position.at, 16)
 }
 
 // 5번 칸에서 지름길을 타지 않으면 바깥 테두리를 그대로 돈다

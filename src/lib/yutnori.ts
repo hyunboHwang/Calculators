@@ -61,7 +61,7 @@ function stepOnce(node: WalkNode, takeShortcut: boolean): BoardNode | 'finished'
     case 'a2':
       return 'a3'
     case 'a3':
-      return 'a3'
+      return 15
     case 'b1':
       return 'b2'
     case 'b2':
@@ -116,15 +116,6 @@ export function movePiece(piece: Piece, result: ThrowResult, takeShortcut: boole
   }
 
   let cur: WalkNode = piece.position.status === 'home' ? 'start' : piece.position.at
-  // Special: if starting from a3 (end of shortcut path), auto-exit to 15 (shortcut ends, no stepping)
-  if (cur === 'a3') {
-    return { ...piece, position: { status: 'onBoard', at: 15 } }
-  }
-  // Special: if starting from b2 (end of shortcut path), auto-exit to finished (shortcut ends)
-  if (cur === 'b2') {
-    return { ...piece, position: { status: 'finished' } }
-  }
-
   const shortcutAtStart =
     piece.position.status === 'onBoard' &&
     (piece.position.at === 5 || piece.position.at === 10)
