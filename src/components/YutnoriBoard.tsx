@@ -91,7 +91,7 @@ export default function YutnoriBoard({
 
   return (
     <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-      <div className="relative mx-auto aspect-square w-full max-w-xs">
+      <div className="relative mx-auto aspect-square w-full max-w-2xl">
         <svg className="absolute inset-0 h-full w-full" viewBox="0 0 100 100" preserveAspectRatio="none">
           {LINE_SEGMENTS.map(([from, to], i) => {
             const [t1, l1] = NODE_COORDS[from]
