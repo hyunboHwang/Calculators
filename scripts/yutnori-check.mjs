@@ -132,8 +132,27 @@ console.log('✓ Task 1 이동 로직 점검 통과')
   assert.equal(teamFinished(pieces, 1), true)
   assert.equal(pieceProgress({ status: 'onBoard', at: 10 }), 10)
   assert.equal(pieceProgress({ status: 'finished' }), 20)
+  assert.equal(pieceProgress({ status: 'onBoard', at: 'b2' }), 19)
+  assert.equal(pieceProgress({ status: 'onBoard', at: 'a1' }), 12)
   const ranked = teamRank(pieces, [2, 1])
   assert.deepEqual(ranked, [1, 2]) // 완주한 팀(1)이 먼저
+}
+
+// 업힌 그룹끼리 부딪히면 상대 그룹 전체가 집으로, 같은 칸의 제3의 같은 팀 말은 그대로 유지된다
+{
+  const pieces = [
+    piece(1, '1-0', { status: 'onBoard', at: 2 }),
+    piece(1, '1-1', { status: 'onBoard', at: 2 }),
+    piece(2, '2-0', { status: 'onBoard', at: 3 }),
+    piece(2, '2-1', { status: 'onBoard', at: 3 }),
+    piece(1, '1-2', { status: 'onBoard', at: 3 }),
+  ]
+  const result = applyMove(pieces, ['1-0', '1-1'], 'do', false)
+  const capturedIds = result.pieces.filter((p) => p.teamId === 2).map((p) => p.position.status)
+  assert.deepEqual(capturedIds, ['home', 'home'])
+  const bystander = result.pieces.find((p) => p.id === '1-2')
+  assert.equal(bystander.position.at, 3)
+  assert.deepEqual(result.capturedTeamIds, [2])
 }
 
 console.log('✓ Task 2 팀/업힘/잡기/순위 로직 점검 통과')

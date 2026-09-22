@@ -130,6 +130,7 @@ function App() {
   useSeo(route)
   useEffect(loadAdsense, []) // 자동 광고 (ADSENSE_CLIENT 설정 시에만 동작)
   const Current = components[route.id] ?? DEFAULT_PAGE
+  const noAds = route.group === '게임'
 
   const [menuOpen, setMenuOpen] = useState(false)
   useEffect(() => setMenuOpen(false), [route])
@@ -252,7 +253,7 @@ function App() {
             </a>
           </div>
           <Sidebar activeRouteId={route.id} activeGroup={route.group} onNavigate={navigate} />
-          <AdSlot slot={SLOTS.sidebar} className="min-h-[250px] shrink-0 px-3 pt-2" />
+          {!noAds && <AdSlot slot={SLOTS.sidebar} className="min-h-[250px] shrink-0 px-3 pt-2" />}
           <p className="px-5 py-4 text-[11px] leading-relaxed text-slate-300">
             모든 결과는 참고용 추정치입니다.
           </p>
@@ -262,13 +263,9 @@ function App() {
           <Suspense fallback={<div className="h-40 animate-pulse rounded-2xl bg-slate-100" />}>
             <Current />
           </Suspense>
-          {route.id !== 'yutnori' && (
-            <AdSlot key={`${route.id}-mid`} slot={SLOTS.belowResult} />
-          )}
+          {!noAds && <AdSlot key={`${route.id}-mid`} slot={SLOTS.belowResult} />}
           {route.group !== '가이드' && <InfoSection pageId={route.id} />}
-          {route.id !== 'yutnori' && (
-            <AdSlot key={`${route.id}-bottom`} slot={SLOTS.bottomOfPage} />
-          )}
+          {!noAds && <AdSlot key={`${route.id}-bottom`} slot={SLOTS.bottomOfPage} />}
 
           <footer className="mt-14 border-t border-slate-200 pt-5 pb-2 text-xs text-slate-400">
             <div className="flex flex-wrap items-center gap-x-4 gap-y-2">

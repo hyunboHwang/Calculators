@@ -238,7 +238,7 @@ export function pieceProgress(position: PiecePosition): number {
   if (position.status === 'finished') return 20
   const at = position.at
   if (typeof at === 'number') return at
-  const diagProgress: Record<DiagNode, number> = { a1: 6, a2: 7, a3: 8, b1: 11, b2: 12 }
+  const diagProgress: Record<DiagNode, number> = { a1: 12, a2: 13, a3: 14, b1: 18, b2: 19 }
   return diagProgress[at]
 }
 

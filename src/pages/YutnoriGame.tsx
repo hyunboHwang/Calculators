@@ -7,6 +7,7 @@ import {
   teamRank,
   THROW_LABELS,
   TEAM_COLORS,
+  STEPS,
   type Team,
   type TeamColor,
   type Piece,
@@ -50,8 +51,8 @@ export const initialState: GameState = {
   log: [],
 }
 
-function needsShortcutChoice(option: MoveOption): boolean {
-  return option.at === 5 || option.at === 10
+function needsShortcutChoice(option: MoveOption, result: ThrowResult): boolean {
+  return STEPS[result] > 0 && (option.at === 5 || option.at === 10)
 }
 
 function nextTeamIndex(state: GameState): number {
@@ -86,7 +87,8 @@ function applyChosenMove(
     logLines.push(`${THROW_LABELS[result]}! 추가 턴`)
   }
 
-  const allFinished = state.teams.every((t) => finishedOrder.includes(t.id))
+  const allFinished = finishedOrder.length >= state.teams.length - 1
+  const stillPlaying = !finishedOrder.includes(currentTeam.id)
 
   return {
     ...state,
@@ -95,7 +97,7 @@ function applyChosenMove(
     awaitingMove: null,
     awaitingShortcut: null,
     phase: allFinished ? 'results' : state.phase,
-    currentTeamIndex: extraTurn ? state.currentTeamIndex : nextTeamIndex({ ...state, finishedOrder }),
+    currentTeamIndex: extraTurn && stillPlaying ? state.currentTeamIndex : nextTeamIndex({ ...state, finishedOrder }),
     log: [...logLines, ...state.log].slice(0, 5),
   }
 }
@@ -121,7 +123,7 @@ export function gameReducer(state: GameState, action: GameAction): GameState {
           currentTeamIndex: nextTeamIndex(state),
         }
       }
-      if (options.length === 1 && !needsShortcutChoice(options[0])) {
+      if (options.length === 1 && !needsShortcutChoice(options[0], action.result)) {
         return applyChosenMove(state, action.result, options[0], false)
       }
       return { ...state, awaitingMove: { result: action.result, options } }
@@ -129,7 +131,7 @@ export function gameReducer(state: GameState, action: GameAction): GameState {
     case 'CHOOSE_MOVE': {
       if (!state.awaitingMove) return state
       const { result } = state.awaitingMove
-      if (needsShortcutChoice(action.option)) {
+      if (needsShortcutChoice(action.option, result)) {
         return { ...state, awaitingMove: null, awaitingShortcut: { result, pieceIds: action.option.pieceIds } }
       }
       return applyChosenMove(state, result, action.option, false)
