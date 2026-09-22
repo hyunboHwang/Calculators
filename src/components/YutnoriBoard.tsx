@@ -55,6 +55,13 @@ const COLOR_BG: Record<TeamColor, string> = {
   yellow: 'bg-yellow-400',
   green: 'bg-emerald-500',
 }
+// 말 마커는 흰 보드 위에서 더 진하고 또렷하게 보이도록 범례보다 채도/명도를 살짝 높인 색을 쓴다.
+const PIECE_COLOR_BG: Record<TeamColor, string> = {
+  red: 'bg-red-600',
+  blue: 'bg-blue-600',
+  yellow: 'bg-yellow-500',
+  green: 'bg-emerald-600',
+}
 const COLOR_BORDER: Record<TeamColor, string> = {
   red: 'border-red-500',
   blue: 'border-blue-500',
@@ -115,13 +122,13 @@ export default function YutnoriBoard({
           return (
             <div
               key={node}
-              className="absolute flex w-8 -translate-x-1/2 -translate-y-1/2 flex-wrap items-center justify-center gap-0.5"
+              className="absolute flex w-12 -translate-x-1/2 -translate-y-1/2 flex-wrap items-center justify-center gap-1"
               style={{ top: `${top}%`, left: `${left}%` }}
             >
               {group.map((p) => (
                 <span
                   key={p.id}
-                  className={`h-3.5 w-3.5 rounded-full border-2 border-white shadow ${COLOR_BG[colorOf(p.teamId)]}`}
+                  className={`h-7 w-7 rounded-full border-[3px] border-white shadow-md ring-1 ring-black/10 ${PIECE_COLOR_BG[colorOf(p.teamId)]}`}
                   title={nameOf(p)}
                 />
               ))}
