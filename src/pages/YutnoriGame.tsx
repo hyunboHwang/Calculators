@@ -423,7 +423,22 @@ function PlayingScreen({
           currentTeamId={currentTeam.id}
           onUndo={undo}
           canUndo={canUndo}
-        />
+        >
+          {!state.awaitingMove && !state.awaitingShortcut && (
+            <div className="mt-2 grid grid-cols-3 gap-2">
+              {THROW_BUTTONS.map((r) => (
+                <button
+                  key={r}
+                  type="button"
+                  onClick={() => dispatch({ type: 'THROW', result: r })}
+                  className="rounded-xl bg-slate-800 py-3 text-sm font-bold text-white hover:bg-slate-700"
+                >
+                  {THROW_LABELS[r]}
+                </button>
+              ))}
+            </div>
+          )}
+        </YutnoriBoard>
       </div>
 
       <div className="mt-4">
@@ -462,21 +477,6 @@ function PlayingScreen({
           </div>
         )}
       </div>
-
-      {!state.awaitingMove && !state.awaitingShortcut && (
-        <div className="mt-4 grid grid-cols-3 gap-2 sm:grid-cols-6">
-          {THROW_BUTTONS.map((r) => (
-            <button
-              key={r}
-              type="button"
-              onClick={() => dispatch({ type: 'THROW', result: r })}
-              className="rounded-xl bg-slate-800 py-3 text-sm font-bold text-white hover:bg-slate-700"
-            >
-              {THROW_LABELS[r]}
-            </button>
-          ))}
-        </div>
-      )}
 
       {state.awaitingMove && (
         <div className="mt-4 rounded-2xl border border-amber-200 bg-amber-50 p-4">

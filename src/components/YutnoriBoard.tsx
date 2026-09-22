@@ -79,6 +79,7 @@ export default function YutnoriBoard({
   currentTeamId,
   onUndo,
   canUndo,
+  children,
 }: {
   pieces: Piece[]
   teams: Team[]
@@ -87,6 +88,7 @@ export default function YutnoriBoard({
   currentTeamId?: number
   onUndo?: () => void
   canUndo?: boolean
+  children?: React.ReactNode
 }) {
   const colorOf = (teamId: number): TeamColor => teams.find((t) => t.id === teamId)?.color ?? 'red'
   const nameOf = (p: Piece): string => {
@@ -209,6 +211,7 @@ export default function YutnoriBoard({
           )
         })}
       </ul>
+      {children}
       </div>
       </div>
     </div>
