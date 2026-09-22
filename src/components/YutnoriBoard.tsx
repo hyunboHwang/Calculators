@@ -155,7 +155,7 @@ export default function YutnoriBoard({
           })()}
       </div>
 
-      <ul className="flex shrink-0 flex-col gap-1.5 text-sm text-slate-600 lg:w-44">
+      <ul className="flex shrink-0 flex-col gap-1.5 text-sm text-slate-600 lg:w-64">
         {teams.map((t) => {
           const teamPieces = pieces.filter((p) => p.teamId === t.id)
           const home = teamPieces.filter((p) => p.position.status === 'home').length
@@ -164,13 +164,13 @@ export default function YutnoriBoard({
           return (
             <li
               key={t.id}
-              className={`flex items-center gap-2 rounded-lg px-2 py-1 ${
+              className={`flex flex-nowrap items-center gap-2 whitespace-nowrap rounded-lg px-2 py-1 ${
                 isCurrent ? 'bg-emerald-50 ring-1 ring-emerald-300' : ''
               }`}
             >
               <span className={`h-2.5 w-2.5 shrink-0 rounded-full ${COLOR_BG[t.color]}`} aria-hidden="true" />
               <b className="shrink-0">{t.name}</b>
-              <span className="text-slate-400">
+              <span className="shrink-0 text-slate-400">
                 대기 {home} · 완주 {finished}
               </span>
               {isCurrent && (
