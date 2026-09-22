@@ -15,6 +15,7 @@ import {
   type MoveOption,
   type BoardNode,
 } from '../lib/yutnori'
+import YutnoriBoard from '../components/YutnoriBoard'
 
 type EndMode = 'complete' | 'timed'
 
@@ -368,25 +369,8 @@ function PlayingScreen({ state, dispatch }: { state: GameState; dispatch: (a: Ga
         <p className="text-sm font-semibold text-emerald-800">지금 차례: {currentTeam.name}</p>
       </div>
 
-      <div className="mt-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-        <h2 className="text-sm font-semibold text-slate-700">보드 현황</h2>
-        <ul className="mt-3 space-y-1.5 text-sm text-slate-600">
-          {state.teams.map((t) => (
-            <li key={t.id}>
-              <b>{t.name}</b>:{' '}
-              {state.pieces
-                .filter((p) => p.teamId === t.id)
-                .map((p) =>
-                  p.position.status === 'home'
-                    ? '대기'
-                    : p.position.status === 'finished'
-                      ? '완주'
-                      : `${p.position.at}번`,
-                )
-                .join(', ')}
-            </li>
-          ))}
-        </ul>
+      <div className="mt-4">
+        <YutnoriBoard pieces={state.pieces} teams={state.teams} />
       </div>
 
       {!state.awaitingMove && !state.awaitingShortcut && (
