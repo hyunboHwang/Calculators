@@ -2,7 +2,10 @@
  * 윷놀이 보드/이동 로직.
  * 좌표는 "출발점부터 이동한 상대 칸 수"로 표현한다 (팀마다 같은 시작 모서리를 공유하므로
  * 절대좌표 변환이 필요 없다). 바깥 테두리 19칸(1~19) + 지름길 A(모서리5→모서리15,
- * a1~a3 경유) + 지름길 B(모서리10→도착, b1~b2 경유)로 구성된 정통 윷놀이판이다.
+ * a1·a2·중앙·a3·a4 경유) + 지름길 B(모서리10→도착, b1·b2·중앙·b3·b4 경유)로 구성된
+ * 정통 윷놀이판이다. 중앙은 두 지름길이 같은 자리를 공유하지만, 어느 쪽에서 왔는지에 따라
+ * 다음 칸이 갈리므로(A쪽은 a3로, B쪽은 b3로) 게임 상태에서는 ac/bc 두 값으로 구분해 걷는다
+ * (화면에는 같은 좌표에 그려 하나의 중앙 칸처럼 보인다).
  */
 
 export type ThrowResult = 'do' | 'gae' | 'geol' | 'yut' | 'mo' | 'baekdo'
@@ -30,7 +33,7 @@ export function grantsExtraTurn(result: ThrowResult): boolean {
 }
 
 export type OuterNode = number // 1~19
-export type DiagNode = 'a1' | 'a2' | 'a3' | 'b1' | 'b2'
+export type DiagNode = 'a1' | 'a2' | 'ac' | 'a3' | 'a4' | 'b1' | 'b2' | 'bc' | 'b3' | 'b4'
 export type BoardNode = OuterNode | DiagNode
 
 export type PiecePosition =
@@ -59,12 +62,22 @@ function stepOnce(node: WalkNode, takeShortcut: boolean): BoardNode | 'finished'
     case 'a1':
       return 'a2'
     case 'a2':
+      return 'ac'
+    case 'ac':
       return 'a3'
     case 'a3':
+      return 'a4'
+    case 'a4':
       return 15
     case 'b1':
       return 'b2'
     case 'b2':
+      return 'bc'
+    case 'bc':
+      return 'b3'
+    case 'b3':
+      return 'b4'
+    case 'b4':
       return 'finished'
   }
 }
@@ -83,12 +96,22 @@ function prevNode(node: BoardNode): BoardNode {
       return 5
     case 'a2':
       return 'a1'
-    case 'a3':
+    case 'ac':
       return 'a2'
+    case 'a3':
+      return 'ac'
+    case 'a4':
+      return 'a3'
     case 'b1':
       return 10
     case 'b2':
       return 'b1'
+    case 'bc':
+      return 'b2'
+    case 'b3':
+      return 'bc'
+    case 'b4':
+      return 'b3'
   }
 }
 
@@ -238,7 +261,18 @@ export function pieceProgress(position: PiecePosition): number {
   if (position.status === 'finished') return 20
   const at = position.at
   if (typeof at === 'number') return at
-  const diagProgress: Record<DiagNode, number> = { a1: 12, a2: 13, a3: 14, b1: 18, b2: 19 }
+  const diagProgress: Record<DiagNode, number> = {
+    a1: 6,
+    a2: 8,
+    ac: 10,
+    a3: 12,
+    a4: 14,
+    b1: 12,
+    b2: 14,
+    bc: 16,
+    b3: 18,
+    b4: 19,
+  }
   return diagProgress[at]
 }
 

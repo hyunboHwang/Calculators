@@ -25,29 +25,32 @@ const NODE_COORDS: Record<string, [top: number, left: number]> = {
   '17': [100, 40],
   '18': [100, 60],
   '19': [100, 80],
-  a1: [25, 75],
-  a2: [50, 50],
-  a3: [75, 25],
-  b1: [25, 25],
-  b2: [75, 75],
+  // 지름길 A(5↔15)·B(10↔출발) 각각 모서리-중앙 사이에 칸 2개씩, 중앙(ac/bc)은 같은 좌표를
+  // 공유해 화면에는 하나의 중앙 칸처럼 보인다 (게임 로직에서는 진행 방향이 갈리므로 다른 값).
+  a1: [16.67, 83.33],
+  a2: [33.33, 66.67],
+  ac: [50, 50],
+  a3: [66.67, 33.33],
+  a4: [83.33, 16.67],
+  b1: [16.67, 16.67],
+  b2: [33.33, 33.33],
+  bc: [50, 50],
+  b3: [66.67, 66.67],
+  b4: [83.33, 83.33],
   start: [100, 100],
 }
 
-/**
- * 실제 말이 지나가는 경로를 따라 선을 잇는다 (테두리 고리 + 대각선 지름길 2개, 중앙에서 교차).
- * 칸 하나 = 던진 결과 1칸과 정확히 대응해야 하므로, 장식용 칸을 끼워 넣지 않는다
- * (끼워 넣으면 이동 칸 수가 시각적으로 실제보다 많아 보이는 버그가 생김).
- */
+// 실제 말이 지나가는 경로를 따라 선을 잇는다 (테두리 고리 + 대각선 지름길 2개, 중앙에서 교차).
 const OUTER_PATH = ['start', ...Array.from({ length: 19 }, (_, i) => String(i + 1)), 'start']
-const DIAG_A_PATH = ['5', 'a1', 'a2', 'a3', '15']
-const DIAG_B_PATH = ['10', 'b1', 'a2', 'b2', 'start']
+const DIAG_A_PATH = ['5', 'a1', 'a2', 'ac', 'a3', 'a4', '15']
+const DIAG_B_PATH = ['10', 'b1', 'b2', 'bc', 'b3', 'b4', 'start']
 
 function segments(path: string[]): [string, string][] {
   return path.slice(1).map((node, i) => [path[i], node])
 }
 const LINE_SEGMENTS = [...segments(OUTER_PATH), ...segments(DIAG_A_PATH), ...segments(DIAG_B_PATH)]
 
-const CENTER_NODE = 'a2'
+const CENTER_NODES = new Set(['ac', 'bc'])
 const CORNER_NODES = new Set(['10', '5', '15', 'start'])
 
 const COLOR_BG: Record<TeamColor, string> = {
@@ -95,7 +98,8 @@ export default function YutnoriBoard({
         </svg>
 
         {Object.entries(NODE_COORDS).map(([node, [top, left]]) => {
-          const isLandmark = node === CENTER_NODE || CORNER_NODES.has(node)
+          if (node === 'bc') return null // ac와 같은 좌표라 중복 렌더링 방지
+          const isLandmark = CENTER_NODES.has(node) || CORNER_NODES.has(node)
           const nodeClass = isLandmark
             ? 'h-5 w-5 border border-slate-300 bg-white shadow'
             : 'h-3 w-3 border border-slate-300 bg-white'
