@@ -49,9 +49,6 @@ function segments(path: string[]): [string, string][] {
 }
 const LINE_SEGMENTS = [...segments(OUTER_PATH), ...segments(DIAG_A_PATH), ...segments(DIAG_B_PATH)]
 
-const CENTER_NODES = new Set(['c'])
-const CORNER_NODES = new Set(['10', '5', '15', 'start'])
-
 const COLOR_BG: Record<TeamColor, string> = {
   red: 'bg-red-500',
   blue: 'bg-blue-500',
@@ -101,14 +98,10 @@ export default function YutnoriBoard({
         </svg>
 
         {Object.entries(NODE_COORDS).map(([node, [top, left]]) => {
-          const isLandmark = CENTER_NODES.has(node) || CORNER_NODES.has(node)
-          const nodeClass = isLandmark
-            ? 'h-5 w-5 border border-slate-300 bg-white shadow'
-            : 'h-3 w-3 border border-slate-300 bg-white'
           return (
             <div
               key={node}
-              className={`absolute -translate-x-1/2 -translate-y-1/2 rounded-full ${nodeClass}`}
+              className="absolute h-5 w-5 -translate-x-1/2 -translate-y-1/2 rounded-full border border-slate-300 bg-white shadow"
               style={{ top: `${top}%`, left: `${left}%` }}
               aria-hidden="true"
             />
