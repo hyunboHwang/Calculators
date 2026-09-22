@@ -75,12 +75,16 @@ export default function YutnoriBoard({
   previewAt,
   previewTeamId,
   currentTeamId,
+  onUndo,
+  canUndo,
 }: {
   pieces: Piece[]
   teams: Team[]
   previewAt?: BoardNode | null
   previewTeamId?: number
   currentTeamId?: number
+  onUndo?: () => void
+  canUndo?: boolean
 }) {
   const colorOf = (teamId: number): TeamColor => teams.find((t) => t.id === teamId)?.color ?? 'red'
   const nameOf = (p: Piece): string => {
@@ -155,7 +159,18 @@ export default function YutnoriBoard({
           })()}
       </div>
 
-      <ul className="flex shrink-0 flex-col gap-1.5 text-sm text-slate-600 lg:w-64">
+      <div className="flex shrink-0 flex-col gap-2 lg:w-64">
+      {onUndo && (
+        <button
+          type="button"
+          disabled={!canUndo}
+          onClick={onUndo}
+          className="self-start rounded-lg bg-white px-3 py-1.5 text-xs font-semibold text-slate-600 shadow-sm ring-1 ring-slate-200 disabled:opacity-40"
+        >
+          되돌리기
+        </button>
+      )}
+      <ul className="flex flex-col gap-1.5 text-sm text-slate-600">
         {teams.map((t) => {
           const teamPieces = pieces.filter((p) => p.teamId === t.id)
           const home = teamPieces.filter((p) => p.position.status === 'home').length
@@ -180,6 +195,7 @@ export default function YutnoriBoard({
           )
         })}
       </ul>
+      </div>
       </div>
     </div>
   )
