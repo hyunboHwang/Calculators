@@ -104,13 +104,10 @@ export default function YutnoriBoard({
         </svg>
 
         {Object.entries(ALL_COORDS).map(([node, [top, left]]) => {
-          const isCenter = node === CENTER_NODE
-          const isCorner = CORNER_NODES.has(node)
-          const nodeClass = isCenter
-            ? 'h-5 w-5 border-2 border-white bg-violet-500 shadow'
-            : isCorner
-              ? 'h-5 w-5 border border-slate-300 bg-white shadow'
-              : 'h-3 w-3 border border-slate-300 bg-white'
+          const isLandmark = node === CENTER_NODE || CORNER_NODES.has(node)
+          const nodeClass = isLandmark
+            ? 'h-5 w-5 border border-slate-300 bg-white shadow'
+            : 'h-3 w-3 border border-slate-300 bg-white'
           return (
             <div
               key={node}
