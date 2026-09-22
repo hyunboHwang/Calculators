@@ -1,10 +1,17 @@
 import { useReducer, useState } from 'react'
 import {
   createPieces,
+  applyMove,
+  moveOptions,
+  teamFinished,
+  THROW_LABELS,
   TEAM_COLORS,
   type Team,
   type TeamColor,
   type Piece,
+  type ThrowResult,
+  type MoveOption,
+  type BoardNode,
 } from '../lib/yutnori'
 
 type EndMode = 'complete' | 'timed'
@@ -15,9 +22,18 @@ export interface GameState {
   pieces: Piece[]
   endMode: EndMode
   timeLimitMin: number
+  currentTeamIndex: number
+  awaitingMove: { result: ThrowResult; options: MoveOption[] } | null
+  awaitingShortcut: { result: ThrowResult; pieceIds: string[] } | null
+  finishedOrder: number[] // 완주 확정된 teamId, 확정된 순서
+  log: string[] // 최근 이벤트 (화면 표시용, 최대 5개 유지)
 }
 
-export type GameAction = { type: 'START_GAME'; teams: Team[]; endMode: EndMode; timeLimitMin: number }
+export type GameAction =
+  | { type: 'START_GAME'; teams: Team[]; endMode: EndMode; timeLimitMin: number }
+  | { type: 'THROW'; result: ThrowResult }
+  | { type: 'CHOOSE_MOVE'; option: MoveOption }
+  | { type: 'CHOOSE_SHORTCUT'; take: boolean }
 
 export const initialState: GameState = {
   phase: 'setup',
@@ -25,6 +41,61 @@ export const initialState: GameState = {
   pieces: [],
   endMode: 'complete',
   timeLimitMin: 10,
+  currentTeamIndex: 0,
+  awaitingMove: null,
+  awaitingShortcut: null,
+  finishedOrder: [],
+  log: [],
+}
+
+function needsShortcutChoice(option: MoveOption): boolean {
+  return option.at === 5 || option.at === 10
+}
+
+function nextTeamIndex(state: GameState): number {
+  const n = state.teams.length
+  let idx = state.currentTeamIndex
+  for (let i = 0; i < n; i++) {
+    idx = (idx + 1) % n
+    if (!state.finishedOrder.includes(state.teams[idx].id)) return idx
+  }
+  return state.currentTeamIndex
+}
+
+function applyChosenMove(
+  state: GameState,
+  result: ThrowResult,
+  option: MoveOption,
+  takeShortcut: boolean,
+): GameState {
+  const currentTeam = state.teams[state.currentTeamIndex]
+  const { pieces, capturedTeamIds, extraTurn } = applyMove(state.pieces, option.pieceIds, result, takeShortcut)
+
+  const finishedOrder = [...state.finishedOrder]
+  for (const t of state.teams) {
+    if (!finishedOrder.includes(t.id) && teamFinished(pieces, t.id)) finishedOrder.push(t.id)
+  }
+
+  const logLines: string[] = [`${currentTeam.name}: ${THROW_LABELS[result]}`]
+  if (capturedTeamIds.length > 0) {
+    const names = capturedTeamIds.map((id) => state.teams.find((t) => t.id === id)?.name ?? '').join(', ')
+    logLines.push(`${currentTeam.name}이(가) ${names} 말을 잡았습니다! 추가 턴`)
+  } else if (extraTurn) {
+    logLines.push(`${THROW_LABELS[result]}! 추가 턴`)
+  }
+
+  const allFinished = state.teams.every((t) => finishedOrder.includes(t.id))
+
+  return {
+    ...state,
+    pieces,
+    finishedOrder,
+    awaitingMove: null,
+    awaitingShortcut: null,
+    phase: allFinished ? 'results' : state.phase,
+    currentTeamIndex: extraTurn ? state.currentTeamIndex : nextTeamIndex({ ...state, finishedOrder }),
+    log: [...logLines, ...state.log].slice(0, 5),
+  }
 }
 
 export function gameReducer(state: GameState, action: GameAction): GameState {
@@ -38,6 +109,34 @@ export function gameReducer(state: GameState, action: GameAction): GameState {
         endMode: action.endMode,
         timeLimitMin: action.timeLimitMin,
       }
+    case 'THROW': {
+      const currentTeam = state.teams[state.currentTeamIndex]
+      const options = moveOptions(state.pieces, currentTeam.id, action.result)
+      if (options.length === 0) {
+        return {
+          ...state,
+          log: [`${currentTeam.name}: 이동할 말이 없어 턴을 넘깁니다 (${THROW_LABELS[action.result]})`, ...state.log].slice(0, 5),
+          currentTeamIndex: nextTeamIndex(state),
+        }
+      }
+      if (options.length === 1 && !needsShortcutChoice(options[0])) {
+        return applyChosenMove(state, action.result, options[0], false)
+      }
+      return { ...state, awaitingMove: { result: action.result, options } }
+    }
+    case 'CHOOSE_MOVE': {
+      if (!state.awaitingMove) return state
+      const { result } = state.awaitingMove
+      if (needsShortcutChoice(action.option)) {
+        return { ...state, awaitingMove: null, awaitingShortcut: { result, pieceIds: action.option.pieceIds } }
+      }
+      return applyChosenMove(state, result, action.option, false)
+    }
+    case 'CHOOSE_SHORTCUT': {
+      if (!state.awaitingShortcut) return state
+      const { result, pieceIds } = state.awaitingShortcut
+      return applyChosenMove(state, result, { pieceIds, at: 'home' }, action.take)
+    }
     default:
       return state
   }
@@ -219,12 +318,119 @@ export default function YutnoriGame() {
     )
   }
 
+  if (state.phase === 'playing') {
+    return <PlayingScreen state={state} dispatch={dispatch} />
+  }
+
   return (
     <div>
       <h1 className="text-2xl font-bold">윷놀이</h1>
-      <p className="mt-2 text-sm text-slate-500">
-        {state.teams.length}팀, {state.pieces.length}개 말로 게임을 시작했습니다. (진행 화면은 다음 작업에서 이어집니다)
-      </p>
+      <p className="mt-2 text-sm text-slate-500">게임 종료! (결과 화면은 다음 작업에서 이어집니다)</p>
+    </div>
+  )
+}
+
+const THROW_BUTTONS: ThrowResult[] = ['do', 'gae', 'geol', 'yut', 'mo', 'baekdo']
+
+function nodeLabel(at: 'home' | BoardNode): string {
+  if (at === 'home') return '대기 중'
+  return `${at}번 칸`
+}
+
+function PlayingScreen({ state, dispatch }: { state: GameState; dispatch: (a: GameAction) => void }) {
+  const currentTeam = state.teams[state.currentTeamIndex]
+
+  return (
+    <div>
+      <h1 className="text-2xl font-bold">윷놀이</h1>
+
+      <div className="mt-4 rounded-2xl border border-emerald-200 bg-emerald-50 p-4">
+        <p className="text-sm font-semibold text-emerald-800">지금 차례: {currentTeam.name}</p>
+      </div>
+
+      <div className="mt-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+        <h2 className="text-sm font-semibold text-slate-700">보드 현황</h2>
+        <ul className="mt-3 space-y-1.5 text-sm text-slate-600">
+          {state.teams.map((t) => (
+            <li key={t.id}>
+              <b>{t.name}</b>:{' '}
+              {state.pieces
+                .filter((p) => p.teamId === t.id)
+                .map((p) =>
+                  p.position.status === 'home'
+                    ? '대기'
+                    : p.position.status === 'finished'
+                      ? '완주'
+                      : `${p.position.at}번`,
+                )
+                .join(', ')}
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      {!state.awaitingMove && !state.awaitingShortcut && (
+        <div className="mt-4 grid grid-cols-3 gap-2 sm:grid-cols-6">
+          {THROW_BUTTONS.map((r) => (
+            <button
+              key={r}
+              type="button"
+              onClick={() => dispatch({ type: 'THROW', result: r })}
+              className="rounded-xl bg-slate-800 py-3 text-sm font-bold text-white hover:bg-slate-700"
+            >
+              {THROW_LABELS[r]}
+            </button>
+          ))}
+        </div>
+      )}
+
+      {state.awaitingMove && (
+        <div className="mt-4 rounded-2xl border border-amber-200 bg-amber-50 p-4">
+          <p className="text-sm font-semibold text-amber-800">
+            {THROW_LABELS[state.awaitingMove.result]} — 움직일 말을 고르세요
+          </p>
+          <div className="mt-2 flex flex-wrap gap-2">
+            {state.awaitingMove.options.map((opt, i) => (
+              <button
+                key={i}
+                type="button"
+                onClick={() => dispatch({ type: 'CHOOSE_MOVE', option: opt })}
+                className="rounded-lg bg-white px-3 py-2 text-sm font-medium text-slate-700 shadow-sm hover:bg-slate-50"
+              >
+                {nodeLabel(opt.at)} {opt.pieceIds.length > 1 ? `(${opt.pieceIds.length}개 업힘)` : ''}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {state.awaitingShortcut && (
+        <div className="mt-4 rounded-2xl border border-amber-200 bg-amber-50 p-4">
+          <p className="text-sm font-semibold text-amber-800">지름길로 갈까요?</p>
+          <div className="mt-2 flex gap-2">
+            <button
+              type="button"
+              onClick={() => dispatch({ type: 'CHOOSE_SHORTCUT', take: true })}
+              className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white"
+            >
+              지름길로
+            </button>
+            <button
+              type="button"
+              onClick={() => dispatch({ type: 'CHOOSE_SHORTCUT', take: false })}
+              className="rounded-lg bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm"
+            >
+              그냥 테두리로
+            </button>
+          </div>
+        </div>
+      )}
+
+      <div className="mt-4 space-y-1 text-xs text-slate-400">
+        {state.log.map((l, i) => (
+          <p key={i}>{l}</p>
+        ))}
+      </div>
     </div>
   )
 }
