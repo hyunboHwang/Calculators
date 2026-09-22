@@ -115,7 +115,7 @@ export default function YutnoriBoard({
           return (
             <div
               key={node}
-              className="absolute h-9 w-9 -translate-x-1/2 -translate-y-1/2 rounded-full border border-slate-300 bg-white shadow"
+              className="absolute h-12 w-12 -translate-x-1/2 -translate-y-1/2 rounded-full border border-slate-300 bg-white shadow"
               style={{ top: `${top}%`, left: `${left}%` }}
               aria-hidden="true"
             />
