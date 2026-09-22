@@ -3,9 +3,9 @@
  * 좌표는 "출발점부터 이동한 상대 칸 수"로 표현한다 (팀마다 같은 시작 모서리를 공유하므로
  * 절대좌표 변환이 필요 없다). 바깥 테두리 19칸(1~19) + 지름길 A(모서리5→모서리15,
  * a1·a2·중앙·a3·a4 경유) + 지름길 B(모서리10→도착, b1·b2·중앙·b3·b4 경유)로 구성된
- * 정통 윷놀이판이다. 중앙은 두 지름길이 같은 자리를 공유하지만, 어느 쪽에서 왔는지에 따라
- * 다음 칸이 갈리므로(A쪽은 a3로, B쪽은 b3로) 게임 상태에서는 ac/bc 두 값으로 구분해 걷는다
- * (화면에는 같은 좌표에 그려 하나의 중앙 칸처럼 보인다).
+ * 정통 윷놀이판이다. 중앙(c)은 두 지름길이 실제로 만나는 교차점이라, 중앙에 멈춘 말은
+ * 다음 턴에 어느 지름길로 계속 갈지(15번 쪽 / 도착 쪽) 다시 선택한다 — 모서리 5·10에서
+ * 지름길을 탈지 고르는 것과 같은 방식.
  */
 
 export type ThrowResult = 'do' | 'gae' | 'geol' | 'yut' | 'mo' | 'baekdo'
@@ -33,7 +33,7 @@ export function grantsExtraTurn(result: ThrowResult): boolean {
 }
 
 export type OuterNode = number // 1~19
-export type DiagNode = 'a1' | 'a2' | 'ac' | 'a3' | 'a4' | 'b1' | 'b2' | 'bc' | 'b3' | 'b4'
+export type DiagNode = 'a1' | 'a2' | 'c' | 'a3' | 'a4' | 'b1' | 'b2' | 'b3' | 'b4'
 export type BoardNode = OuterNode | DiagNode
 
 export type PiecePosition =
@@ -49,7 +49,10 @@ export interface Piece {
 
 type WalkNode = BoardNode | 'start'
 
-/** 한 칸 전진. takeShortcut은 지금 막 모서리5·10을 "출발하는" 그 한 걸음에만 의미가 있다. */
+/**
+ * 한 칸 전진. takeShortcut은 "지름길 갈림길에 멈춰 있다가 다음 턴을 시작하는" 그 한 걸음에만
+ * 의미가 있다 — 모서리 5·10(지름길을 탈지)과 중앙 c(어느 지름길로 계속 갈지) 두 곳.
+ */
 function stepOnce(node: WalkNode, takeShortcut: boolean): BoardNode | 'finished' {
   if (node === 'start') return 1
   if (typeof node === 'number') {
@@ -62,9 +65,9 @@ function stepOnce(node: WalkNode, takeShortcut: boolean): BoardNode | 'finished'
     case 'a1':
       return 'a2'
     case 'a2':
-      return 'ac'
-    case 'ac':
-      return 'a3'
+      return 'c'
+    case 'c':
+      return takeShortcut ? 'a3' : 'b3'
     case 'a3':
       return 'a4'
     case 'a4':
@@ -72,9 +75,7 @@ function stepOnce(node: WalkNode, takeShortcut: boolean): BoardNode | 'finished'
     case 'b1':
       return 'b2'
     case 'b2':
-      return 'bc'
-    case 'bc':
-      return 'b3'
+      return 'c'
     case 'b3':
       return 'b4'
     case 'b4':
@@ -85,9 +86,10 @@ function stepOnce(node: WalkNode, takeShortcut: boolean): BoardNode | 'finished'
 /**
  * 백도(한 칸 후진)용. 지름길 위에 있던 말이 후진하면 그 지름길이 갈라진 모서리로 되돌아가고,
  * 지름길을 거쳐 15번 칸에 합류한 말은(도착 지점만 보면 바깥길로 온 말과 구별할 수 없으므로)
- * 바깥길 14번 칸으로 후진한다 — 아주 드문 경계 케이스라 이렇게 단순화했다.
- * ponytail: 지름길 경유 여부를 기억해 15번 칸에서 후진 방향을 구분하려면 Piece에 path 이력을
- * 추가해야 함. 실제로 문제가 되면(플레이 중 부자연스럽다는 얘기가 나오면) 그때 추가.
+ * 바깥길 14번 칸으로 후진한다 — 아주 드문 경계 케이스라 이렇게 단순화했다. 중앙(c)에서
+ * 후진할 때 어느 지름길에서 왔는지도 마찬가지 이유로 기억하지 않고 항상 a2쪽으로 되돌린다.
+ * ponytail: 정확한 경로 이력이 필요해지면(플레이 중 부자연스럽다는 얘기가 나오면) Piece에
+ * path 이력을 추가.
  */
 function prevNode(node: BoardNode): BoardNode {
   if (typeof node === 'number') return node === 1 ? 1 : node - 1
@@ -96,20 +98,18 @@ function prevNode(node: BoardNode): BoardNode {
       return 5
     case 'a2':
       return 'a1'
-    case 'ac':
+    case 'c':
       return 'a2'
     case 'a3':
-      return 'ac'
+      return 'c'
     case 'a4':
       return 'a3'
     case 'b1':
       return 10
     case 'b2':
       return 'b1'
-    case 'bc':
-      return 'b2'
     case 'b3':
-      return 'bc'
+      return 'c'
     case 'b4':
       return 'b3'
   }
@@ -123,9 +123,9 @@ export function canMove(piece: Piece, result: ThrowResult): boolean {
 }
 
 /**
- * 말 하나를 이동시킨다. takeShortcut은 piece가 지금 모서리5·10에 멈춰 있을 때만 적용되고,
- * 그 외에는 무시된다(여러 칸을 가는 도중에 모서리를 "지나치는" 것만으로는 지름길이 열리지 않음
- * — 정확히 그 칸에서 멈췄다가 다음 턴을 시작할 때만 선택 가능한 전통 규칙).
+ * 말 하나를 이동시킨다. takeShortcut은 piece가 지금 모서리5·10 또는 중앙(c)에 멈춰 있을
+ * 때만 적용되고, 그 외에는 무시된다(여러 칸을 가는 도중에 갈림길을 "지나치는" 것만으로는
+ * 선택이 열리지 않음 — 정확히 그 칸에서 멈췄다가 다음 턴을 시작할 때만 선택 가능한 전통 규칙).
  */
 export function movePiece(piece: Piece, result: ThrowResult, takeShortcut: boolean): Piece {
   if (piece.position.status === 'finished') {
@@ -141,7 +141,7 @@ export function movePiece(piece: Piece, result: ThrowResult, takeShortcut: boole
   let cur: WalkNode = piece.position.status === 'home' ? 'start' : piece.position.at
   const shortcutAtStart =
     piece.position.status === 'onBoard' &&
-    (piece.position.at === 5 || piece.position.at === 10)
+    (piece.position.at === 5 || piece.position.at === 10 || piece.position.at === 'c')
 
   for (let i = 0; i < steps; i++) {
     const useShortcut = i === 0 && shortcutAtStart && takeShortcut
@@ -262,16 +262,15 @@ export function pieceProgress(position: PiecePosition): number {
   const at = position.at
   if (typeof at === 'number') return at
   const diagProgress: Record<DiagNode, number> = {
-    a1: 6,
-    a2: 8,
-    ac: 10,
-    a3: 12,
-    a4: 14,
-    b1: 12,
-    b2: 14,
-    bc: 16,
-    b3: 18,
-    b4: 19,
+    a1: 7,
+    a2: 9,
+    c: 12,
+    a3: 13.5,
+    a4: 14.5,
+    b1: 10.5,
+    b2: 11.2,
+    b3: 15,
+    b4: 17,
   }
   return diagProgress[at]
 }

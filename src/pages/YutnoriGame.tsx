@@ -54,7 +54,7 @@ export const initialState: GameState = {
 }
 
 function needsShortcutChoice(option: MoveOption, result: ThrowResult): boolean {
-  return STEPS[result] > 0 && (option.at === 5 || option.at === 10)
+  return STEPS[result] > 0 && (option.at === 5 || option.at === 10 || option.at === 'c')
 }
 
 function nextTeamIndex(state: GameState): number {
@@ -354,6 +354,7 @@ const THROW_BUTTONS: ThrowResult[] = ['do', 'gae', 'geol', 'yut', 'mo', 'baekdo'
 
 function nodeLabel(at: 'home' | BoardNode): string {
   if (at === 'home') return '대기 중'
+  if (at === 'c') return '중앙'
   return `${at}번 칸`
 }
 
@@ -462,27 +463,34 @@ function PlayingScreen({
         </div>
       )}
 
-      {state.awaitingShortcut && (
-        <div className="mt-4 rounded-2xl border border-amber-200 bg-amber-50 p-4">
-          <p className="text-sm font-semibold text-amber-800">지름길로 갈까요?</p>
-          <div className="mt-2 flex gap-2">
-            <button
-              type="button"
-              onClick={() => dispatch({ type: 'CHOOSE_SHORTCUT', take: true })}
-              className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white"
-            >
-              지름길로
-            </button>
-            <button
-              type="button"
-              onClick={() => dispatch({ type: 'CHOOSE_SHORTCUT', take: false })}
-              className="rounded-lg bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm"
-            >
-              그냥 테두리로
-            </button>
-          </div>
-        </div>
-      )}
+      {state.awaitingShortcut &&
+        (() => {
+          const piece = state.pieces.find((p) => state.awaitingShortcut!.pieceIds.includes(p.id))
+          const atCenter = piece?.position.status === 'onBoard' && piece.position.at === 'c'
+          return (
+            <div className="mt-4 rounded-2xl border border-amber-200 bg-amber-50 p-4">
+              <p className="text-sm font-semibold text-amber-800">
+                {atCenter ? '중앙에서 어느 지름길로 갈까요?' : '지름길로 갈까요?'}
+              </p>
+              <div className="mt-2 flex gap-2">
+                <button
+                  type="button"
+                  onClick={() => dispatch({ type: 'CHOOSE_SHORTCUT', take: true })}
+                  className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white"
+                >
+                  {atCenter ? '15번 칸 방향' : '지름길로'}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => dispatch({ type: 'CHOOSE_SHORTCUT', take: false })}
+                  className="rounded-lg bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm"
+                >
+                  {atCenter ? '도착 방향' : '그냥 테두리로'}
+                </button>
+              </div>
+            </div>
+          )
+        })()}
 
       <div className="mt-4 space-y-1 text-xs text-slate-400">
         {state.log.map((l, i) => (
