@@ -73,6 +73,7 @@ const components: Record<string, React.LazyExoticComponent<() => React.JSX.Eleme
   about: lazy(() => import('./pages/AboutPage')),
   verificationProcess: lazy(() => import('./pages/VerificationProcessPage')),
   privacy: lazy(() => import('./pages/PrivacyPage')),
+  yutnori: lazy(() => import('./pages/YutnoriGame')),
 }
 const DEFAULT_PAGE = components.stockReturn
 
@@ -261,9 +262,13 @@ function App() {
           <Suspense fallback={<div className="h-40 animate-pulse rounded-2xl bg-slate-100" />}>
             <Current />
           </Suspense>
-          <AdSlot key={`${route.id}-mid`} slot={SLOTS.belowResult} />
+          {route.id !== 'yutnori' && (
+            <AdSlot key={`${route.id}-mid`} slot={SLOTS.belowResult} />
+          )}
           {route.group !== '가이드' && <InfoSection pageId={route.id} />}
-          <AdSlot key={`${route.id}-bottom`} slot={SLOTS.bottomOfPage} />
+          {route.id !== 'yutnori' && (
+            <AdSlot key={`${route.id}-bottom`} slot={SLOTS.bottomOfPage} />
+          )}
 
           <footer className="mt-14 border-t border-slate-200 pt-5 pb-2 text-xs text-slate-400">
             <div className="flex flex-wrap items-center gap-x-4 gap-y-2">

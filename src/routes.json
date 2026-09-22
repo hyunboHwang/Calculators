@@ -512,5 +512,14 @@
     "title": "개인정보처리방침 | 계산기",
     "description": "계산기(calculators.ai.kr)의 개인정보 수집·이용, 쿠키 및 Google AdSense 광고 정책 안내입니다.",
     "noindex": true
+  },
+  {
+    "id": "yutnori",
+    "path": "/yutnori",
+    "label": "윷놀이",
+    "group": "게임",
+    "title": "윷놀이 | 계산기",
+    "description": "사무실에서 즐기는 온라인 윷놀이. 팀을 만들고 윷 던진 결과만 입력하면 보드와 말이 자동으로 움직입니다.",
+    "noindex": true
   }
 ]
