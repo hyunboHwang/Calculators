@@ -68,6 +68,8 @@ const COLOR_BORDER: Record<TeamColor, string> = {
   yellow: 'border-yellow-400',
   green: 'border-emerald-500',
 }
+// 말 이름과 같은 파일명의 이미지가 있으면 그 이미지를, 없으면(404) 팀 색 배경만 보여준다.
+const PIECE_IMAGE_BASE = 'http://content.chungchy.com/data/playchungchy/game/'
 
 export default function YutnoriBoard({
   pieces,
@@ -132,13 +134,25 @@ export default function YutnoriBoard({
               className="absolute flex w-12 -translate-x-1/2 -translate-y-1/2 flex-wrap items-center justify-center gap-1"
               style={{ top: `${top}%`, left: `${left}%` }}
             >
-              {group.map((p) => (
-                <span
-                  key={p.id}
-                  className={`h-7 w-7 rounded-full border-[3px] border-white shadow-md ring-1 ring-black/10 ${PIECE_COLOR_BG[colorOf(p.teamId)]}`}
-                  title={nameOf(p)}
-                />
-              ))}
+              {group.map((p) => {
+                const name = nameOf(p)
+                return (
+                  <span
+                    key={p.id}
+                    className={`relative block h-7 w-7 overflow-hidden rounded-full border-[3px] border-white shadow-md ring-1 ring-black/10 ${PIECE_COLOR_BG[colorOf(p.teamId)]}`}
+                    title={name}
+                  >
+                    <img
+                      src={`${PIECE_IMAGE_BASE}${encodeURIComponent(name)}.png`}
+                      alt=""
+                      className="absolute inset-0 h-full w-full object-cover"
+                      onError={(e) => {
+                        e.currentTarget.style.display = 'none'
+                      }}
+                    />
+                  </span>
+                )
+              })}
             </div>
           )
         })}
