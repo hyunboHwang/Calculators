@@ -28,8 +28,8 @@ const NODE_COORDS: Record<string, [top: number, left: number]> = {
   a1: [25, 75],
   a2: [50, 50],
   a3: [75, 25],
-  b1: [33.3, 33.3],
-  b2: [66.6, 66.6],
+  b1: [25, 25],
+  b2: [75, 75],
   start: [100, 100],
 }
 
