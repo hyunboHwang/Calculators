@@ -130,7 +130,7 @@ function App() {
   useSeo(route)
   useEffect(loadAdsense, []) // 자동 광고 (ADSENSE_CLIENT 설정 시에만 동작)
   const Current = components[route.id] ?? DEFAULT_PAGE
-  const noAds = route.group === '게임'
+  const hideChrome = route.group === '게임' // 숨김 페이지(예: 윷놀이)는 좌측 메뉴·광고 없이 전체 폭으로 렌더
 
   const [menuOpen, setMenuOpen] = useState(false)
   useEffect(() => setMenuOpen(false), [route])
@@ -224,48 +224,50 @@ function App() {
       </header>
 
       <div className="mx-auto flex max-w-6xl">
-        {/* 데스크톱 사이드바 */}
-        <aside className="sticky top-0 hidden h-screen w-60 shrink-0 flex-col border-r border-slate-200 bg-white lg:flex">
-          <div className="px-5 py-6">
-            <a
-              href="/"
-              onClick={(e) => {
-                e.preventDefault()
-                navigate('/')
-              }}
-              className="flex items-center gap-2 text-xl font-extrabold tracking-tight"
-            >
-              <img src="/favicon.svg" alt="" className="h-7 w-7" aria-hidden="true" />
-              계산기
-            </a>
-            <p className="mt-1.5 text-xs text-slate-400">돈·나이·날짜 계산부터 생활 가이드까지, 한곳에서</p>
-          </div>
-          <div className="px-5 pb-3">
-            <a
-              href="/guides/"
-              onClick={(e) => {
-                e.preventDefault()
-                navigate('/guides')
-              }}
-              className="flex items-center gap-1.5 rounded-lg border border-slate-200 px-3 py-2 text-sm font-medium text-slate-600 transition-colors hover:border-emerald-300 hover:bg-emerald-50/40"
-            >
-              📖 가이드
-            </a>
-          </div>
-          <Sidebar activeRouteId={route.id} activeGroup={route.group} onNavigate={navigate} />
-          {!noAds && <AdSlot slot={SLOTS.sidebar} className="min-h-[250px] shrink-0 px-3 pt-2" />}
-          <p className="px-5 py-4 text-[11px] leading-relaxed text-slate-300">
-            모든 결과는 참고용 추정치입니다.
-          </p>
-        </aside>
+        {/* 데스크톱 사이드바 (숨김 페이지에서는 렌더하지 않음) */}
+        {!hideChrome && (
+          <aside className="sticky top-0 hidden h-screen w-60 shrink-0 flex-col border-r border-slate-200 bg-white lg:flex">
+            <div className="px-5 py-6">
+              <a
+                href="/"
+                onClick={(e) => {
+                  e.preventDefault()
+                  navigate('/')
+                }}
+                className="flex items-center gap-2 text-xl font-extrabold tracking-tight"
+              >
+                <img src="/favicon.svg" alt="" className="h-7 w-7" aria-hidden="true" />
+                계산기
+              </a>
+              <p className="mt-1.5 text-xs text-slate-400">돈·나이·날짜 계산부터 생활 가이드까지, 한곳에서</p>
+            </div>
+            <div className="px-5 pb-3">
+              <a
+                href="/guides/"
+                onClick={(e) => {
+                  e.preventDefault()
+                  navigate('/guides')
+                }}
+                className="flex items-center gap-1.5 rounded-lg border border-slate-200 px-3 py-2 text-sm font-medium text-slate-600 transition-colors hover:border-emerald-300 hover:bg-emerald-50/40"
+              >
+                📖 가이드
+              </a>
+            </div>
+            <Sidebar activeRouteId={route.id} activeGroup={route.group} onNavigate={navigate} />
+            <AdSlot slot={SLOTS.sidebar} className="min-h-[250px] shrink-0 px-3 pt-2" />
+            <p className="px-5 py-4 text-[11px] leading-relaxed text-slate-300">
+              모든 결과는 참고용 추정치입니다.
+            </p>
+          </aside>
+        )}
 
         <main className="min-w-0 flex-1 px-4 py-6 sm:px-6 sm:py-8 lg:px-10">
           <Suspense fallback={<div className="h-40 animate-pulse rounded-2xl bg-slate-100" />}>
             <Current />
           </Suspense>
-          {!noAds && <AdSlot key={`${route.id}-mid`} slot={SLOTS.belowResult} />}
+          {!hideChrome && <AdSlot key={`${route.id}-mid`} slot={SLOTS.belowResult} />}
           {route.group !== '가이드' && <InfoSection pageId={route.id} />}
-          {!noAds && <AdSlot key={`${route.id}-bottom`} slot={SLOTS.bottomOfPage} />}
+          {!hideChrome && <AdSlot key={`${route.id}-bottom`} slot={SLOTS.bottomOfPage} />}
 
           <footer className="mt-14 border-t border-slate-200 pt-5 pb-2 text-xs text-slate-400">
             <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
