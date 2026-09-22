@@ -95,6 +95,7 @@ export default function YutnoriBoard({
 
   return (
     <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+      <div className="flex flex-col gap-4 lg:flex-row lg:items-start">
       <div className="relative mx-auto aspect-square w-full max-w-2xl">
         <svg className="absolute inset-0 h-full w-full" viewBox="0 0 100 100" preserveAspectRatio="none">
           {LINE_SEGMENTS.map(([from, to], i) => {
@@ -152,7 +153,7 @@ export default function YutnoriBoard({
           })()}
       </div>
 
-      <ul className="mt-4 space-y-1.5 text-sm text-slate-600">
+      <ul className="flex shrink-0 flex-col gap-1.5 text-sm text-slate-600 lg:w-44">
         {teams.map((t) => {
           const teamPieces = pieces.filter((p) => p.teamId === t.id)
           const home = teamPieces.filter((p) => p.position.status === 'home').length
@@ -168,6 +169,7 @@ export default function YutnoriBoard({
           )
         })}
       </ul>
+      </div>
     </div>
   )
 }
