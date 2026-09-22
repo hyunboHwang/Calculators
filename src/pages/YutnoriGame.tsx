@@ -3,6 +3,7 @@ import {
   createPieces,
   applyMove,
   moveOptions,
+  movePiece,
   teamFinished,
   teamRank,
   THROW_LABELS,
@@ -356,6 +357,14 @@ function nodeLabel(at: 'home' | BoardNode): string {
   return `${at}번 칸`
 }
 
+/** 이 옵션을 고르면 말이 어디로 이동할지 미리 계산한다 (지름길 선택 전이라 기본 경로 기준). */
+function previewDestination(pieces: Piece[], option: MoveOption, result: ThrowResult): BoardNode | null {
+  const piece = pieces.find((p) => p.id === option.pieceIds[0])
+  if (!piece) return null
+  const moved = movePiece(piece, result, false)
+  return moved.position.status === 'onBoard' ? moved.position.at : null
+}
+
 function PlayingScreen({
   state,
   dispatch,
@@ -368,6 +377,7 @@ function PlayingScreen({
   canUndo: boolean
 }) {
   const [remainingSec, setRemainingSec] = useState(() => state.timeLimitMin * 60)
+  const [previewAt, setPreviewAt] = useState<BoardNode | null>(null)
 
   useEffect(() => {
     if (state.endMode !== 'timed') return
@@ -378,6 +388,8 @@ function PlayingScreen({
     const id = window.setTimeout(() => setRemainingSec((s) => s - 1), 1000)
     return () => window.clearTimeout(id)
   }, [state.endMode, remainingSec, dispatch])
+
+  useEffect(() => setPreviewAt(null), [state.awaitingMove])
 
   const currentTeam = state.teams[state.currentTeamIndex]
 
@@ -403,7 +415,12 @@ function PlayingScreen({
       </div>
 
       <div className="mt-4">
-        <YutnoriBoard pieces={state.pieces} teams={state.teams} />
+        <YutnoriBoard
+          pieces={state.pieces}
+          teams={state.teams}
+          previewAt={previewAt}
+          previewTeamId={currentTeam.id}
+        />
       </div>
 
       {!state.awaitingMove && !state.awaitingShortcut && (
@@ -432,6 +449,10 @@ function PlayingScreen({
                 key={i}
                 type="button"
                 onClick={() => dispatch({ type: 'CHOOSE_MOVE', option: opt })}
+                onMouseEnter={() => setPreviewAt(previewDestination(state.pieces, opt, state.awaitingMove!.result))}
+                onMouseLeave={() => setPreviewAt(null)}
+                onFocus={() => setPreviewAt(previewDestination(state.pieces, opt, state.awaitingMove!.result))}
+                onBlur={() => setPreviewAt(null)}
                 className="rounded-lg bg-white px-3 py-2 text-sm font-medium text-slate-700 shadow-sm hover:bg-slate-50"
               >
                 {nodeLabel(opt.at)} {opt.pieceIds.length > 1 ? `(${opt.pieceIds.length}개 업힘)` : ''}

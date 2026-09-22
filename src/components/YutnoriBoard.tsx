@@ -1,4 +1,4 @@
-import type { Piece, Team, TeamColor } from '../lib/yutnori'
+import type { BoardNode, Piece, Team, TeamColor } from '../lib/yutnori'
 
 /**
  * 보드 노드 → 화면 좌표(%) 매핑. 게임 로직(yutnori.ts)과는 완전히 분리된 순수 표시용 테이블.
@@ -65,8 +65,24 @@ const COLOR_BG: Record<TeamColor, string> = {
   yellow: 'bg-yellow-400',
   green: 'bg-emerald-500',
 }
+const COLOR_BORDER: Record<TeamColor, string> = {
+  red: 'border-red-500',
+  blue: 'border-blue-500',
+  yellow: 'border-yellow-400',
+  green: 'border-emerald-500',
+}
 
-export default function YutnoriBoard({ pieces, teams }: { pieces: Piece[]; teams: Team[] }) {
+export default function YutnoriBoard({
+  pieces,
+  teams,
+  previewAt,
+  previewTeamId,
+}: {
+  pieces: Piece[]
+  teams: Team[]
+  previewAt?: BoardNode | null
+  previewTeamId?: number
+}) {
   const colorOf = (teamId: number): TeamColor => teams.find((t) => t.id === teamId)?.color ?? 'red'
 
   const grouped = new Map<string, Piece[]>()
@@ -125,6 +141,21 @@ export default function YutnoriBoard({ pieces, teams }: { pieces: Piece[]; teams
             </div>
           )
         })}
+
+        {previewAt != null &&
+          previewTeamId != null &&
+          (() => {
+            const coords = NODE_COORDS[String(previewAt)]
+            if (!coords) return null
+            const [top, left] = coords
+            return (
+              <div
+                className={`pointer-events-none absolute h-5 w-5 -translate-x-1/2 -translate-y-1/2 animate-pulse rounded-full border-2 bg-white/40 ${COLOR_BORDER[colorOf(previewTeamId)]}`}
+                style={{ top: `${top}%`, left: `${left}%` }}
+                aria-hidden="true"
+              />
+            )
+          })()}
       </div>
 
       <ul className="mt-4 space-y-1.5 text-sm text-slate-600">
