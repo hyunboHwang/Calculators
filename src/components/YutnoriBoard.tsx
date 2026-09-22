@@ -77,6 +77,10 @@ export default function YutnoriBoard({
   previewTeamId?: number
 }) {
   const colorOf = (teamId: number): TeamColor => teams.find((t) => t.id === teamId)?.color ?? 'red'
+  const nameOf = (p: Piece): string => {
+    const idx = Number(p.id.split('-')[1])
+    return teams.find((t) => t.id === p.teamId)?.playerNames[idx] ?? p.id
+  }
 
   const grouped = new Map<string, Piece[]>()
   for (const p of pieces) {
@@ -125,7 +129,7 @@ export default function YutnoriBoard({
                 <span
                   key={p.id}
                   className={`h-3.5 w-3.5 rounded-full border-2 border-white shadow ${COLOR_BG[colorOf(p.teamId)]}`}
-                  title={p.id}
+                  title={nameOf(p)}
                 />
               ))}
             </div>

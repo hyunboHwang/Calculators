@@ -39,6 +39,7 @@ export type GameAction =
   | { type: 'CHOOSE_MOVE'; option: MoveOption }
   | { type: 'CHOOSE_SHORTCUT'; take: boolean }
   | { type: 'TIME_UP' }
+  | { type: 'RENAME_PLAYER'; teamId: number; index: number; name: string }
 
 export const initialState: GameState = {
   phase: 'setup',
@@ -146,6 +147,14 @@ export function gameReducer(state: GameState, action: GameAction): GameState {
     case 'TIME_UP': {
       if (state.phase !== 'playing') return state
       return { ...state, phase: 'results' }
+    }
+    case 'RENAME_PLAYER': {
+      const teams = state.teams.map((t) =>
+        t.id === action.teamId
+          ? { ...t, playerNames: t.playerNames.map((n, i) => (i === action.index ? action.name : n)) }
+          : t,
+      )
+      return { ...state, teams }
     }
     default:
       return state
@@ -422,6 +431,33 @@ function PlayingScreen({
           previewAt={previewAt}
           previewTeamId={currentTeam.id}
         />
+      </div>
+
+      <div className="mt-4 rounded-2xl border border-slate-200 bg-white p-4">
+        <p className="mb-2 text-sm font-semibold text-slate-700">말 이름 수정</p>
+        <div className="space-y-3">
+          {state.teams.map((t) => (
+            <div key={t.id}>
+              <p className="mb-1 flex items-center gap-1.5 text-xs font-semibold text-slate-500">
+                <span className={`h-2 w-2 rounded-full ${COLOR_DOT[t.color]}`} aria-hidden="true" />
+                {t.name}
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {t.playerNames.map((name, i) => (
+                  <input
+                    key={i}
+                    type="text"
+                    value={name}
+                    onChange={(e) =>
+                      dispatch({ type: 'RENAME_PLAYER', teamId: t.id, index: i, name: e.target.value })
+                    }
+                    className="w-24 rounded-lg border border-slate-300 px-2 py-1 text-xs"
+                  />
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
 
       {!state.awaitingMove && !state.awaitingShortcut && (
