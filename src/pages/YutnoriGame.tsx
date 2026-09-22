@@ -398,6 +398,13 @@ function nodeLabel(at: 'home' | BoardNode): string {
   return `${at}번 칸`
 }
 
+function pieceName(pieces: Piece[], teams: Team[], id: string): string {
+  const piece = pieces.find((p) => p.id === id)
+  if (!piece) return id
+  const idx = Number(id.split('-')[1])
+  return teams.find((t) => t.id === piece.teamId)?.playerNames[idx] ?? id
+}
+
 /** 이 옵션을 고르면 말이 어디로 이동할지 미리 계산한다 (지름길 선택 전이라 기본 경로 기준). */
 function previewDestination(pieces: Piece[], option: MoveOption, result: ThrowResult): BoardNode | null {
   const piece = pieces.find((p) => p.id === option.pieceIds[0])
@@ -507,7 +514,9 @@ function PlayingScreen({
                     onBlur={() => setPreviewAt(null)}
                     className="rounded-lg bg-white px-3 py-2 text-sm font-medium text-slate-700 shadow-sm hover:bg-slate-50"
                   >
-                    {nodeLabel(opt.at)} {opt.pieceIds.length > 1 ? `(${opt.pieceIds.length}개 업힘)` : ''}
+                    {opt.pieceIds.map((id) => pieceName(state.pieces, state.teams, id)).join(', ')}
+                    <span className="text-slate-400"> · {nodeLabel(opt.at)}</span>
+                    {opt.pieceIds.length > 1 ? ' (업힘)' : ''}
                   </button>
                 ))}
               </div>
