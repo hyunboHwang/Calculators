@@ -57,13 +57,7 @@ function segments(path: string[]): [string, string][] {
 const LINE_SEGMENTS = [...segments(OUTER_PATH), ...segments(DIAG_A_PATH), ...segments(DIAG_B_PATH)]
 
 const CENTER_NODE = 'a2'
-// 장식용 강조색 — 팀 색과 무관하게 모서리/중앙을 시각적으로 구분하기 위한 표시일 뿐이다.
-const CORNER_COLOR: Record<string, string> = {
-  '10': 'bg-blue-500',
-  '5': 'bg-yellow-400',
-  '15': 'bg-red-500',
-  start: 'bg-emerald-500',
-}
+const CORNER_NODES = new Set(['10', '5', '15', 'start'])
 
 const COLOR_BG: Record<TeamColor, string> = {
   red: 'bg-red-500',
@@ -94,11 +88,12 @@ export default function YutnoriBoard({ pieces, teams }: { pieces: Piece[]; teams
         </svg>
 
         {Object.entries(ALL_COORDS).map(([node, [top, left]]) => {
-          const cornerColor = CORNER_COLOR[node]
           const isCenter = node === CENTER_NODE
-          const nodeClass =
-            cornerColor || isCenter
-              ? `h-5 w-5 border-2 border-white shadow ${cornerColor ?? 'bg-violet-500'}`
+          const isCorner = CORNER_NODES.has(node)
+          const nodeClass = isCenter
+            ? 'h-5 w-5 border-2 border-white bg-violet-500 shadow'
+            : isCorner
+              ? 'h-5 w-5 border border-slate-300 bg-white shadow'
               : 'h-3 w-3 border border-slate-300 bg-white'
           return (
             <div
