@@ -1,9 +1,10 @@
-import { useReducer, useState } from 'react'
+import { useEffect, useReducer, useState } from 'react'
 import {
   createPieces,
   applyMove,
   moveOptions,
   teamFinished,
+  teamRank,
   THROW_LABELS,
   TEAM_COLORS,
   type Team,
@@ -34,6 +35,7 @@ export type GameAction =
   | { type: 'THROW'; result: ThrowResult }
   | { type: 'CHOOSE_MOVE'; option: MoveOption }
   | { type: 'CHOOSE_SHORTCUT'; take: boolean }
+  | { type: 'TIME_UP' }
 
 export const initialState: GameState = {
   phase: 'setup',
@@ -136,6 +138,10 @@ export function gameReducer(state: GameState, action: GameAction): GameState {
       if (!state.awaitingShortcut) return state
       const { result, pieceIds } = state.awaitingShortcut
       return applyChosenMove(state, result, { pieceIds, at: 'home' }, action.take)
+    }
+    case 'TIME_UP': {
+      if (state.phase !== 'playing') return state
+      return { ...state, phase: 'results' }
     }
     default:
       return state
@@ -322,12 +328,7 @@ export default function YutnoriGame() {
     return <PlayingScreen state={state} dispatch={dispatch} />
   }
 
-  return (
-    <div>
-      <h1 className="text-2xl font-bold">윷놀이</h1>
-      <p className="mt-2 text-sm text-slate-500">게임 종료! (결과 화면은 다음 작업에서 이어집니다)</p>
-    </div>
-  )
+  return <ResultsScreen state={state} />
 }
 
 const THROW_BUTTONS: ThrowResult[] = ['do', 'gae', 'geol', 'yut', 'mo', 'baekdo']
@@ -338,11 +339,28 @@ function nodeLabel(at: 'home' | BoardNode): string {
 }
 
 function PlayingScreen({ state, dispatch }: { state: GameState; dispatch: (a: GameAction) => void }) {
+  const [remainingSec, setRemainingSec] = useState(() => state.timeLimitMin * 60)
+
+  useEffect(() => {
+    if (state.endMode !== 'timed') return
+    if (remainingSec <= 0) {
+      dispatch({ type: 'TIME_UP' })
+      return
+    }
+    const id = window.setTimeout(() => setRemainingSec((s) => s - 1), 1000)
+    return () => window.clearTimeout(id)
+  }, [state.endMode, remainingSec, dispatch])
+
   const currentTeam = state.teams[state.currentTeamIndex]
 
   return (
     <div>
       <h1 className="text-2xl font-bold">윷놀이</h1>
+      {state.endMode === 'timed' && (
+        <p className="mt-1 text-sm font-semibold text-slate-600">
+          남은 시간: {Math.floor(remainingSec / 60)}분 {remainingSec % 60}초
+        </p>
+      )}
 
       <div className="mt-4 rounded-2xl border border-emerald-200 bg-emerald-50 p-4">
         <p className="text-sm font-semibold text-emerald-800">지금 차례: {currentTeam.name}</p>
@@ -431,6 +449,40 @@ function PlayingScreen({ state, dispatch }: { state: GameState; dispatch: (a: Ga
           <p key={i}>{l}</p>
         ))}
       </div>
+    </div>
+  )
+}
+
+function ResultsScreen({ state }: { state: GameState }) {
+  const remainingTeamIds = state.teams.map((t) => t.id).filter((id) => !state.finishedOrder.includes(id))
+  const rankedRemaining = teamRank(state.pieces, remainingTeamIds)
+  const finalOrder = [...state.finishedOrder, ...rankedRemaining]
+
+  return (
+    <div>
+      <h1 className="text-2xl font-bold">최종 순위</h1>
+      <ol className="mt-6 space-y-2">
+        {finalOrder.map((teamId, i) => {
+          const team = state.teams.find((t) => t.id === teamId)!
+          return (
+            <li
+              key={teamId}
+              className="flex items-center gap-3 rounded-xl border border-slate-200 bg-white p-4 shadow-sm"
+            >
+              <span className="text-lg font-bold text-emerald-600">{i + 1}등</span>
+              <span className="font-semibold text-slate-800">{team.name}</span>
+              <span className="text-sm text-slate-400">({team.playerNames.join(', ')})</span>
+            </li>
+          )
+        })}
+      </ol>
+      <button
+        type="button"
+        onClick={() => window.location.reload()}
+        className="mt-6 w-full rounded-xl bg-emerald-600 py-3 text-sm font-bold text-white"
+      >
+        다시 시작
+      </button>
     </div>
   )
 }
