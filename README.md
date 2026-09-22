@@ -8,7 +8,7 @@
 
 배포 후 Vercel의 `TOSS_CLIENT_ID`, `TOSS_CLIENT_SECRET`, `STOCK_PASSWORD` 환경변수도 삭제하세요. 기존 API 키 폐기는 발급기관에서 별도로 처리해야 합니다. 로컬 `.env.local`은 자동 수정하지 않았습니다.
 
-## 계산기 목록 (44개)
+## 계산기 목록 (46개)
 
 | 그룹 | 계산기 | 경로 |
 |---|---|---|
@@ -21,6 +21,7 @@
 | 주식 | 예적금 이자 | `/deposit/` |
 | 주식 | 연금저축·IRP 세액공제 | `/pension-tax-credit/` |
 | 직장인 | 연봉 실수령액 | `/salary/` |
+| 직장인 | 연봉 실수령액표 | `/salary-table/` |
 | 직장인 | 연봉 인상 비교 | `/raise/` |
 | 직장인 | 퇴직금 | `/severance/` |
 | 직장인 | 알바 월급·주휴수당 | `/part-time/` |
@@ -56,3 +57,4 @@
 | 생활 | BMI·표준체중 | `/bmi/` |
 | 생활 | 관리비 | `/management-fee/` |
 | 생활 | 이사비용 | `/moving-cost/` |
+| 용어사전 | 용어사전 | `/glossary/` |
