@@ -25,18 +25,31 @@ const NODE_COORDS: Record<string, [top: number, left: number]> = {
   '17': [100, 40],
   '18': [100, 60],
   '19': [100, 80],
-  a1: [25, 75],
+  a1: [33.3, 66.6],
   a2: [50, 50],
-  a3: [75, 25],
+  a3: [66.6, 33.3],
   b1: [33.3, 33.3],
   b2: [66.6, 66.6],
   start: [100, 100],
 }
 
+/**
+ * 대각선은 모서리↔중앙 사이에 칸이 2개씩 있어야 참고 이미지와 같은 밀도가 된다.
+ * a1/a3/b1/b2는 실제 지름길 정지 칸(게임 로직과 연결), af1/af2/bf1/bf2는 그 사이를 메우는
+ * 순수 장식용 칸(말이 멈추지 않음)이다.
+ */
+const DECOR_COORDS: Record<string, [top: number, left: number]> = {
+  af1: [16.6, 83.3],
+  af2: [83.3, 16.6],
+  bf1: [16.6, 16.6],
+  bf2: [83.3, 83.3],
+}
+const ALL_COORDS = { ...NODE_COORDS, ...DECOR_COORDS }
+
 // 실제 말이 지나가는 경로를 따라 선을 잇는다 (테두리 고리 + 대각선 지름길 2개, 중앙에서 교차).
 const OUTER_PATH = ['start', ...Array.from({ length: 19 }, (_, i) => String(i + 1)), 'start']
-const DIAG_A_PATH = ['5', 'a1', 'a2', 'a3', '15']
-const DIAG_B_PATH = ['10', 'b1', 'a2', 'b2', 'start']
+const DIAG_A_PATH = ['5', 'af1', 'a1', 'a2', 'a3', 'af2', '15']
+const DIAG_B_PATH = ['10', 'bf1', 'b1', 'a2', 'b2', 'bf2', 'start']
 
 function segments(path: string[]): [string, string][] {
   return path.slice(1).map((node, i) => [path[i], node])
@@ -74,13 +87,13 @@ export default function YutnoriBoard({ pieces, teams }: { pieces: Piece[]; teams
       <div className="relative mx-auto aspect-square w-full max-w-xs">
         <svg className="absolute inset-0 h-full w-full" viewBox="0 0 100 100" preserveAspectRatio="none">
           {LINE_SEGMENTS.map(([from, to], i) => {
-            const [t1, l1] = NODE_COORDS[from]
-            const [t2, l2] = NODE_COORDS[to]
+            const [t1, l1] = ALL_COORDS[from]
+            const [t2, l2] = ALL_COORDS[to]
             return <line key={i} x1={l1} y1={t1} x2={l2} y2={t2} stroke="#cbd5e1" strokeWidth="1" />
           })}
         </svg>
 
-        {Object.entries(NODE_COORDS).map(([node, [top, left]]) => {
+        {Object.entries(ALL_COORDS).map(([node, [top, left]]) => {
           const cornerColor = CORNER_COLOR[node]
           const isCenter = node === CENTER_NODE
           const nodeClass =
