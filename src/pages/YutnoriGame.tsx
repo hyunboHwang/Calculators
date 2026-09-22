@@ -4,6 +4,7 @@ import {
   applyMove,
   moveOptions,
   movePiece,
+  grantsExtraTurn,
   teamFinished,
   teamRank,
   THROW_LABELS,
@@ -27,6 +28,8 @@ export interface GameState {
   endMode: EndMode
   timeLimitMin: number
   currentTeamIndex: number
+  pendingThrows: ThrowResult[] // 윷/모나 잡기로 얻은, 아직 어느 말에도 배정하지 않은 던지기 결과들
+  canThrow: boolean // 지금 도개걸윷모를 던질 수 있는지 (일반 결과를 던지면 꺼짐, 윷/모·잡기로 다시 켜짐)
   awaitingMove: { result: ThrowResult; options: MoveOption[] } | null
   awaitingShortcut: { result: ThrowResult; pieceIds: string[] } | null
   finishedOrder: number[] // 완주 확정된 teamId, 확정된 순서
@@ -36,6 +39,7 @@ export interface GameState {
 export type GameAction =
   | { type: 'START_GAME'; teams: Team[]; endMode: EndMode; timeLimitMin: number }
   | { type: 'THROW'; result: ThrowResult }
+  | { type: 'RESOLVE_THROW'; index: number }
   | { type: 'CHOOSE_MOVE'; option: MoveOption }
   | { type: 'CHOOSE_SHORTCUT'; take: boolean }
   | { type: 'TIME_UP' }
@@ -48,6 +52,8 @@ export const initialState: GameState = {
   endMode: 'complete',
   timeLimitMin: 10,
   currentTeamIndex: 0,
+  pendingThrows: [],
+  canThrow: true,
   awaitingMove: null,
   awaitingShortcut: null,
   finishedOrder: [],
@@ -68,6 +74,14 @@ function nextTeamIndex(state: GameState): number {
   return state.currentTeamIndex
 }
 
+/** 더 던질 수도, 배정할 던지기도, 진행 중인 선택도 없으면 다음 팀으로 넘긴다. */
+function settleTurn(state: GameState): GameState {
+  if (state.phase !== 'playing') return state
+  if (state.canThrow || state.pendingThrows.length > 0) return state
+  if (state.awaitingMove || state.awaitingShortcut) return state
+  return { ...state, currentTeamIndex: nextTeamIndex(state), canThrow: true }
+}
+
 function applyChosenMove(
   state: GameState,
   result: ThrowResult,
@@ -76,6 +90,7 @@ function applyChosenMove(
 ): GameState {
   const currentTeam = state.teams[state.currentTeamIndex]
   const { pieces, capturedTeamIds, extraTurn } = applyMove(state.pieces, option.pieceIds, result, takeShortcut)
+  const captured = capturedTeamIds.length > 0
 
   const finishedOrder = [...state.finishedOrder]
   for (const t of state.teams) {
@@ -83,7 +98,7 @@ function applyChosenMove(
   }
 
   const logLines: string[] = [`${currentTeam.name}: ${THROW_LABELS[result]}`]
-  if (capturedTeamIds.length > 0) {
+  if (captured) {
     const names = capturedTeamIds.map((id) => state.teams.find((t) => t.id === id)?.name ?? '').join(', ')
     logLines.push(`${currentTeam.name}이(가) ${names} 말을 잡았습니다! 추가 턴`)
   } else if (extraTurn) {
@@ -91,18 +106,17 @@ function applyChosenMove(
   }
 
   const allFinished = finishedOrder.length >= state.teams.length - 1
-  const stillPlaying = !finishedOrder.includes(currentTeam.id)
 
-  return {
+  return settleTurn({
     ...state,
     pieces,
     finishedOrder,
     awaitingMove: null,
     awaitingShortcut: null,
     phase: allFinished ? 'results' : state.phase,
-    currentTeamIndex: extraTurn && stillPlaying ? state.currentTeamIndex : nextTeamIndex({ ...state, finishedOrder }),
+    canThrow: state.canThrow || captured, // 잡으면 즉시 한 번 더 던질 수 있다
     log: [...logLines, ...state.log].slice(0, 5),
-  }
+  })
 }
 
 export function gameReducer(state: GameState, action: GameAction): GameState {
@@ -115,21 +129,38 @@ export function gameReducer(state: GameState, action: GameAction): GameState {
         pieces: createPieces(action.teams),
         endMode: action.endMode,
         timeLimitMin: action.timeLimitMin,
+        pendingThrows: [],
+        canThrow: true,
       }
     case 'THROW': {
+      if (!state.canThrow) return state
+      return {
+        ...state,
+        pendingThrows: [...state.pendingThrows, action.result],
+        canThrow: grantsExtraTurn(action.result),
+      }
+    }
+    case 'RESOLVE_THROW': {
+      const result = state.pendingThrows[action.index]
+      if (result === undefined) return state
+      const pendingThrows = state.pendingThrows.filter((_, i) => i !== action.index)
       const currentTeam = state.teams[state.currentTeamIndex]
-      const options = moveOptions(state.pieces, currentTeam.id, action.result)
+      const options = moveOptions(state.pieces, currentTeam.id, result)
+
       if (options.length === 0) {
-        return {
+        return settleTurn({
           ...state,
-          log: [`${currentTeam.name}: 이동할 말이 없어 턴을 넘깁니다 (${THROW_LABELS[action.result]})`, ...state.log].slice(0, 5),
-          currentTeamIndex: nextTeamIndex(state),
-        }
+          pendingThrows,
+          log: [`${currentTeam.name}: 이동할 말이 없어 ${THROW_LABELS[result]}를 사용하지 못했습니다`, ...state.log].slice(
+            0,
+            5,
+          ),
+        })
       }
-      if (options.length === 1 && !needsShortcutChoice(options[0], action.result)) {
-        return applyChosenMove(state, action.result, options[0], false)
+      if (options.length === 1 && !needsShortcutChoice(options[0], result)) {
+        return applyChosenMove({ ...state, pendingThrows }, result, options[0], false)
       }
-      return { ...state, awaitingMove: { result: action.result, options } }
+      return { ...state, pendingThrows, awaitingMove: { result, options } }
     }
     case 'CHOOSE_MOVE': {
       if (!state.awaitingMove) return state
@@ -424,7 +455,25 @@ function PlayingScreen({
           onUndo={undo}
           canUndo={canUndo}
         >
-          {!state.awaitingMove && !state.awaitingShortcut && (
+          {!state.awaitingMove && !state.awaitingShortcut && state.pendingThrows.length > 0 && (
+            <div className="mt-2 rounded-2xl border border-sky-200 bg-sky-50 p-4">
+              <p className="text-sm font-semibold text-sky-800">배정 대기 중인 결과 — 눌러서 말을 고르세요</p>
+              <div className="mt-2 flex flex-wrap gap-2">
+                {state.pendingThrows.map((r, i) => (
+                  <button
+                    key={i}
+                    type="button"
+                    onClick={() => dispatch({ type: 'RESOLVE_THROW', index: i })}
+                    className="rounded-lg bg-white px-3 py-2 text-sm font-semibold text-sky-700 shadow-sm hover:bg-sky-100"
+                  >
+                    {THROW_LABELS[r]}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {!state.awaitingMove && !state.awaitingShortcut && state.canThrow && (
             <div className="mt-2 grid grid-cols-3 gap-2">
               {THROW_BUTTONS.map((r) => (
                 <button
