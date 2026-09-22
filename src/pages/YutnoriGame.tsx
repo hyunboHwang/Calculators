@@ -401,6 +401,8 @@ function PlayingScreen({
 
   useEffect(() => setPreviewAt(null), [state.awaitingMove])
 
+  const [showRename, setShowRename] = useState(false)
+
   const currentTeam = state.teams[state.currentTeamIndex]
 
   return (
@@ -433,31 +435,41 @@ function PlayingScreen({
         />
       </div>
 
-      <div className="mt-4 rounded-2xl border border-slate-200 bg-white p-4">
-        <p className="mb-2 text-sm font-semibold text-slate-700">말 이름 수정</p>
-        <div className="space-y-3">
-          {state.teams.map((t) => (
-            <div key={t.id}>
-              <p className="mb-1 flex items-center gap-1.5 text-xs font-semibold text-slate-500">
-                <span className={`h-2 w-2 rounded-full ${COLOR_DOT[t.color]}`} aria-hidden="true" />
-                {t.name}
-              </p>
-              <div className="flex flex-wrap gap-2">
-                {t.playerNames.map((name, i) => (
-                  <input
-                    key={i}
-                    type="text"
-                    value={name}
-                    onChange={(e) =>
-                      dispatch({ type: 'RENAME_PLAYER', teamId: t.id, index: i, name: e.target.value })
-                    }
-                    className="w-24 rounded-lg border border-slate-300 px-2 py-1 text-xs"
-                  />
-                ))}
-              </div>
+      <div className="mt-4">
+        <button
+          type="button"
+          onClick={() => setShowRename((v) => !v)}
+          className="text-xs font-semibold text-slate-500 underline underline-offset-2"
+        >
+          {showRename ? '말 이름 수정 닫기' : '말 이름 수정'}
+        </button>
+        {showRename && (
+          <div className="mt-2 rounded-2xl border border-slate-200 bg-white p-4">
+            <div className="space-y-3">
+              {state.teams.map((t) => (
+                <div key={t.id}>
+                  <p className="mb-1 flex items-center gap-1.5 text-xs font-semibold text-slate-500">
+                    <span className={`h-2 w-2 rounded-full ${COLOR_DOT[t.color]}`} aria-hidden="true" />
+                    {t.name}
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    {t.playerNames.map((name, i) => (
+                      <input
+                        key={i}
+                        type="text"
+                        value={name}
+                        onChange={(e) =>
+                          dispatch({ type: 'RENAME_PLAYER', teamId: t.id, index: i, name: e.target.value })
+                        }
+                        className="w-24 rounded-lg border border-slate-300 px-2 py-1 text-xs"
+                      />
+                    ))}
+                  </div>
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
+          </div>
+        )}
       </div>
 
       {!state.awaitingMove && !state.awaitingShortcut && (
