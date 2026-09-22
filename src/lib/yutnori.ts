@@ -128,3 +128,135 @@ export function movePiece(piece: Piece, result: ThrowResult, takeShortcut: boole
   }
   return { ...piece, position: { status: 'onBoard', at: cur as BoardNode } }
 }
+
+export type TeamColor = 'red' | 'blue' | 'yellow' | 'green'
+export const TEAM_COLORS: TeamColor[] = ['red', 'blue', 'yellow', 'green']
+
+export interface Team {
+  id: number
+  name: string
+  color: TeamColor
+  playerNames: string[] // 인원 수 = 이 팀의 말 개수
+}
+
+/** 팀 구성으로 초기 말 목록을 만든다. 모든 말은 대기(home) 상태로 시작한다. */
+export function createPieces(teams: Team[]): Piece[] {
+  return teams.flatMap((t) =>
+    t.playerNames.map((_, i) => ({
+      id: `${t.id}-${i}`,
+      teamId: t.id,
+      position: { status: 'home' } as PiecePosition,
+    })),
+  )
+}
+
+export interface MoveOption {
+  pieceIds: string[] // 이동할 말들 (업힌 그룹이면 2개 이상, 보통은 1개)
+  at: 'home' | BoardNode
+}
+
+/**
+ * 이번 던지기 결과로 이 팀이 고를 수 있는 이동 옵션 목록.
+ * 보드 위의 같은 칸에 모인 같은 팀 말은 하나의 그룹(업힘)으로 묶여 한 옵션이 된다.
+ */
+export function moveOptions(pieces: Piece[], teamId: number, result: ThrowResult): MoveOption[] {
+  const movable = pieces.filter((p) => p.teamId === teamId && canMove(p, result))
+
+  const grouped = new Map<BoardNode, string[]>()
+  for (const p of movable) {
+    if (p.position.status !== 'onBoard') continue
+    const key = p.position.at
+    const list = grouped.get(key) ?? []
+    list.push(p.id)
+    grouped.set(key, list)
+  }
+  const onBoardOptions: MoveOption[] = [...grouped.entries()].map(([at, pieceIds]) => ({
+    pieceIds,
+    at,
+  }))
+
+  const homeOptions: MoveOption[] =
+    result === 'baekdo'
+      ? []
+      : movable
+          .filter((p) => p.position.status === 'home')
+          .map((p) => ({ pieceIds: [p.id], at: 'home' as const }))
+
+  return [...onBoardOptions, ...homeOptions]
+}
+
+export interface ApplyMoveResult {
+  pieces: Piece[]
+  capturedTeamIds: number[]
+  extraTurn: boolean
+}
+
+/**
+ * 선택한 말(들)을 이동시키고 업힘/잡기를 반영한다.
+ * 업힘은 별도 자료구조 없이 "같은 칸에 있으면 그룹"으로 취급하므로, 이동 후 그 칸에
+ * 이미 있던 같은 팀 말은 자동으로 다음 선택에서 같은 그룹으로 묶인다(moveOptions 참고).
+ */
+export function applyMove(
+  pieces: Piece[],
+  pieceIds: string[],
+  result: ThrowResult,
+  takeShortcut: boolean,
+): ApplyMoveResult {
+  const moved = pieces.map((p) => (pieceIds.includes(p.id) ? movePiece(p, result, takeShortcut) : p))
+
+  const landed = moved.find((p) => p.id === pieceIds[0])!
+  if (landed.position.status !== 'onBoard') {
+    return { pieces: moved, capturedTeamIds: [], extraTurn: grantsExtraTurn(result) }
+  }
+  const at = landed.position.at
+  const opponents = moved.filter(
+    (p) => !pieceIds.includes(p.id) && p.position.status === 'onBoard' && p.position.at === at && p.teamId !== landed.teamId,
+  )
+  if (opponents.length === 0) {
+    return { pieces: moved, capturedTeamIds: [], extraTurn: grantsExtraTurn(result) }
+  }
+
+  const capturedIds = new Set(opponents.map((p) => p.id))
+  const pieces2 = moved.map((p) =>
+    capturedIds.has(p.id) ? { ...p, position: { status: 'home' } as PiecePosition } : p,
+  )
+  return {
+    pieces: pieces2,
+    capturedTeamIds: [...new Set(opponents.map((o) => o.teamId))],
+    extraTurn: true, // 윷/모가 아니어도 잡으면 추가 턴
+  }
+}
+
+export function teamFinished(pieces: Piece[], teamId: number): boolean {
+  const teamPieces = pieces.filter((p) => p.teamId === teamId)
+  return teamPieces.length > 0 && teamPieces.every((p) => p.position.status === 'finished')
+}
+
+/** 시간제한 모드 순위용 대략적인 진행도(0~20). 완주=20, 대기=0. */
+export function pieceProgress(position: PiecePosition): number {
+  if (position.status === 'home') return 0
+  if (position.status === 'finished') return 20
+  const at = position.at
+  if (typeof at === 'number') return at
+  const diagProgress: Record<DiagNode, number> = { a1: 6, a2: 7, a3: 8, b1: 11, b2: 12 }
+  return diagProgress[at]
+}
+
+/**
+ * teamIds를 순위(1등부터) 순서로 정렬해 반환한다.
+ * 완주 말 수 내림차순 → 동률이면 팀 전체 진행도 합산 내림차순.
+ */
+export function teamRank(pieces: Piece[], teamIds: number[]): number[] {
+  const score = (teamId: number) => {
+    const teamPieces = pieces.filter((p) => p.teamId === teamId)
+    const finished = teamPieces.filter((p) => p.position.status === 'finished').length
+    const progress = teamPieces.reduce((sum, p) => sum + pieceProgress(p.position), 0)
+    return { finished, progress }
+  }
+  return [...teamIds].sort((a, b) => {
+    const sa = score(a)
+    const sb = score(b)
+    if (sa.finished !== sb.finished) return sb.finished - sa.finished
+    return sb.progress - sa.progress
+  })
+}

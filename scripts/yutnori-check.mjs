@@ -1,5 +1,16 @@
 import assert from 'node:assert/strict'
-import { movePiece, canMove, grantsExtraTurn } from '../src/lib/yutnori.ts'
+import {
+  movePiece,
+  canMove,
+  grantsExtraTurn,
+  createPieces,
+  moveOptions,
+  applyMove,
+  teamFinished,
+  pieceProgress,
+  teamRank,
+  TEAM_COLORS,
+} from '../src/lib/yutnori.ts'
 
 function piece(teamId, id, position) {
   return { id, teamId, position }
@@ -74,3 +85,55 @@ assert.equal(grantsExtraTurn('do'), false)
 assert.equal(grantsExtraTurn('baekdo'), false)
 
 console.log('✓ Task 1 이동 로직 점검 통과')
+
+// 업힘: 같은 칸에 있는 같은 팀 말은 하나의 이동 옵션으로 묶인다
+{
+  const pieces = [
+    piece(1, '1-0', { status: 'onBoard', at: 3 }),
+    piece(1, '1-1', { status: 'onBoard', at: 3 }),
+  ]
+  const options = moveOptions(pieces, 1, 'do')
+  assert.equal(options.length, 1)
+  assert.deepEqual(options[0].pieceIds.sort(), ['1-0', '1-1'])
+}
+
+// 잡기: 상대 팀 말이 있는 칸에 도착하면 그 말은 집으로 돌아가고 추가 턴을 받는다
+{
+  const pieces = [
+    piece(1, '1-0', { status: 'onBoard', at: 2 }),
+    piece(2, '2-0', { status: 'onBoard', at: 3 }),
+  ]
+  const result = applyMove(pieces, ['1-0'], 'do', false)
+  const mine = result.pieces.find((p) => p.id === '1-0')
+  const theirs = result.pieces.find((p) => p.id === '2-0')
+  assert.equal(mine.position.at, 3)
+  assert.equal(theirs.position.status, 'home')
+  assert.equal(result.extraTurn, true)
+  assert.deepEqual(result.capturedTeamIds, [2])
+}
+
+// 잡지 않고 도/개/걸만 던졌으면 추가 턴이 없다
+{
+  const pieces = [piece(1, '1-0', { status: 'onBoard', at: 2 })]
+  const result = applyMove(pieces, ['1-0'], 'do', false)
+  assert.equal(result.extraTurn, false)
+}
+
+// 완주 판정과 순위
+{
+  const teams = [
+    { id: 1, name: 'A', color: TEAM_COLORS[0], playerNames: ['철수'] },
+    { id: 2, name: 'B', color: TEAM_COLORS[1], playerNames: ['영희'] },
+  ]
+  let pieces = createPieces(teams)
+  assert.equal(pieces.length, 2)
+  assert.equal(teamFinished(pieces, 1), false)
+  pieces = pieces.map((p) => (p.teamId === 1 ? { ...p, position: { status: 'finished' } } : p))
+  assert.equal(teamFinished(pieces, 1), true)
+  assert.equal(pieceProgress({ status: 'onBoard', at: 10 }), 10)
+  assert.equal(pieceProgress({ status: 'finished' }), 20)
+  const ranked = teamRank(pieces, [2, 1])
+  assert.deepEqual(ranked, [1, 2]) // 완주한 팀(1)이 먼저
+}
+
+console.log('✓ Task 2 팀/업힘/잡기/순위 로직 점검 통과')
