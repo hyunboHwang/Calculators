@@ -53,7 +53,7 @@ const LINE_SEGMENTS = [...segments(OUTER_PATH), ...segments(DIAG_A_PATH), ...seg
 function boardNodeLabel(node: string): string {
   if (/^\d+$/.test(node)) return node
   if (node === 'c') return '중앙'
-  return ''
+  return node
 }
 
 const COLOR_BG: Record<TeamColor, string> = {
