@@ -49,6 +49,13 @@ function segments(path: string[]): [string, string][] {
 }
 const LINE_SEGMENTS = [...segments(OUTER_PATH), ...segments(DIAG_A_PATH), ...segments(DIAG_B_PATH)]
 
+// 바깥 테두리 1~19번 칸과 중앙만 위치를 부르는 이름이 있어 그것만 숫자/글자로 표시한다.
+function boardNodeLabel(node: string): string {
+  if (/^\d+$/.test(node)) return node
+  if (node === 'c') return '중앙'
+  return ''
+}
+
 const COLOR_BG: Record<TeamColor, string> = {
   red: 'bg-red-500',
   blue: 'bg-blue-500',
@@ -119,10 +126,13 @@ export default function YutnoriBoard({
           return (
             <div
               key={node}
-              className="absolute h-12 w-12 -translate-x-1/2 -translate-y-1/2 rounded-full border border-slate-300 bg-white shadow"
+              className="absolute flex h-12 w-12 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-slate-300 bg-white shadow"
               style={{ top: `${top}%`, left: `${left}%` }}
-              aria-hidden="true"
-            />
+            >
+              <span className="select-none text-[11px] font-semibold text-slate-400">
+                {boardNodeLabel(node)}
+              </span>
+            </div>
           )
         })}
 
