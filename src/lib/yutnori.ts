@@ -52,8 +52,10 @@ type WalkNode = BoardNode | 'start'
 /**
  * 한 칸 전진. takeShortcut은 "지름길 갈림길에 멈춰 있다가 다음 턴을 시작하는" 그 한 걸음에만
  * 의미가 있다 — 모서리 5·10(지름길을 탈지)과 중앙 c(어느 지름길로 계속 갈지) 두 곳.
+ * prev는 바로 직전 칸: 중앙(c)을 "멈추지 않고 지나치는" 경우, 원래 타고 있던 지름길
+ * 방향(a2에서 왔으면 a3 쪽, b2에서 왔으면 b3 쪽)을 그대로 이어가기 위해 필요하다.
  */
-function stepOnce(node: WalkNode, takeShortcut: boolean): BoardNode | 'finished' {
+function stepOnce(node: WalkNode, prev: WalkNode | null, takeShortcut: boolean): BoardNode | 'finished' {
   if (node === 'start') return 1
   if (typeof node === 'number') {
     if (node === 19) return 'finished'
@@ -67,7 +69,9 @@ function stepOnce(node: WalkNode, takeShortcut: boolean): BoardNode | 'finished'
     case 'a2':
       return 'c'
     case 'c':
-      return takeShortcut ? 'a3' : 'b3'
+      if (prev === 'a2') return 'a3'
+      if (prev === 'b2') return 'b3'
+      return takeShortcut ? 'a3' : 'b3' // 정확히 중앙에서 출발하는 경우 — 진짜 사용자 선택
     case 'a3':
       return 'a4'
     case 'a4':
@@ -139,14 +143,16 @@ export function movePiece(piece: Piece, result: ThrowResult, takeShortcut: boole
   }
 
   let cur: WalkNode = piece.position.status === 'home' ? 'start' : piece.position.at
+  let prev: WalkNode | null = null
   const shortcutAtStart =
     piece.position.status === 'onBoard' &&
     (piece.position.at === 5 || piece.position.at === 10 || piece.position.at === 'c')
 
   for (let i = 0; i < steps; i++) {
     const useShortcut = i === 0 && shortcutAtStart && takeShortcut
-    const next = stepOnce(cur, useShortcut)
+    const next = stepOnce(cur, prev, useShortcut)
     if (next === 'finished') return { ...piece, position: { status: 'finished' } }
+    prev = cur
     cur = next
   }
   return { ...piece, position: { status: 'onBoard', at: cur as BoardNode } }
