@@ -200,6 +200,14 @@ const COLOR_DOT: Record<TeamColor, string> = {
   green: 'bg-emerald-500',
 }
 
+// 기본 조 편성 프리셋 — 4조, 조당 5명.
+const DEFAULT_ROSTERS: string[][] = [
+  ['송수미', '이경민', '김정효', '이희지', '사라'],
+  ['이상민', '김가영', '박초원', '송기호', '유인선'],
+  ['정민옥', '신나라', '김혜정', '정연중', '정슬기'],
+  ['황현보', '임승아', '박철순', '이송아', '강민수'],
+]
+
 function SetupScreen({ onStart }: { onStart: (teams: Team[], endMode: EndMode, timeLimitMin: number) => void }) {
   const [teamCount, setTeamCount] = useState(2)
   const [rosters, setRosters] = useState<string[][]>([['팀원1'], ['팀원1']])
@@ -233,6 +241,11 @@ function SetupScreen({ onStart }: { onStart: (teams: Team[], endMode: EndMode, t
     })
   }
 
+  const loadDefaultRosters = () => {
+    setTeamCount(DEFAULT_ROSTERS.length)
+    setRosters(DEFAULT_ROSTERS.map((names) => [...names]))
+  }
+
   const canStart = rosters.slice(0, teamCount).every((r) => r.length >= 1 && r.every((n) => n.trim().length > 0))
 
   const handleStart = () => {
@@ -248,9 +261,17 @@ function SetupScreen({ onStart }: { onStart: (teams: Team[], endMode: EndMode, t
   return (
     <div>
       <h1 className="text-2xl font-bold">윷놀이</h1>
-      <p className="mt-1 mb-6 text-sm text-slate-500">
+      <p className="mt-1 mb-3 text-sm text-slate-500">
         팀을 만들고 시작하세요. 윷은 직접 던지고, 나온 결과만 화면에 입력하면 됩니다.
       </p>
+
+      <button
+        type="button"
+        onClick={loadDefaultRosters}
+        className="mb-6 rounded-lg bg-emerald-50 px-3 py-2 text-sm font-semibold text-emerald-700 ring-1 ring-emerald-200 hover:bg-emerald-100"
+      >
+        기본 조 편성 불러오기 (4조)
+      </button>
 
       <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
         <label className="block">
