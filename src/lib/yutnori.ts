@@ -38,7 +38,7 @@ export type BoardNode = OuterNode | DiagNode
 
 export type PiecePosition =
   | { status: 'home' }
-  | { status: 'onBoard'; at: BoardNode }
+  | { status: 'onBoard'; at: BoardNode; via?: 'a' | 'b' } // via는 at === 'c'일 때만 의미 있음: 어느 지름길에서 왔는지
   | { status: 'finished' }
 
 export interface Piece {
@@ -91,11 +91,9 @@ function stepOnce(node: WalkNode, prev: WalkNode | null, takeShortcut: boolean):
  * 백도(한 칸 후진)용. 지름길 위에 있던 말이 후진하면 그 지름길이 갈라진 모서리로 되돌아가고,
  * 지름길을 거쳐 15번 칸에 합류한 말은(도착 지점만 보면 바깥길로 온 말과 구별할 수 없으므로)
  * 바깥길 14번 칸으로 후진한다 — 아주 드문 경계 케이스라 이렇게 단순화했다. 중앙(c)에서
- * 후진할 때 어느 지름길에서 왔는지도 마찬가지 이유로 기억하지 않고 항상 a2쪽으로 되돌린다.
- * ponytail: 정확한 경로 이력이 필요해지면(플레이 중 부자연스럽다는 얘기가 나오면) Piece에
- * path 이력을 추가.
+ * 후진할 때는 Piece.position.via(어느 지름길에서 왔는지)를 참고해 그쪽으로 되돌린다.
  */
-function prevNode(node: BoardNode): BoardNode {
+function prevNode(node: BoardNode, via: 'a' | 'b' | undefined): BoardNode {
   if (typeof node === 'number') return node === 1 ? 1 : node - 1
   switch (node) {
     case 'a1':
@@ -103,7 +101,7 @@ function prevNode(node: BoardNode): BoardNode {
     case 'a2':
       return 'a1'
     case 'c':
-      return 'a2'
+      return via === 'b' ? 'b2' : 'a2'
     case 'a3':
       return 'c'
     case 'a4':
@@ -139,7 +137,9 @@ export function movePiece(piece: Piece, result: ThrowResult, takeShortcut: boole
 
   if (steps < 0) {
     if (piece.position.status === 'home') return piece
-    return { ...piece, position: { status: 'onBoard', at: prevNode(piece.position.at) } }
+    const at = prevNode(piece.position.at, piece.position.via)
+    const via: 'a' | 'b' | undefined = at === 'c' ? (piece.position.at === 'b3' ? 'b' : 'a') : undefined
+    return { ...piece, position: { status: 'onBoard', at, via } }
   }
 
   let cur: WalkNode = piece.position.status === 'home' ? 'start' : piece.position.at
@@ -155,7 +155,8 @@ export function movePiece(piece: Piece, result: ThrowResult, takeShortcut: boole
     prev = cur
     cur = next
   }
-  return { ...piece, position: { status: 'onBoard', at: cur as BoardNode } }
+  const via: 'a' | 'b' | undefined = cur === 'c' ? (prev === 'b2' ? 'b' : 'a') : undefined
+  return { ...piece, position: { status: 'onBoard', at: cur as BoardNode, via } }
 }
 
 export type TeamColor = 'red' | 'blue' | 'yellow' | 'green'
