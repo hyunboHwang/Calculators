@@ -36,6 +36,7 @@ function prerenderBody(route) {
   let html = `<div class="mx-auto max-w-3xl px-4 py-8 text-sm leading-relaxed text-slate-600">`
   html += `<h1 class="text-2xl font-bold text-slate-900">${esc(h1)}</h1>`
   html += `<p class="mt-2">${esc(route.description)}</p>`
+  if (c?.updatedAt) html += `<p class="mt-1 text-xs">최종 업데이트: ${esc(c.updatedAt.replaceAll('-', '. '))}.</p>`
 
   if (c) {
     if (c.operatorIntro?.length) {
