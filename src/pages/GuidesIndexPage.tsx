@@ -2,6 +2,7 @@ import routes from '../routes.json'
 
 const GUIDE_ICONS: Record<string, string> = {
   yearEndTaxProcedureGuide: '🧾',
+  yearEndTax2026Guide: '🗓️',
   jeonseDepositRecoveryGuide: '🔑',
   severanceInterimGuide: '💼',
   unemploymentApplicationGuide: '📋',
@@ -19,6 +20,7 @@ const GUIDE_ICONS: Record<string, string> = {
 
 const TRACK1_IDS = [
   'yearEndTaxProcedureGuide',
+  'yearEndTax2026Guide',
   'jeonseDepositRecoveryGuide',
   'severanceInterimGuide',
   'unemploymentApplicationGuide',

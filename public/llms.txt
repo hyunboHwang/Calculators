@@ -16,6 +16,7 @@
 ## 가이드
 - [가이드 전체 목록](https://www.calculators.ai.kr/guides/)
 - [연말정산 신고 절차](https://www.calculators.ai.kr/guides/yearend-tax-procedure/)
+- [2026년 귀속 연말정산 달라지는 점](https://www.calculators.ai.kr/guides/yearend-tax-2026-changes/)
 - [실업급여 신청 절차·준비서류](https://www.calculators.ai.kr/guides/unemployment-application/)
 - [재산세·종부세(보유세) 완벽정리](https://www.calculators.ai.kr/guides/holding-tax/)
 

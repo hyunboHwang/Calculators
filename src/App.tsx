@@ -58,6 +58,7 @@ const components: Record<string, React.LazyExoticComponent<() => React.JSX.Eleme
   pensionTaxCredit: lazy(() => import('./pages/PensionTaxCreditCalculator')),
   guidesIndex: lazy(() => import('./pages/GuidesIndexPage')),
   yearEndTaxProcedureGuide: lazy(() => import('./pages/guides/YearEndTaxProcedureGuide')),
+  yearEndTax2026Guide: lazy(() => import('./pages/guides/YearEndTax2026Guide')),
   jeonseDepositRecoveryGuide: lazy(() => import('./pages/guides/JeonseDepositRecoveryGuide')),
   severanceInterimGuide: lazy(() => import('./pages/guides/SeveranceInterimGuide')),
   unemploymentApplicationGuide: lazy(() => import('./pages/guides/UnemploymentApplicationGuide')),
