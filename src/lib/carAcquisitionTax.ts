@@ -6,7 +6,7 @@
 
 export type VehicleType = 'nonBusiness' | 'business' | 'lightCar'
 
-const RATES: Record<VehicleType, number> = {
+export const RATES: Record<VehicleType, number> = {
   nonBusiness: 7,
   business: 4,
   lightCar: 4,

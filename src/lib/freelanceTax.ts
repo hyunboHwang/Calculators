@@ -2,7 +2,7 @@
  * 프리랜서 3.3% 원천징수 계산 (사업소득세 3% + 지방소득세 0.3%)
  * + 연간 종합소득세 간이 추정(단순경비율 방식, bizTax.ts와 동일 산식)
  */
-import { basicTax } from './salary'
+import { basicTax } from './salary.ts'
 
 export const FREELANCE_WITHHOLDING_RATE = 0.033
 

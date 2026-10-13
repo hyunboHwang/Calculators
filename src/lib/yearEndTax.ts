@@ -18,7 +18,7 @@ import {
   childTaxCredit,
   basicTax,
   withholdingIncomeTax,
-} from './salary'
+} from './salary.ts'
 
 const floor10 = (v: number) => Math.floor(v / 10) * 10
 
@@ -44,9 +44,10 @@ export interface YearEndTaxInput {
  *
  * 2025년 세법개정(2025.12.2 국회 본회의 의결, 2026.1.1 이후 개시 과세기간부터 적용)으로
  * 기본한도에 자녀 수에 따른 추가한도가 신설됐습니다: 총급여 7천만원 이하는 자녀 1인당
- * 50만원(최대 100만원), 초과는 자녀 1인당 25만원(최대 50만원). 법 조문상 대상은
- * "자녀·손자녀 등 부양가족"이며 세부 연령 기준은 하위법령 확인이 필요해, 이 계산기는
- * 입력값인 8~20세 자녀 수로 근사합니다.
+ * 50만원(최대 100만원), 초과는 자녀 1인당 25만원(최대 50만원). 대상은 조세특례제한법
+ * 시행령 제121조의2(2026.2.27 신설)상 소득요건을 충족하고 다른 거주자의 기본공제를 받지
+ * 않는 20세 이하(장애인은 나이 제한 없음) 직계비속입니다(확인됨). 다만 이 계산기는
+ * 입력값인 8~20세 자녀 수로 근사하므로 0~7세 자녀는 반영되지 않아 공제가 과소 계산될 수 있습니다.
  */
 function creditCardDeduction(gross: number, credit: number, debitOrCash: number, children: number) {
   const threshold = gross * 0.25

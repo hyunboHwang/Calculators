@@ -111,7 +111,7 @@ export default function GiftTaxCalculator() {
               value={priorGiftPaidTax}
               onChange={setPriorGiftPaidTax}
               step={100_000}
-              hint="위 합산액에 대해 10년 이내 이미 신고·납부한 증여세(기납부세액공제)"
+              hint="합산한 이전 증여분의 증여 당시 산출세액(법 제58조). 실제 공제는 합산분 비율 한도 이내이나 계산기는 입력값을 그대로 공제"
             />
           </div>
         </section>

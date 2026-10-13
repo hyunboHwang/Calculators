@@ -1,13 +1,13 @@
 /**
  * 주택 유상취득 시 취득세 추정 (개인 기준)
  * - 1주택(또는 일시적 2주택 포함) 표준세율: 6억 이하 1%, 6~9억 구간 선형 보간, 9억 초과 3%
- * - 2주택 조정대상지역 8%, 3주택 이상 비조정 8% / 조정 12%
+ * - 2주택 조정대상지역 8%, 3주택 비조정 8% / 조정 12%, 4주택 이상은 지역과 무관하게 12%
  * - 지방교육세는 표준세율 구간(1~3%) 취득세액의 10%, 중과(8%/12%) 구간은 취득가액의 0.4% 정액
  * - 농특세는 전용 85㎡ 초과 시 취득가액의 0.2%(표준세율)·0.6%(8% 중과)·1.0%(12% 중과)
  * - 위택스 고시 기준 단순화 모델이며 실제 신고 세액과 다를 수 있음
  */
 
-export type HouseCount = 'first' | 'second' | 'thirdPlus'
+export type HouseCount = 'first' | 'second' | 'third' | 'fourthPlus'
 
 export interface AcquisitionTaxInput {
   price: number // 취득가액
@@ -29,6 +29,7 @@ function baseRate(price: number): number {
 function rateFor(i: AcquisitionTaxInput): number {
   if (i.houseCount === 'first') return baseRate(i.price)
   if (i.houseCount === 'second') return i.isAdjusted ? 8 : baseRate(i.price)
+  if (i.houseCount === 'fourthPlus') return 12
   return i.isAdjusted ? 12 : 8
 }
 

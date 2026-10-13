@@ -100,7 +100,7 @@ export default function SubscriptionScoreCalculator() {
 
           <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-xs leading-relaxed text-amber-800">
             <b>이 계산은 예상치입니다.</b> 무주택세대구성원 자격 자체(배우자를 포함한 세대 전원의
-            무주택 여부 등)는 검증하지 않았습니다. 정확한 자격과 가점은 청약홈에서 확인하세요.
+            무주택 여부 등)는 검증하지 않았습니다. 이 계산기는 오늘 날짜 기준으로 기간을 계산하지만, 실제 청약은 입주자모집공고일 기준으로 무주택기간·부양가족·가입기간을 산정합니다(주택공급에 관한 규칙 별표 1). 정확한 자격과 가점은 청약홈에서 확인하세요.
           </div>
         </section>
       </div>

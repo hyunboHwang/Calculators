@@ -3,6 +3,8 @@
 > 연봉 실수령액, 퇴직금, 연말정산, 실업급여, 취득세·재산세·종부세, 대출 등 생활·금융 계산기와 세금·정책 가이드를 모은 무료 한국어 사이트입니다. 세율·한도·기준값은 국세청·고용노동부 등 공식기관 자료로 검증하며, 가이드는 최종 업데이트 날짜와 변경 이력을 함께 공개합니다. 모든 계산 결과는 참고용 추정치입니다.
 
 ## 주요 계산기
+- [계산기 전체 목록(홈)](https://www.calculators.ai.kr/)
+- [주식 수익률 계산기](https://www.calculators.ai.kr/stock-return/)
 - [연봉 실수령액 계산기](https://www.calculators.ai.kr/salary/)
 - [연봉 실수령액표](https://www.calculators.ai.kr/salary-table/)
 - [퇴직금 계산기](https://www.calculators.ai.kr/severance/)

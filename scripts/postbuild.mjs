@@ -12,9 +12,14 @@ import { join } from 'node:path'
 import { pageContent } from '../src/lib/pageContent.js'
 import { buildSalaryTable } from '../src/lib/salary.ts'
 import { buildGlossaryIndex } from '../src/lib/glossaryIndex.ts'
+import { tablesFor } from '../src/lib/tables.ts'
 
 const popularLinks = JSON.parse(
   readFileSync(new URL('../src/popularLinks.json', import.meta.url), 'utf8'),
+)
+
+const groupOrder = JSON.parse(
+  readFileSync(new URL('../src/groups.json', import.meta.url), 'utf8'),
 )
 
 const SITE_URL = 'https://www.calculators.ai.kr'
@@ -92,6 +97,14 @@ function prerenderBody(route) {
         .map((s) => `<li class="mt-1">${esc(s.replace(/^\d+\.\s+/, ''))}</li>`)
         .join('')
       html += `</ol>`
+    }
+
+    for (const t of tablesFor(route.id)) {
+      html += `<h2 class="mt-6 text-lg font-bold text-slate-900">${esc(t.title)}</h2>`
+      html += `<table class="mt-2 w-full text-sm"><thead><tr>${t.headers.map((h) => `<th>${esc(h)}</th>`).join('')}</tr></thead><tbody>`
+      html += t.rows.map((row) => `<tr>${row.map((cell) => `<td>${esc(String(cell))}</td>`).join('')}</tr>`).join('')
+      html += `</tbody></table>`
+      if (t.note) html += `<p class="mt-1 text-xs">${esc(t.note)}</p>`
     }
 
     if (c.glossary?.length) {
@@ -172,6 +185,35 @@ function prerenderBody(route) {
     html += `</ul>`
   }
 
+  if (route.id === 'home') {
+    const link = (r) => `<a href="${urlOf(r.path)}">${esc(r.label)}</a>`
+    html += `<h2 class="mt-6 text-lg font-bold text-slate-900">카테고리별 계산기</h2>`
+    for (const g of groupOrder.filter((g) => g !== '용어사전')) {
+      const items = routes.filter((r) => r.group === g)
+      if (!items.length) continue
+      html += `<h3 class="mt-3 font-semibold text-slate-800">${esc(g)}</h3><ul class="mt-1 list-disc pl-5">`
+      html += items.map((r) => `<li class="mt-1">${link(r)} — ${esc(r.description)}</li>`).join('')
+      html += `</ul>`
+    }
+    html += `<h2 class="mt-6 text-lg font-bold text-slate-900">세금·정책 가이드</h2><ul class="mt-2 list-disc pl-5">`
+    html += routes
+      .filter((r) => r.group === '가이드' && r.id !== 'guidesIndex')
+      .map((r) => `<li class="mt-1">${link(r)}</li>`)
+      .join('')
+    html += `</ul>`
+    const recent = routes
+      .filter((r) => r.group === '가이드')
+      .flatMap((r) => (pageContent[r.id]?.changelog ?? []).map((l) => ({ ...l, r })))
+      .sort((a, b) => b.date.localeCompare(a.date))
+      .slice(0, 5)
+    if (recent.length) {
+      html += `<h2 class="mt-6 text-lg font-bold text-slate-900">최근 업데이트</h2><ul class="mt-2 list-disc pl-5">`
+      html += recent.map((u) => `<li class="mt-1">${esc(u.date)} ${link(u.r)} — ${esc(u.text)}</li>`).join('')
+      html += `</ul>`
+    }
+    html += `<h2 class="mt-6 text-lg font-bold text-slate-900">운영자와 검증 방식</h2><p class="mt-2">1인 개발자가 직접 만들고 운영하며, 계산 기준은 공식기관 자료로 확인하고 수정 이력을 남깁니다. <a href="/about/">운영자 소개</a> · <a href="/verification/">계산기 검증 방식</a></p>`
+  }
+
   if (route.id === 'salaryTable') {
     const rows = buildSalaryTable()
     const won = (n) => n.toLocaleString('ko-KR')
@@ -234,7 +276,7 @@ function prerenderBody(route) {
   return html
 }
 
-const NON_CALCULATOR_GROUPS = ['가이드', '정보', '용어사전', '게임']
+const NON_CALCULATOR_GROUPS = ['홈', '가이드', '정보', '용어사전', '게임']
 
 function jsonLdFor(route) {
   const pageUrl = SITE_URL + urlOf(route.path)

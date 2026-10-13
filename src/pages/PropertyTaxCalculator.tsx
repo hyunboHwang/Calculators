@@ -60,8 +60,8 @@ export default function PropertyTaxCalculator() {
           </div>
 
           <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-xs leading-relaxed text-amber-800">
-            <b>이 계산은 예상치입니다.</b> 세부담 상한, 지자체별 감면 조례 등은 반영하지
-            않았습니다. 정확한 세액은 위택스(wetax.go.kr) 고지서를 확인하세요.
+            <b>이 계산은 예상치입니다.</b> 주택의 과세표준상한제(직전 연도 과세표준 상당액
+            + 시가표준액 과세표준의 5% 범위), 지자체별 감면 조례 등은 반영하지 않았습니다. (옛 &lsquo;세부담 상한&rsquo;은 주택에는 적용되지 않고 토지·건축물 등에만 남아 있습니다.) 정확한 세액은 위택스(wetax.go.kr) 고지서를 확인하세요.
           </div>
         </section>
       </div>

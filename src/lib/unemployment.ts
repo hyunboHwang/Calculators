@@ -20,7 +20,7 @@ export const UNEMPLOYMENT_2026 = {
 export type InsuredPeriod = '<1' | '1-3' | '3-5' | '5-10' | '10+'
 
 /** 소정급여일수 표 [만 50세 미만, 만 50세 이상 또는 장애인] */
-const BENEFIT_DAYS: Record<InsuredPeriod, [number, number]> = {
+export const BENEFIT_DAYS: Record<InsuredPeriod, [number, number]> = {
   '<1': [120, 120],
   '1-3': [150, 180],
   '3-5': [180, 210],

@@ -88,13 +88,30 @@ export default function SeveranceCalculator() {
                 />
                 <Row label="1일 평균임금" value={`${fmt(r.avgDailyWage)}원`} />
                 <Row label="재직일수" value={`${fmt(r.serviceDays)}일`} />
-                <Row label="예상 퇴직금" value={`${fmt(r.amount)}원`} strong />
+                <Row label="예상 퇴직금 (세전)" value={`${fmt(r.amount)}원`} strong />
+              </div>
+            </div>
+          )}
+
+          {r.valid && r.eligible && (
+            <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+              <h2 className="mb-2 text-base font-semibold">퇴직소득세 계산</h2>
+              <div className="divide-y divide-slate-100">
+                <Row label="근속연수" value={`${r.tax.taxYears}년`} sub="1년 미만 기간은 1년으로 올림" />
+                <Row label="근속연수공제" value={`${fmt(r.tax.serviceDed)}원`} />
+                <Row label="환산급여" value={`${fmt(r.tax.converted)}원`} sub="(퇴직금 − 근속연수공제) × 12 ÷ 근속연수" />
+                <Row label="환산급여공제" value={`${fmt(r.tax.convDed)}원`} />
+                <Row label="과세표준" value={`${fmt(r.tax.base)}원`} />
+                <Row label="퇴직소득세" value={`${fmt(r.tax.incomeTax)}원`} sub="기본세율 적용 후 × 근속연수 ÷ 12" />
+                <Row label="지방소득세 (10%)" value={`${fmt(r.tax.localTax)}원`} />
+                <Row label="세후 실수령액" value={`${fmt(r.tax.netAmount)}원`} strong />
               </div>
             </div>
           )}
 
           <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-xs leading-relaxed text-amber-800">
-            세전 금액이며 퇴직소득세는 반영하지 않았습니다. 3개월간 급여 변동, 무급휴직,
+            퇴직소득세는 2026년 소득세법(제48조·제55조) 기준으로 계산했습니다. 2012.12.31 이전
+            입사자 경과규정과 퇴직연금(IRP) 이전 시 과세이연은 반영하지 않았습니다. 3개월간 급여 변동, 무급휴직,
             평균임금에 포함되는 수당 범위에 따라 실제 금액과 달라질 수 있습니다. 통상임금이
             평균임금보다 크면 통상임금으로 계산해야 합니다.
           </div>

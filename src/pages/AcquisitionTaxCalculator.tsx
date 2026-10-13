@@ -5,7 +5,8 @@ import { Field, Row, fmt } from '../components/ui'
 const HOUSE_COUNT_LABEL: Record<HouseCount, string> = {
   first: '1주택',
   second: '2주택',
-  thirdPlus: '3주택 이상',
+  third: '3주택',
+  fourthPlus: '4주택 이상',
 }
 
 export default function AcquisitionTaxCalculator() {

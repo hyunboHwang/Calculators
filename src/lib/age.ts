@@ -92,18 +92,17 @@ const WEEKDAYS = ['일', '월', '화', '수', '목', '금', '토']
 export const fmtDate = (d: Date) =>
   `${d.getFullYear()}년 ${d.getMonth() + 1}월 ${d.getDate()}일 (${WEEKDAYS[d.getDay()]})`
 
-export const addYears = (d: Date, n: number) =>
-  new Date(d.getFullYear() + n, d.getMonth(), d.getDate())
-export const addMonths = (d: Date, n: number) =>
-  new Date(d.getFullYear(), d.getMonth() + n, d.getDate())
+/** 민법 제160조③: 대상 월에 해당일이 없으면 그 월의 말일(clamp). 1/31+1개월=2/28, 2/29+1년=2/28 */
+export const addMonths = (d: Date, n: number) => addMonthsClamped(d, n)
+export const addYears = (d: Date, n: number) => addMonthsClamped(d, n * 12)
 export const addDays = (d: Date, n: number) => new Date(d.getTime() + n * DAY)
 
 /** 다음 생일 */
 export function nextBirthday(birth: Date, ref: Date): Date {
-  const thisYear = new Date(ref.getFullYear(), birth.getMonth(), birth.getDate())
+  const thisYear = addYears(birth, ref.getFullYear() - birth.getFullYear())
   return stripTime(thisYear).getTime() >= stripTime(ref).getTime()
     ? thisYear
-    : new Date(ref.getFullYear() + 1, birth.getMonth(), birth.getDate())
+    : addYears(birth, ref.getFullYear() - birth.getFullYear() + 1)
 }
 
 /* ---------- 보험나이 ---------- */
@@ -111,10 +110,9 @@ export function nextBirthday(birth: Date, ref: Date): Date {
 export function insuranceAge(birth: Date, ref: Date) {
   const { years, months } = ageParts(birth, ref)
   const age = months >= 6 ? years + 1 : years
-  // 마지막 생일 + 6개월 = 이번 주기 상령일
-  const lastBirthday = addYears(birth, years)
-  const thisCycle = addMonths(lastBirthday, 6)
-  const next = dday(thisCycle, ref) > 0 ? thisCycle : addYears(thisCycle, 1)
+  // 마지막 생일 + 6개월 = 이번 주기 상령일 (생일 원본에서 직접 더해 2/29생도 ageParts와 일치)
+  const thisCycle = addMonths(birth, years * 12 + 6)
+  const next = dday(thisCycle, ref) > 0 ? thisCycle : addMonths(birth, years * 12 + 18)
   return { age, nextSangryeong: next, daysLeft: dday(next, ref) }
 }
 

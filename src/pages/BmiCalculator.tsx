@@ -5,9 +5,10 @@ import { Field, Row } from '../components/ui'
 const CATEGORY_STYLE: Record<string, string> = {
   저체중: 'border-sky-200 bg-sky-50 text-sky-700',
   정상: 'border-emerald-200 bg-emerald-50 text-emerald-700',
-  과체중: 'border-amber-200 bg-amber-50 text-amber-700',
-  비만: 'border-orange-200 bg-orange-50 text-orange-700',
-  고도비만: 'border-red-200 bg-red-50 text-red-700',
+  '비만 전단계(과체중)': 'border-amber-200 bg-amber-50 text-amber-700',
+  '1단계 비만': 'border-orange-200 bg-orange-50 text-orange-700',
+  '2단계 비만': 'border-red-200 bg-red-50 text-red-700',
+  '3단계 비만(고도비만)': 'border-red-300 bg-red-100 text-red-800',
   '입력값을 확인하세요': 'border-slate-200 bg-slate-50 text-slate-700',
 }
 

@@ -30,7 +30,8 @@ export default function YearEndTaxCalculator() {
       <h1 className="text-2xl font-bold">연말정산 환급액 계산기</h1>
       <p className="mt-1 mb-6 text-sm text-slate-500">
         신용카드·연금계좌·보험료·의료비·교육비·기부금·월세 공제를 반영한 결정세액과
-        환급/추가납부 예상액입니다.
+        환급/추가납부 예상액입니다. 2026년 귀속(2027년 1월 정산) 세법 기준이며, 2026년 1월에 한
+        2025년 귀속 정산과는 일부 공제 기준이 다를 수 있습니다.
       </p>
 
       <div className="grid gap-6 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
@@ -205,8 +206,10 @@ export default function YearEndTaxCalculator() {
           <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-xs leading-relaxed text-amber-800">
             <b>이 계산은 근사 추정치입니다.</b> 주택자금(주담대 이자상환액) 소득공제, 청약저축
             공제, 장애인·경로우대 추가공제, 부양가족의 소득 요건 등은 반영하지 않았습니다.
-            기납부세액은 원천징수 간이세액표 산출방식으로 추정한 값이라 실제 원천징수영수증
-            금액과 다를 수 있습니다. 정확한 환급액은 국세청 홈택스 연말정산 간소화 서비스에서
+            표준세액공제(연 13만원), 의료비·교육비 한도, 0~7세 자녀의 신용카드 추가한도도 반영하지
+            않아 결과가 실제와 다를 수 있습니다(표준세액공제·0~7세 자녀 누락은 환급을 적게, 의료비·교육비
+            한도 누락은 환급을 많게 계산할 수 있습니다). 기납부세액은 원천징수 간이세액표(별표 2)로
+            추정한 값이라 실제 원천징수영수증 금액과 다를 수 있습니다. 정확한 환급액은 국세청 홈택스 연말정산 간소화 서비스에서
             확인하세요.
           </div>
         </section>

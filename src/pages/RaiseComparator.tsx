@@ -138,7 +138,7 @@ export default function RaiseComparator() {
           </div>
 
           <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-xs leading-relaxed text-amber-800">
-            간이세액표 산출방식 기준 예상치입니다. 소득 구간이 올라가면 한계세율이 높아져
+            소득세법 시행령 별표 2 간이세액표 기준 예상치입니다. 소득 구간이 올라가면 한계세율이 높아져
             인상분의 체감 비율이 낮아질 수 있습니다.
           </div>
         </section>

@@ -35,7 +35,7 @@ export default function BizTaxCalculator() {
               value={annualSales}
               onChange={setAnnualSales}
               step={1_000_000}
-              hint="공급가액 기준"
+              hint="공급가액(부가세 제외) 입력 · 간이 판정은 ×1.1 환산"
             />
             <Field
               label="연 매입액"
@@ -52,7 +52,7 @@ export default function BizTaxCalculator() {
                 className="h-4 w-4 rounded border-slate-300 accent-emerald-600"
               />
               신용카드 등 발행 세액공제 반영
-              <span className="text-xs text-slate-400">(1.3%, 한도 1천만)</span>
+              <span className="text-xs text-slate-400">(1.3%, 한도 1천만 · 2026.12.31까지 한시 특례)</span>
             </label>
             <div className="grid grid-cols-2 gap-x-3">
               <Field
@@ -94,7 +94,7 @@ export default function BizTaxCalculator() {
                 </p>
                 <p className="mt-1 text-xs text-slate-500">
                   {!vat.simplifiedEligible
-                    ? `매출 ${fmt(VAT_2026.simplifiedThreshold)}원 이상 → 간이 불가`
+                    ? `공급대가 ${fmt(VAT_2026.simplifiedThreshold)}원 이상 → 간이 불가`
                     : vat.simplifiedExempt
                       ? '공급대가 4,800만 미만 → 납부의무 면제'
                       : '부가가치율 15% 적용'}
@@ -145,8 +145,8 @@ export default function BizTaxCalculator() {
           </div>
 
           <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-xs leading-relaxed text-amber-800">
-            <b>추정치입니다.</b> 간이과세 여부는 직전년도 공급대가 기준이며 업종·지역 제한이
-            있습니다. 종합소득세는 다른 소득이 없고 기본공제만 있다고 가정했으며, 실제로는
+            <b>추정치입니다.</b> 간이과세 여부는 직전년도 공급대가(공급가액×1.1로 환산) 기준이며
+            업종·지역 제한이 있습니다. 종합소득세는 다른 소득이 없고 기본공제만 있다고 가정했으며, 실제로는
             기장 방식(단순/기준경비율·복식부기), 노란우산공제, 각종 세액공제에 따라 크게
             달라집니다. 근로소득과 겸업이면 합산과세로 세율 구간이 올라갈 수 있습니다.
           </div>

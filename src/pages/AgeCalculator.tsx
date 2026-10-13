@@ -102,8 +102,8 @@ export default function AgeCalculator() {
                   <Row label="대학교" value={`${r.univ}년 3월`} sub="재수·조기입학 미반영" />
                 </div>
                 <p className="mt-3 text-xs text-slate-400">
-                  2009년 이후 초등학교 입학 기준(출생연도 + 7년, 1~2월생 조기입학 제도 폐지
-                  이후). 그 이전 출생자는 빠른년생 여부에 따라 1년 다를 수 있습니다.
+                  현재 초등학교 입학 기준(출생연도 + 7년)입니다. 과거 &quot;빠른년생&quot; 입학자나
+                  조기입학·입학연기 신청자는 1년 다를 수 있습니다.
                 </p>
               </div>
             </>

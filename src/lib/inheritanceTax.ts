@@ -10,7 +10,7 @@ interface Bracket {
   deduction: number
 }
 
-const BRACKETS: Bracket[] = [
+export const BRACKETS: Bracket[] = [
   { limit: 100_000_000, rate: 0.1, deduction: 0 },
   { limit: 500_000_000, rate: 0.2, deduction: 10_000_000 },
   { limit: 1_000_000_000, rate: 0.3, deduction: 60_000_000 },

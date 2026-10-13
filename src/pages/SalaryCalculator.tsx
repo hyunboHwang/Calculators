@@ -26,7 +26,7 @@ export default function SalaryCalculator() {
     <div>
       <h1 className="text-2xl font-bold">연봉 실수령액 계산기</h1>
       <p className="mt-1 mb-6 text-sm text-slate-500">
-        2026년 4대보험 요율과 근로소득 간이세액표 산출방식을 반영한 예상치입니다.
+        2026년 4대보험 요율과 소득세법 시행령 별표 2 근로소득 간이세액표를 반영한 예상치입니다.
       </p>
 
       <div className="grid gap-6 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
@@ -78,6 +78,7 @@ export default function SalaryCalculator() {
               onChange={(v) => set('children')(Math.max(0, Math.round(v)))}
               suffix="명"
               step={1}
+              hint="부양가족 수에도 포함해 입력"
             />
             <div className="col-span-2">
               <span className="mb-1 block text-sm font-medium text-slate-700">원천징수 비율</span>
@@ -173,8 +174,8 @@ export default function SalaryCalculator() {
 
           {/* 안내 */}
           <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-xs leading-relaxed text-amber-800">
-            <b>이 계산은 예상치입니다.</b> 소득세는 국세청 근로소득 간이세액표의 산출방식을
-            따른 근사값으로, 회사의 비과세 항목 구성, 상여 지급 방식, 연말정산 결과에 따라
+            <b>이 계산은 예상치입니다.</b> 소득세는 소득세법 시행령 별표 2 근로소득 간이세액표
+            조회값(매월 원천징수 세액)이며, 회사의 비과세 항목 구성, 상여 지급 방식, 연말정산 결과에 따라
             실제 수령액과 달라질 수 있습니다. 국민연금은 기준소득월액 하한{' '}
             {fmt(RATES_2026.pensionFloorMonthly)}원 / 상한 {fmt(RATES_2026.pensionCapMonthly)}원
             (2026.7~2027.6)을 반영했습니다.

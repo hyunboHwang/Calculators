@@ -4,8 +4,8 @@ import { Field, Row, fmt } from '../components/ui'
 
 const TAX_LABELS: Record<TaxOption, string> = {
   general: '일반과세 15.4%',
-  preferential: '세금우대 9.5%',
-  exempt: '비과세',
+  exempt: '비과세종합저축 0%',
+  preferential: '과거 세금우대 9.5%(참고용)',
 }
 
 export default function DepositCalculator() {
@@ -156,7 +156,7 @@ export default function DepositCalculator() {
           <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-xs leading-relaxed text-amber-800">
             은행 광고 금리(세전)와 실제 수령 이자(세후)는 다릅니다. 일반과세 기준 이자소득세
             15.4%가 원천징수되며, 연간 이자·배당 합계가 2,000만원을 넘으면 금융소득종합과세
-            대상이 될 수 있습니다. 세금우대(9.5%)는 조합원 예탁금 등 한정된 상품에만 적용됩니다.
+            대상이 될 수 있습니다. 비과세종합저축(0%)은 만 65세 이상 기초연금 수급자·장애인 등 일부 대상자만 가입할 수 있고(한도 5,000만원, 가입기한 2028.12.31), 세금우대종합저축(9%+농특세)은 2014.12.31 가입 종료로 신규 가입이 불가능해 참고용 옵션입니다.
           </div>
         </section>
       </div>

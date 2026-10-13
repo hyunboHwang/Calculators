@@ -80,8 +80,8 @@ export default function JeonseConversionCalculator() {
           </div>
 
           <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-xs leading-relaxed text-amber-800">
-            <b>이 계산은 참고용입니다.</b> 법정 상한은 신규 계약이 아닌 계약갱신 시 증액 제한에
-            적용되는 기준입니다. 신규 계약의 전월세 전환은 당사자 합의로 정해집니다.
+            <b>이 계산은 참고용입니다.</b> 법정 상한은 보증금을 월세로 전환하는 경우의 월차임
+            전환율을 제한하는 기준(주택임대차보호법 제7조의2)이며, 갱신 시 차임 증액 5% 제한(제7조)과는 별개의 제도입니다. 신규 계약에 적용되는지는 해석상 다툼이 있을 수 있으니 법원·법무부 등에서 확인하세요.
           </div>
         </section>
       </div>

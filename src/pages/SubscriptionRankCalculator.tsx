@@ -3,7 +3,7 @@ import { calcSubscriptionRank, type RegionType } from '../lib/subscriptionRank'
 import { Field, DateField, Row, fmt } from '../components/ui'
 
 const REGION_LABELS: Record<RegionType, string> = {
-  speculation: '투기과열지구·조정대상지역',
+  speculation: '투기과열지구·청약과열지역',
   metro: '수도권 (그 외 지역)',
   nonMetro: '비수도권',
   shrinking: '위축지역',
@@ -166,7 +166,8 @@ export default function SubscriptionRankCalculator() {
 
           <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-xs leading-relaxed text-amber-800">
             <b>이 계산은 예상치입니다.</b> 재당첨제한(지역별 5~10년 별도 제도)은 반영하지
-            않았습니다. 투기과열지구·조정대상지역 지정 현황은 수시로 바뀌므로 청약홈에서 최종
+            않았습니다. 순차제에서 &lsquo;3년 이상 무주택세대구성원&rsquo;이 먼저 경쟁한다는 구분(규칙 제27조제2항)도
+            모델링하지 않습니다. 투기과열지구·청약과열지역 지정 현황은 수시로 바뀌므로 청약홈에서 최종
             확인하세요.
           </div>
         </section>

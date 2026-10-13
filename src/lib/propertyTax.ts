@@ -17,14 +17,14 @@ interface Bracket {
   deduction: number
 }
 
-const GENERAL_BRACKETS: Bracket[] = [
+export const GENERAL_BRACKETS: Bracket[] = [
   { limit: 60_000_000, rate: 0.001, deduction: 0 },
   { limit: 150_000_000, rate: 0.0015, deduction: 30_000 },
   { limit: 300_000_000, rate: 0.0025, deduction: 180_000 },
   { limit: Infinity, rate: 0.004, deduction: 630_000 },
 ]
 
-const SPECIAL_BRACKETS: Bracket[] = [
+export const SPECIAL_BRACKETS: Bracket[] = [
   { limit: 60_000_000, rate: 0.0005, deduction: 0 },
   { limit: 150_000_000, rate: 0.001, deduction: 30_000 },
   { limit: 300_000_000, rate: 0.002, deduction: 180_000 },

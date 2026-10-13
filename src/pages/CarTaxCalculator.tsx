@@ -79,7 +79,9 @@ export default function CarTaxCalculator() {
 
           <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-xs leading-relaxed text-amber-800">
             <b>이 계산은 예상치입니다.</b> 연납 신청 시 받을 수 있는 할인은 반영하지
-            않았습니다. 실제 고지 세액은 위택스(wetax.go.kr)에서 확인하세요.
+            않았습니다. 입력하는 &lsquo;차령&rsquo;은 법정 차령(지방세법 시행령 제122조제2항: 자동차관리법상 차령기산일 기준으로
+            기산일이 1~6월이면 과세연도−기산연도+1, 7~12월이면 1기분은 −0·2기분은 +1)과 단순 경과연수가 다를 수 있으니
+            고지서의 차령을 확인해 입력하세요. 실제 고지 세액은 위택스(wetax.go.kr)에서 확인하세요.
           </div>
         </section>
       </div>

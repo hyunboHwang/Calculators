@@ -1,7 +1,8 @@
 /**
  * 청약순위 판정 — 국민주택(공공분양) 1순위·2순위 + 순차제
- * - 2순위 강등 조건(투기과열지구·조정대상지역 한정: 세대주 아님/최근5년 당첨이력)은
+ * - 2순위 강등 조건(투기과열지구 또는 청약과열지역(=조정대상지역, 주택법 제63조의2제1항제1호) 한정: 세대주 아님/최근5년 당첨이력)은
  *   재당첨제한(주택공급에 관한 규칙 제54조, 지역별 5~10년)과는 별개 제도이며 반영하지 않음
+ * - 순차제의 '3년 이상 무주택세대구성원 우선'(규칙 제27조②)은 모델링하지 않음
  * - 지역 지정 현황은 수시로 바뀌므로 사용자가 지역 유형을 직접 선택하게 함(도시명 하드코딩 없음)
  * - 저축총액/납입횟수는 사용자가 이미 월 25만원 인정한도를 반영해 파악한 값을 그대로 입력받음
  * - 날짜는 달력 기준(연/월)으로 계산하며, 일수 근사(/30)는 사용하지 않음
@@ -26,7 +27,7 @@ const REGION_REQUIREMENTS: Record<RegionType, { months: number; payments: number
   speculation: { months: 24, payments: 24 },
   metro: { months: 12, payments: 12 },
   nonMetro: { months: 6, payments: 6 },
-  shrinking: { months: 0, payments: 0 },
+  shrinking: { months: 1, payments: 0 }, // 규칙 제27조①1호 라목: 가입 1개월 경과(납입횟수 요건 없음)
 }
 
 export function calcSubscriptionRank(i: SubscriptionRankInput, asOf: Date) {

@@ -10,6 +10,7 @@ import { loadAnalytics, trackPageView } from './lib/analytics'
 
 /** 라우트별 코드 스플리팅: 방문한 계산기의 JS만 내려받도록 지연 로드 */
 const components: Record<string, React.LazyExoticComponent<() => React.JSX.Element>> = {
+  home: lazy(() => import('./pages/HomePage')),
   margin: lazy(() => import('./pages/MarginCalculator')),
   bizTax: lazy(() => import('./pages/BizTaxCalculator')),
   salary: lazy(() => import('./pages/SalaryCalculator')),
@@ -76,7 +77,7 @@ const components: Record<string, React.LazyExoticComponent<() => React.JSX.Eleme
   privacy: lazy(() => import('./pages/PrivacyPage')),
   yutnori: lazy(() => import('./pages/YutnoriGame')),
 }
-const DEFAULT_PAGE = components.stockReturn
+const DEFAULT_PAGE = components.home
 
 /** 사이드바 그룹 표시 순서 ('정보' 그룹은 푸터에만 노출) */
 const groups = GROUP_ORDER.filter((g) => routes.some((r) => r.group === g))

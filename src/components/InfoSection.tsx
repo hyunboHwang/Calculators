@@ -1,5 +1,6 @@
 import { pageContent } from '../lib/pageContent'
 import AdSlot from './AdSlot'
+import { tablesFor } from '../lib/tables'
 import { SLOTS } from '../lib/ads'
 
 interface PageInfo {
@@ -31,6 +32,7 @@ const stripStepNumber = (s: string) => s.replace(/^\d+\.\s+/, '')
 export default function InfoSection({ pageId }: { pageId: string }) {
   const c = content[pageId]
   if (!c || c.hidden) return null
+  const tables = tablesFor(pageId)
 
   const faqJsonLd =
     c.faqs.length > 0
@@ -157,6 +159,37 @@ export default function InfoSection({ pageId }: { pageId: string }) {
       )}
 
       <AdSlot key={`${pageId}-article`} slot={SLOTS.inArticle} className="my-8 min-h-[280px]" />
+
+      {tables.map((t) => (
+        <section key={t.title} className="mt-8">
+          <h2 className="text-lg font-bold text-slate-800">{t.title}</h2>
+          <div className="mt-3 overflow-x-auto rounded-xl border border-slate-200">
+            <table className="w-full min-w-max text-left text-sm">
+              <thead className="bg-slate-50 text-xs text-slate-500">
+                <tr>
+                  {t.headers.map((h) => (
+                    <th key={h} className="px-3 py-2 font-semibold">
+                      {h}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100 text-slate-700">
+                {t.rows.map((row, i) => (
+                  <tr key={i}>
+                    {row.map((cell, j) => (
+                      <td key={j} className="px-3 py-2">
+                        {cell}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          {t.note && <p className="mt-2 text-xs text-slate-500">{t.note}</p>}
+        </section>
+      ))}
 
       {c.glossary && c.glossary.length > 0 && (
         <section className="mt-8">
