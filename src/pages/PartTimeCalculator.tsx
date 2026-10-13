@@ -82,6 +82,11 @@ export default function PartTimeCalculator() {
                 ))}
               </div>
             </div>
+            {deduct === 'insurance' && weeklyHours < 15 && (
+              <p className="mt-2 text-xs text-slate-500">
+                주 15시간 미만은 대부분 4대보험 가입 대상이 아닙니다. 참고용 계산입니다.
+              </p>
+            )}
           </div>
           {r.belowMinWage && (
             <p className="mt-4 rounded-lg bg-red-50 p-3 text-sm text-red-700">
@@ -121,7 +126,7 @@ export default function PartTimeCalculator() {
                 value={`${fmt(r.holidayPay)}원`}
                 sub={r.holidayHours > 0 ? `주 ${r.holidayHours.toFixed(1)}시간분` : '주 15시간 미만'}
               />
-              <Row label="월 환산 근로시간" value={`${r.monthlyHours}시간`} sub="주휴 포함, 4.345주 기준" />
+              <Row label="월 환산 근로시간" value={`${r.monthlyHours}시간`} sub="(주 소정+주휴)×365÷7÷12, 정수 반올림" />
               <Row label="월 세전 급여" value={`${fmt(r.monthlyGross)}원`} strong />
               {deduct !== 'none' && (
                 <Row
@@ -134,7 +139,8 @@ export default function PartTimeCalculator() {
           </div>
 
           <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-xs leading-relaxed text-amber-800">
-            주휴수당은 1주 소정근로시간 15시간 이상 + 개근 시 발생합니다. 알바를 3.3%
+            월 환산시간은 (주 소정근로시간+주휴시간)×365÷7÷12를 정수로 반올림한 값(주 40시간은
+            최저임금 환산 209시간)이며 실제 급여 방식과 소폭 다를 수 있습니다. 주휴수당은 1주 소정근로시간 15시간 이상 + 개근 시 발생합니다. 알바를 3.3%
             사업소득으로 처리하는 관행이 있으나 원칙적으로 근로자는 4대보험 대상입니다. 야간
             (22시~06시)·연장·휴일근로 가산수당(5인 이상 사업장 50%)은 별도입니다.
           </div>

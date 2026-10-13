@@ -102,8 +102,7 @@ export default function StockReturnCalculator() {
               {m(r.pnl)}
             </p>
             <p className={`mt-1 text-xl font-bold tabular-nums ${pnlColor(r.pnl)}`}>
-              {r.rate > 0 ? '+' : ''}
-              {Number.isFinite(r.rate) ? r.rate.toFixed(2) : '-'}%
+              {Number.isFinite(r.rate) ? `${r.rate > 0 ? '+' : ''}${r.rate.toFixed(2)}%` : '-'}
             </p>
             {currency === 'USD' && fxRate > 0 && (
               <p className="mt-2 text-sm text-slate-500">
@@ -134,7 +133,7 @@ export default function StockReturnCalculator() {
             )}
             {r.pnl > 0 && (
               <p className="mt-3 rounded-lg bg-red-50 p-3 text-sm leading-relaxed text-red-700">
-                원금 대비 <b>+{r.rate.toFixed(1)}%</b> 수익입니다. 실제 수령액은 증권사
+                원금 대비 <b>{Number.isFinite(r.rate) ? `+${r.rate.toFixed(1)}%` : '-'}</b> 수익입니다. 실제 수령액은 증권사
                 수수료와 세금(국내 거래세, 해외 양도세 등)
                 {currency === 'USD' && ', 환율 변동'}에 따라 달라질 수 있습니다.
               </p>

@@ -24,8 +24,8 @@ export default function AcquisitionTaxCalculator() {
     <div>
       <h1 className="text-2xl font-bold">취득세 계산기</h1>
       <p className="mt-1 mb-6 text-sm text-slate-500">
-        주택 유상취득 시 취득세·지방교육세·농어촌특별세를 계산합니다. 보유주택수와 조정대상지역
-        여부에 따라 세율이 크게 달라집니다.
+        주택 유상취득 시 취득세·지방교육세·농어촌특별세를 계산합니다. 취득 후 주택 수(이번 취득 포함)와
+        조정대상지역 여부에 따라 세율이 크게 달라집니다.
       </p>
 
       <div className="grid gap-6 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
@@ -35,7 +35,7 @@ export default function AcquisitionTaxCalculator() {
             <Field label="취득가액" value={price} onChange={setPrice} step={10_000_000} />
 
             <div>
-              <span className="mb-1.5 block text-sm font-medium text-slate-700">보유주택수</span>
+              <span className="mb-1.5 block text-sm font-medium text-slate-700">취득 후 주택 수 (이번 취득 포함)</span>
               <div className="flex gap-1.5">
                 {(Object.keys(HOUSE_COUNT_LABEL) as HouseCount[]).map((h) => (
                   <button

@@ -132,8 +132,8 @@ export default function RaiseComparator() {
               </div>
             ))}
             <div className="mt-2 rounded-lg bg-slate-50 p-3">
-              <Row label="월 실수령 증가" value={`+${fmt(monthlyDiff)}원`} strong />
-              <Row label="연 실수령 증가" value={`+${fmt(annualDiff)}원`} strong />
+              <Row label="월 실수령 증가" value={`${monthlyDiff < 0 ? "" : "+"}${fmt(monthlyDiff)}원`} strong />
+              <Row label="연 실수령 증가" value={`${annualDiff < 0 ? "" : "+"}${fmt(annualDiff)}원`} strong />
             </div>
           </div>
 

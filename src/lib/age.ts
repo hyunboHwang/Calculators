@@ -95,7 +95,8 @@ export const fmtDate = (d: Date) =>
 /** 민법 제160조③: 대상 월에 해당일이 없으면 그 월의 말일(clamp). 1/31+1개월=2/28, 2/29+1년=2/28 */
 export const addMonths = (d: Date, n: number) => addMonthsClamped(d, n)
 export const addYears = (d: Date, n: number) => addMonthsClamped(d, n * 12)
-export const addDays = (d: Date, n: number) => new Date(d.getTime() + n * DAY)
+/** 달력 필드 가산 — ms 가산은 서머타임·과거 UTC 오프셋 변경 시 하루 어긋남 */
+export const addDays = (d: Date, n: number) => new Date(d.getFullYear(), d.getMonth(), d.getDate() + n)
 
 /** 다음 생일 */
 export function nextBirthday(birth: Date, ref: Date): Date {

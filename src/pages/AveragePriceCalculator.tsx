@@ -48,12 +48,13 @@ export default function AveragePriceCalculator() {
 
   const target = useMemo(() => {
     // (q·avg + n·p) / (q+n) = t  →  n = q(avg−t) / (t−p)
+    const already = quantity <= 0 || targetAvg === avgPrice
     const denom = targetAvg - currentPrice
     const n = denom !== 0 ? (quantity * (avgPrice - targetAvg)) / denom : NaN
     const possible = Number.isFinite(n) && n > 0
     const shares = possible ? Math.ceil(n) : NaN
     const cost = possible ? shares * currentPrice : NaN
-    return { shares, cost, possible }
+    return { shares, cost, possible, already }
   }, [avgPrice, quantity, currentPrice, targetAvg])
 
   const m = (n: number) => fmtMoney(n, currency)
@@ -139,7 +140,13 @@ export default function AveragePriceCalculator() {
             </>
           ) : (
             <>
-              {target.possible ? (
+              {target.already ? (
+                <div className="rounded-2xl border border-slate-200 bg-white p-5 text-sm leading-relaxed text-slate-700">
+                  {quantity <= 0
+                    ? '보유 수량이 0주라 기존 평단이 없습니다. 현재가로 매수하면 평단이 곧 현재가가 됩니다.'
+                    : '목표 평단가가 현재 평단가와 같습니다. 추가 매수는 0주 필요합니다.'}
+                </div>
+              ) : target.possible ? (
                 <>
                   <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-6 text-center">
                     <p className="text-sm text-slate-500">

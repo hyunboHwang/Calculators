@@ -20,7 +20,7 @@ export const BRACKETS: Bracket[] = [
 ]
 
 function calcTax(taxBase: number): number {
-  if (taxBase <= 0) return 0
+  if (taxBase < 500_000) return 0 // 과세최저한: 과세표준 50만원 미만이면 부과하지 않음 (상증세법 제55조②)
   const bracket = BRACKETS.find((b) => taxBase <= b.limit) ?? BRACKETS[BRACKETS.length - 1]
   return Math.max(taxBase * bracket.rate - bracket.deduction, 0)
 }

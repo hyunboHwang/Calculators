@@ -9,7 +9,9 @@ export interface BmiInput {
 
 export function calcBmi(i: BmiInput) {
   const heightM = i.heightCm / 100
-  const bmi = heightM > 0 ? i.weightKg / (heightM * heightM) : NaN
+  const raw = heightM > 0 && i.weightKg > 0 ? i.weightKg / (heightM * heightM) : NaN
+  // 표시값(소수 첫째 자리)과 분류 기준값을 동일하게 — 반올림한 BMI로 분류
+  const bmi = Math.round(raw * 10) / 10
   const standardWeight = heightM * heightM * 22
 
   const category = !Number.isFinite(bmi)

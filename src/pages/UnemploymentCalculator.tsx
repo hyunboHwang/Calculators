@@ -84,7 +84,7 @@ export default function UnemploymentCalculator() {
           <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
             <h2 className="mb-2 text-base font-semibold">계산 내역</h2>
             <div className="divide-y divide-slate-100">
-              <Row label="1일 평균임금" value={`${fmt(r.avgDailyWage)}원`} />
+              <Row label="1일 평균임금" value={`${fmt(r.avgDailyWage)}원`} sub="근사: 월급여×3÷91일" />
               <Row
                 label="1일 구직급여액"
                 value={`${fmt(r.dailyBenefit)}원`}

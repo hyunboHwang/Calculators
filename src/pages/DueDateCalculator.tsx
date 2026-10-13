@@ -1,18 +1,20 @@
 import { useMemo, useState } from 'react'
 import { parseDate, todayStr, dday, fmtDate, addDays } from '../lib/age'
+import { useToday } from '../hooks/useToday'
 import { DateField, Field, Row } from '../components/ui'
 
 export default function DueDateCalculator() {
   const [lmpStr, setLmpStr] = useState(todayStr())
   const [cycle, setCycle] = useState(28)
 
+  const todayS = useToday()
   const r = useMemo(() => {
     const lmp = parseDate(lmpStr)
     if (!lmp) return null
-    const adjust = cycle - 28
+    const adjust = Math.min(Math.max(Math.round(cycle) || 28, 20), 45) - 28 // 계산 시에만 20~45 보정
     const base = addDays(lmp, adjust) // 주기 보정된 기준일
     const due = addDays(base, 280) // 40주
-    const today = parseDate(todayStr())!
+    const today = parseDate(todayS)!
     const gestDays = dday(today, base)
     const weeks = Math.floor(gestDays / 7)
     const days = gestDays % 7
@@ -29,7 +31,7 @@ export default function DueDateCalculator() {
       t2: addDays(base, 98), // 14주 0일
       t3: addDays(base, 196), // 28주 0일
     }
-  }, [lmpStr, cycle])
+  }, [lmpStr, cycle, todayS])
 
   return (
     <div>
@@ -46,10 +48,10 @@ export default function DueDateCalculator() {
             <Field
               label="평소 생리 주기"
               value={cycle}
-              onChange={(v) => setCycle(Math.min(Math.max(Math.round(v), 20), 45))}
+              onChange={setCycle}
               suffix="일"
               step={1}
-              hint="기본 28일"
+              hint="기본 28일 · 20~45일 범위로 보정해 계산"
             />
           </div>
         </section>
@@ -63,7 +65,7 @@ export default function DueDateCalculator() {
                 {r.valid && (
                   <p className="mt-3 text-sm text-slate-600">
                     오늘은 임신 <b>{r.weeks}주 {r.days}일</b> ({r.trimester}분기) · 예정일까지{' '}
-                    <b>D-{Math.max(r.d, 0)}</b>
+                    <b>{r.d >= 0 ? `D-${r.d}` : `D+${-r.d} 예정일 경과`}</b>
                   </p>
                 )}
               </div>

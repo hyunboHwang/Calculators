@@ -32,9 +32,10 @@ export default function ParentalLeaveCalculator() {
             <Field
               label="육아휴직 기간"
               value={leaveMonths}
-              onChange={(v) => setLeaveMonths(Math.max(0, Math.round(v)))}
+              onChange={(v) => setLeaveMonths(Math.min(Math.max(0, Math.round(v)), 36))}
               suffix="개월"
               step={1}
+              hint="최대 36개월까지 입력할 수 있습니다"
             />
           </div>
         </section>
@@ -53,9 +54,12 @@ export default function ParentalLeaveCalculator() {
                 <p className="text-lg font-bold tabular-nums">{fmt(r.average)}원</p>
               </div>
             </div>
-            {r.isCapped && (
+            {(ordinaryWage > 2_500_000 || ordinaryWage > 2_000_000 || ordinaryWage * 0.8 > 1_600_000) && (
               <p className="mt-3 text-sm text-slate-600">
-                통상임금이 상한액을 넘어 1~3개월차는 <b>250만원</b>으로 제한됩니다.
+                통상임금이 상한액을 넘는 구간은 상한으로 제한됩니다:
+                {ordinaryWage > 2_500_000 && ' 1~3개월차 250만원'}
+                {ordinaryWage > 2_000_000 && ' · 4~6개월차 200만원'}
+                {ordinaryWage * 0.8 > 1_600_000 && ' · 7개월차~ 160만원(통상임금 80%가 상한 초과)'}
               </p>
             )}
           </div>

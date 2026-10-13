@@ -1,16 +1,18 @@
 import { useMemo, useState } from 'react'
-import { parseDate, todayStr, celebrations, dday, fmtDate } from '../lib/age'
+import { parseDate, celebrations, dday, fmtDate } from '../lib/age'
 import { DateField } from '../components/ui'
+import { useToday } from '../hooks/useToday'
 
 export default function CelebrationCalculator() {
   const [birthStr, setBirthStr] = useState('1960-01-01')
 
+  const todayS = useToday()
   const r = useMemo(() => {
     const birth = parseDate(birthStr)
     if (!birth) return null
-    const today = parseDate(todayStr())!
+    const today = parseDate(todayS)!
     return celebrations(birth).map((c) => ({ ...c, d: dday(c.date, today) }))
-  }, [birthStr])
+  }, [birthStr, todayS])
 
   const upcoming = r?.find((c) => c.d >= 0)
 

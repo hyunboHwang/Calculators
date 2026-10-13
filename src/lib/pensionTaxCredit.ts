@@ -12,8 +12,8 @@ export interface PensionTaxCreditInput {
 }
 
 export function calcPensionTaxCredit(i: PensionTaxCreditInput) {
-  const pensionSavingsRecognized = Math.min(i.pensionSavingsContribution, 6_000_000)
-  const totalRecognized = Math.min(pensionSavingsRecognized + i.irpContribution, 9_000_000)
+  const pensionSavingsRecognized = Math.min(Math.max(i.pensionSavingsContribution, 0), 6_000_000)
+  const totalRecognized = Math.min(pensionSavingsRecognized + Math.max(i.irpContribution, 0), 9_000_000)
   const rate = i.totalSalary <= 55_000_000 ? 0.165 : 0.132
   const deductionAmount = Math.round(totalRecognized * rate)
 

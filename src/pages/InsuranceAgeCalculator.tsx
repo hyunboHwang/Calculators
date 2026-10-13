@@ -1,10 +1,13 @@
 import { useMemo, useState } from 'react'
-import { parseDate, todayStr, ageParts, insuranceAge, fmtDate } from '../lib/age'
+import { parseDate, ageParts, insuranceAge, fmtDate } from '../lib/age'
+import { useToday } from '../hooks/useToday'
 import { DateField, Row } from '../components/ui'
 
 export default function InsuranceAgeCalculator() {
   const [birthStr, setBirthStr] = useState('1990-01-01')
-  const [refStr, setRefStr] = useState(todayStr())
+  const today = useToday()
+  const [refInput, setRefStr] = useState<string | null>(null) // null = 기본(오늘, 자정에 자동 갱신)
+  const refStr = refInput ?? today
 
   const r = useMemo(() => {
     const birth = parseDate(birthStr)

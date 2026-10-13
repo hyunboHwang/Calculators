@@ -19,6 +19,6 @@ export interface CarAcquisitionTaxInput {
 
 export function calcCarAcquisitionTax(i: CarAcquisitionTaxInput) {
   const rate = RATES[i.vehicleType]
-  const tax = i.price * (rate / 100)
+  const tax = Math.max(0, i.price) * (rate / 100)
   return { rate, tax: Math.round(tax) }
 }

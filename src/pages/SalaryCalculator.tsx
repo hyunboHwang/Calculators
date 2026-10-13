@@ -124,7 +124,7 @@ export default function SalaryCalculator() {
               </div>
             </div>
             <p className="mt-3 text-sm text-slate-600">
-              연봉의 <b>{(r.netRatio * 100).toFixed(1)}%</b>를 실수령하고, 매월{' '}
+              연봉의 <b>{Number.isFinite(r.netRatio) ? `${(r.netRatio * 100).toFixed(1)}%` : '-'}</b>를 실수령하고, 매월{' '}
               <b>{fmt(r.totalDeduction)}원</b>이 공제됩니다.
             </p>
           </div>

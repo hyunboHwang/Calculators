@@ -38,7 +38,7 @@ export default function CompoundCalculator() {
             <Field label="초기 원금" value={principal} onChange={setPrincipal} step={1_000_000} />
             <Field label="월 적립액" value={monthly} onChange={setMonthly} step={100_000} />
             <div className="grid grid-cols-2 gap-x-3">
-              <Field label="연 수익률" value={ratePct} onChange={setRatePct} suffix="%" step={0.5} />
+              <Field label="연 수익률" value={ratePct} onChange={setRatePct} suffix="%" step={0.5} allowNegative />
               <Field
                 label="투자 기간"
                 value={years}
@@ -57,7 +57,7 @@ export default function CompoundCalculator() {
               {fmt(r.final)}원
             </p>
             <p className="mt-2 text-sm text-slate-600">
-              총 납입 {fmt(r.totalPaid)}원 → <b>{r.multiple.toFixed(2)}배</b> · 수익{' '}
+              총 납입 {fmt(r.totalPaid)}원 → <b>{Number.isFinite(r.multiple) ? `${r.multiple.toFixed(2)}배` : '-'}</b> · 수익{' '}
               <b>+{fmt(r.profit)}원</b>
             </p>
           </div>

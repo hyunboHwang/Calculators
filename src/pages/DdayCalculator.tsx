@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import { parseDate, todayStr, dday, fmtDate, addDays, addYears } from '../lib/age'
 import { DateField } from '../components/ui'
+import { useToday } from '../hooks/useToday'
 
 type Mode = 'dday' | 'anniversary'
 
@@ -11,14 +12,15 @@ export default function DdayCalculator() {
   const [targetStr, setTargetStr] = useState(todayStr())
   const [startStr, setStartStr] = useState(todayStr())
 
-  const today = parseDate(todayStr())!
+  const todayS = useToday()
+  const today = parseDate(todayS)!
 
   const target = useMemo(() => {
     const t = parseDate(targetStr)
     if (!t) return null
     return { date: t, d: dday(t, today) }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [targetStr])
+  }, [targetStr, todayS])
 
   const anniv = useMemo(() => {
     const s = parseDate(startStr)
@@ -35,7 +37,7 @@ export default function DdayCalculator() {
       .sort((a, b) => a.date.getTime() - b.date.getTime())
     return { daysSince, events }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [startStr])
+  }, [startStr, todayS])
 
   return (
     <div>

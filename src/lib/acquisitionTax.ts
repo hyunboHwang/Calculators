@@ -11,7 +11,7 @@ export type HouseCount = 'first' | 'second' | 'third' | 'fourthPlus'
 
 export interface AcquisitionTaxInput {
   price: number // 취득가액
-  houseCount: HouseCount
+  houseCount: HouseCount // 이번 취득 후 주택 수(이번 취득 포함)
   isAdjusted: boolean // 조정대상지역 여부
   areaOver85: boolean // 전용면적 85㎡ 초과 여부
 }
@@ -19,9 +19,9 @@ export interface AcquisitionTaxInput {
 function baseRate(price: number): number {
   if (price <= 600_000_000) return 1
   if (price <= 900_000_000) {
-    // 6억~9억 구간: 1%에서 3%까지 선형 보간 (지방세법 시행령, 4자리 반올림)
+    // 6억~9억 구간: (취득가/3억×2−3)/100 을 소수 다섯째자리에서 반올림(지방세법 제11조①8호 나목) = 퍼센트로 소수 둘째자리
     const raw = (price / 100_000_000) * (2 / 3) - 3
-    return Math.round(raw * 10000) / 10000
+    return Math.round(raw * 100) / 100
   }
   return 3
 }
@@ -33,7 +33,8 @@ function rateFor(i: AcquisitionTaxInput): number {
   return i.isAdjusted ? 12 : 8
 }
 
-export function calcAcquisitionTax(i: AcquisitionTaxInput) {
+export function calcAcquisitionTax(input: AcquisitionTaxInput) {
+  const i = { ...input, price: Math.max(0, input.price) }
   const rate = rateFor(i)
   const acquisitionTax = i.price * (rate / 100)
   const isHeavy = rate === 8 || rate === 12

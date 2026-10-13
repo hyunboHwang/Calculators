@@ -18,7 +18,7 @@ export default function PropertyTaxCalculator() {
       <h1 className="text-2xl font-bold">재산세 계산기</h1>
       <p className="mt-1 mb-6 text-sm text-slate-500">
         공시가격 기준으로 재산세·도시지역분·지방교육세를 계산합니다. 1세대1주택자는 공시가격
-        9억원 이하일 때 특례세율이 적용됩니다.
+        9억원 이하일 때 특례세율이 적용됩니다. (공정시장가액비율은 2026년도 기준이며 매년 달라질 수 있습니다.)
       </p>
 
       <div className="grid gap-6 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">

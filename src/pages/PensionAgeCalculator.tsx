@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
-import { parseDate, todayStr, pensionStartAge, addYears, dday, fmtDate } from '../lib/age'
+import { parseDate, ageParts, pensionStartAge, addYears, dday, fmtDate } from '../lib/age'
+import { useToday } from '../hooks/useToday'
 import { DateField, Row } from '../components/ui'
 
 const EARLY_RATE = 6 // 조기수령 1년당 감액 %
@@ -8,10 +9,11 @@ const DELAY_RATE = 7.2 // 연기수령 1년당 증액 %
 export default function PensionAgeCalculator() {
   const [birthStr, setBirthStr] = useState('1970-01-01')
 
+  const todayS = useToday()
   const r = useMemo(() => {
     const birth = parseDate(birthStr)
     if (!birth) return null
-    const today = parseDate(todayStr())!
+    const today = parseDate(todayS)!
     const startAge = pensionStartAge(birth.getFullYear())
     const startDate = addYears(birth, startAge)
     const d = dday(startDate, today)
@@ -20,12 +22,13 @@ export default function PensionAgeCalculator() {
       startAge,
       startDate,
       d,
+      remain: d > 0 ? ageParts(today, startDate) : null,
       earlyAge: startAge - 5,
       earlyDate: addYears(birth, startAge - 5),
       delayAge: startAge + 5,
       delayDate: addYears(birth, startAge + 5),
     }
-  }, [birthStr])
+  }, [birthStr, todayS])
 
   return (
     <div>
@@ -79,9 +82,9 @@ export default function PensionAgeCalculator() {
                 </p>
                 <p className="mt-2 text-sm text-slate-600">
                   {fmtDate(r.startDate)} 도달 ·{' '}
-                  {r.d > 0 ? (
+                  {r.remain ? (
                     <>
-                      약 <b>{Math.floor(r.d / 365)}년 {Math.round((r.d % 365) / 30)}개월</b> 남음
+                      <b>{r.remain.years}년 {r.remain.months}개월 {r.remain.days}일</b> 남음
                     </>
                   ) : (
                     <b>이미 수령 연령에 도달했습니다</b>

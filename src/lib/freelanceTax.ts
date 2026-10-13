@@ -31,7 +31,7 @@ export interface AnnualTaxInput {
 }
 
 export function calcFreelanceAnnualTax(i: AnnualTaxInput) {
-  const income = Math.max(i.annualIncome * (1 - i.expenseRate / 100), 0)
+  const income = Math.max(i.annualIncome * (1 - Math.min(Math.max(i.expenseRate, 0), 100) / 100), 0)
   const taxBase = Math.max(income - Math.max(i.dependents, 1) * 1_500_000, 0)
   const calculated = basicTax(taxBase)
   const incomeTax = Math.max(calculated - 70_000, 0) // 표준세액공제

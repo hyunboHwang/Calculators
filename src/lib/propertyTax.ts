@@ -48,7 +48,9 @@ function specialRatio(publicPrice: number): number {
   return 0.45
 }
 
-export function calcPropertyTax(i: PropertyTaxInput) {
+// 2027년 이후: 공정시장가액비율(43~45%, 2026년도 납세의무 성립분 한정)은 매년 시행령 확인 후 갱신 필요
+export function calcPropertyTax(input: PropertyTaxInput) {
+  const i = { ...input, publicPrice: Math.max(0, input.publicPrice) }
   // 공정시장가액비율 특례는 1세대1주택이면 공시가격 제한 없이 적용된다.
   const ratioIsSpecial = i.isSingleHouse
   // 반면 더 낮은 특례세율(세율 구간표)은 공시가격 9억원 이하일 때만 적용된다.
@@ -58,7 +60,6 @@ export function calcPropertyTax(i: PropertyTaxInput) {
   const propertyTax = progressiveTax(taxBase, useSpecial ? SPECIAL_BRACKETS : GENERAL_BRACKETS)
   const urbanTax = taxBase * 0.0014
   const localEduTax = propertyTax * 0.2
-  const total = propertyTax + urbanTax + localEduTax
 
   return {
     useSpecial,
@@ -66,7 +67,7 @@ export function calcPropertyTax(i: PropertyTaxInput) {
     propertyTax: Math.round(propertyTax),
     urbanTax: Math.round(urbanTax),
     localEduTax: Math.round(localEduTax),
-    total: Math.round(total),
+    total: Math.round(propertyTax) + Math.round(urbanTax) + Math.round(localEduTax), // 구성 항목 반올림값의 합
   }
 }
 

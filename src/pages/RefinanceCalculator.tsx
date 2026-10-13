@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { amortize, prepaymentFee } from '../lib/loan'
+import { amortize, prepaymentFee, MAX_MONTHS } from '../lib/loan'
 import { Field, Row, fmt } from '../components/ui'
 
 export default function RefinanceCalculator() {
@@ -13,8 +13,9 @@ export default function RefinanceCalculator() {
   const [etcCost, setEtcCost] = useState(0)
 
   const r = useMemo(() => {
-    const oldLoan = amortize(balance, oldRate, remainMonths, 'equalPayment')
-    const newLoan = amortize(balance, newRate, remainMonths, 'equalPayment')
+    const remain = Math.min(Math.max(Math.round(remainMonths), 1), MAX_MONTHS)
+    const oldLoan = amortize(balance, oldRate, remain, 'equalPayment')
+    const newLoan = amortize(balance, newRate, remain, 'equalPayment')
     const fee = prepaymentFee(balance, feeRate, elapsedMonths, feePeriod)
     const cost = fee + etcCost
 
@@ -51,6 +52,7 @@ export default function RefinanceCalculator() {
               onChange={setRemainMonths}
               suffix="개월"
               step={12}
+              hint="1~600개월(최대 50년)"
             />
             <Field
               label="기타 비용"
@@ -150,7 +152,11 @@ export default function RefinanceCalculator() {
               </div>
             ))}
             <div className="mt-2 rounded-lg bg-slate-50 p-3">
-              <Row label="이자 절감액" value={`+${fmt(r.interestSaving)}원`} />
+              <Row
+                label="이자 절감액"
+                value={`${r.interestSaving >= 0 ? '+' : '-'}${fmt(Math.abs(r.interestSaving))}원`}
+                negative={r.interestSaving < 0}
+              />
               <Row
                 label="중도상환수수료"
                 value={`-${fmt(r.fee)}원`}

@@ -23,6 +23,8 @@ export default function SubscriptionScoreCalculator() {
     [noHouseSinceDate, dependentsCount, subscriptionJoinDate, hasSpouseSubscription, spouseSubscriptionJoinDate],
   )
 
+  const todayIso = new Date().toLocaleDateString('sv-SE')
+
   return (
     <div>
       <h1 className="text-2xl font-bold">청약가점 계산기</h1>
@@ -76,6 +78,13 @@ export default function SubscriptionScoreCalculator() {
         </section>
 
         <section className="space-y-4">
+          {[noHouseSinceDate, subscriptionJoinDate, hasSpouseSubscription ? spouseSubscriptionJoinDate : ''].some(
+            (d) => d > todayIso,
+          ) && (
+            <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800">
+              오늘({todayIso}) 이후 날짜가 입력되었습니다. 미래 날짜는 기간이 0으로 계산되므로 날짜를 확인해주세요.
+            </div>
+          )}
           {!r.valid ? (
             <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-5 text-sm text-slate-600">
               날짜를 확인해주세요.

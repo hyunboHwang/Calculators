@@ -28,7 +28,7 @@ export default function UsStockTaxCalculator() {
     const net = gainKrw - lossKrw // 손익 통산 (원화 기준)
     const taxBase = Math.max(net - DEDUCTION, 0)
     const tax = taxBase * TAX_RATE
-    const remainingDeduction = Math.max(DEDUCTION - Math.max(net, 0), 0)
+    const remainingDeduction = Math.max(DEDUCTION - net, 0) // 순손실이면 250만원 + |순손실|
     return {
       gainKrw,
       lossKrw,
@@ -120,7 +120,7 @@ export default function UsStockTaxCalculator() {
               {r.remainingDeduction > 0 ? (
                 <>
                   올해 공제 한도가 <b className="text-emerald-700">{fmt(r.remainingDeduction)}원</b>{' '}
-                  남았습니다. 이 금액까지는 이익을 실현해도 세금이 없으니, 연말 전에 수익
+                  남았습니다{r.net < 0 && ' (순손실만큼 공제 여력이 늘어납니다)'}. 이 금액까지는 이익을 실현해도 세금이 없으니, 연말 전에 수익
                   종목 일부를 매도해 공제를 활용하는 것을 검토해보세요.
                 </>
               ) : (

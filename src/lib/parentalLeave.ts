@@ -28,7 +28,8 @@ export interface ParentalLeaveInput {
 }
 
 export function calcParentalLeave(i: ParentalLeaveInput) {
-  const months = Math.max(Math.round(i.leaveMonths), 0)
+  // 최대 36개월로 방어 (육아휴직은 자녀 1명당 1년 기준, 입력 폭주 방지)
+  const months = Math.min(Math.max(Math.round(i.leaveMonths) || 0, 0), 36)
   const byMonth: { month: number; amount: number }[] = []
   let total = 0
 

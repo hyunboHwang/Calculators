@@ -69,7 +69,25 @@ function pensionAccountCredit(gross: number, pensionSavings: number, irp: number
   return base * rate
 }
 
-export function calcYearEndTax(i: YearEndTaxInput) {
+export function calcYearEndTax(input: YearEndTaxInput) {
+  // 음수 입력 방어, 자녀 수는 (부양가족 수 − 1) 이하로 제한
+  const nn = (v: number) => (Number.isFinite(v) ? Math.max(v, 0) : 0)
+  const i: YearEndTaxInput = {
+    ...input,
+    annualSalary: nn(input.annualSalary),
+    nonTaxableMonthly: nn(input.nonTaxableMonthly),
+    creditCard: nn(input.creditCard),
+    debitCashReceipt: nn(input.debitCashReceipt),
+    pensionSavings: nn(input.pensionSavings),
+    irp: nn(input.irp),
+    insurancePremium: nn(input.insurancePremium),
+    medicalExpense: nn(input.medicalExpense),
+    educationExpense: nn(input.educationExpense),
+    donation: nn(input.donation),
+    monthlyRent: nn(input.monthlyRent),
+    dependents: Math.max(Math.floor(nn(input.dependents)), 1),
+    children: Math.min(Math.floor(nn(input.children)), Math.max(Math.floor(nn(input.dependents)), 1) - 1),
+  }
   const monthlyGross = i.annualSalary / 12
   const monthlyTaxable = Math.max(monthlyGross - i.nonTaxableMonthly, 0)
   const gross = Math.round(monthlyTaxable * 12) // 총급여 (연, 비과세 제외)

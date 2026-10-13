@@ -38,7 +38,7 @@ export default function BmiCalculator() {
         <section className="space-y-4">
           {!Number.isFinite(r.bmi) ? (
             <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5 text-sm text-slate-600">
-              신장을 입력하면 BMI를 계산합니다.
+              신장과 체중을 0보다 큰 값으로 입력하면 BMI를 계산합니다.
             </div>
           ) : (
             <>

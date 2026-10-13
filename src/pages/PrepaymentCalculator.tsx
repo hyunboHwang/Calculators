@@ -137,10 +137,10 @@ export default function PrepaymentCalculator() {
                 </div>
                 <p
                   className={`mt-3 rounded-lg p-3 text-sm leading-relaxed ${
-                    r.worthIt ? 'bg-emerald-50 text-emerald-800' : 'bg-red-50 text-red-700'
+                    r.worthIt || r.fee === 0 ? 'bg-emerald-50 text-emerald-800' : 'bg-red-50 text-red-700'
                   }`}
                 >
-                  {r.exempt ? (
+                  {r.exempt || r.fee === 0 ? (
                     <>수수료가 없으므로 여유 자금이 있다면 상환하는 것이 무조건 유리합니다.</>
                   ) : r.worthIt ? (
                     <>
@@ -158,7 +158,7 @@ export default function PrepaymentCalculator() {
 
               <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-xs leading-relaxed text-amber-800">
                 이자 절감액은 잔액 고정(만기일시) 기준 근사치로, 원리금균등 상환이면 실제
-                절감액은 이보다 적습니다. 수수료율과 부과기간은 대출 약정서를 확인하세요.
+                절감액은 이보다 적습니다. 경과 개월은 일할(30.44일=1개월) 근사입니다. 수수료율과 부과기간은 대출 약정서를 확인하세요.
               </div>
             </>
           )}

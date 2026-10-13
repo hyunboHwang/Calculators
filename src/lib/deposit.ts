@@ -40,7 +40,6 @@ export function calcDeposit(i: DepositInput) {
   const taxRate = TAX_RATES[i.taxOption]
   const tax = preTaxInterest * taxRate
   const postTaxInterest = preTaxInterest - tax
-  const maturityAmount = principal + postTaxInterest
 
   // 세후 실질 연이율 (단리 환산, 원금 대비)
   const effectiveAnnualRate =
@@ -50,8 +49,8 @@ export function calcDeposit(i: DepositInput) {
     principal: Math.round(principal),
     preTaxInterest: Math.round(preTaxInterest),
     tax: Math.round(tax),
-    postTaxInterest: Math.round(postTaxInterest),
-    maturityAmount: Math.round(maturityAmount),
+    postTaxInterest: Math.round(preTaxInterest) - Math.round(tax), // 세후 = 세전 − 세금(표시값 일치)
+    maturityAmount: Math.round(principal) + Math.round(preTaxInterest) - Math.round(tax),
     effectiveAnnualRate,
   }
 }

@@ -22,6 +22,7 @@ export function equalMonthly(principal: number, annualRatePct: number, months: n
   if (months <= 0) return 0
   if (r === 0) return principal / months
   const k = Math.pow(1 + r, months)
+  if (!Number.isFinite(k)) return principal * r // 오버플로: 극한값(이자만)
   return (principal * r * k) / (k - 1)
 }
 
@@ -31,8 +32,12 @@ export function maxPrincipal(monthly: number, annualRatePct: number, months: num
   if (months <= 0 || monthly <= 0) return 0
   if (r === 0) return monthly * months
   const k = Math.pow(1 + r, months)
+  if (!Number.isFinite(k)) return monthly / r // 오버플로: 극한값
   return (monthly * (k - 1)) / (r * k)
 }
+
+/** 대출 기간 상한 (50년) */
+export const MAX_MONTHS = 600
 
 /** 상환 스케줄 생성 */
 export function amortize(
@@ -41,6 +46,7 @@ export function amortize(
   months: number,
   type: RepayType,
 ) {
+  months = Math.min(Math.round(months), MAX_MONTHS) // 정수화·상한(루프 방어)
   const r = annualRatePct / 100 / 12
   const schedule: ScheduleRow[] = []
   let totalInterest = 0

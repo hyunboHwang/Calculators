@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
 import { parseDate, todayStr, dday, fmtDate, addMonths, addDays } from '../lib/age'
+import { useToday } from '../hooks/useToday'
 import { DateField, Row } from '../components/ui'
 
 const BRANCHES = [
@@ -14,18 +15,19 @@ export default function DischargeCalculator() {
   const [enlistStr, setEnlistStr] = useState(todayStr())
   const [branchId, setBranchId] = useState<(typeof BRANCHES)[number]['id']>('army')
 
+  const todayS = useToday()
   const r = useMemo(() => {
     const enlist = parseDate(enlistStr)
     if (!enlist) return null
     const branch = BRANCHES.find((b) => b.id === branchId)!
     const discharge = addDays(addMonths(enlist, branch.months), -1) // 전역일 = 입대일 + 복무개월 - 1일
-    const today = parseDate(todayStr())!
+    const today = parseDate(todayS)!
     const total = dday(discharge, enlist)
     const served = Math.min(Math.max(dday(today, enlist) + 1, 0), total + 1)
     const remain = dday(discharge, today)
     const progress = Math.min(Math.max((served / (total + 1)) * 100, 0), 100)
     return { branch, discharge, total: total + 1, served, remain, progress }
-  }, [enlistStr, branchId])
+  }, [enlistStr, branchId, todayS])
 
   return (
     <div>

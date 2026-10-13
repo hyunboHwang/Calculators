@@ -19,7 +19,7 @@ export const BRACKETS: Bracket[] = [
 ]
 
 function calcTax(taxBase: number): number {
-  if (taxBase <= 0) return 0
+  if (taxBase < 500_000) return 0 // 과세최저한: 과세표준 50만원 미만이면 부과하지 않음 (상증세법 제25조②)
   const bracket = BRACKETS.find((b) => taxBase <= b.limit) ?? BRACKETS[BRACKETS.length - 1]
   return Math.max(taxBase * bracket.rate - bracket.deduction, 0)
 }
@@ -64,10 +64,9 @@ export function calcInheritanceTax(i: InheritanceTaxInput) {
       ? 500_000_000
       : Math.min(i.spouseActualShare, 3_000_000_000)
 
+  const netFin = Math.max(i.netFinancialAssets, 0)
   const financialDeduction =
-    i.netFinancialAssets <= 20_000_000
-      ? i.netFinancialAssets
-      : Math.min(Math.max(i.netFinancialAssets * 0.2, 20_000_000), 200_000_000)
+    netFin <= 20_000_000 ? netFin : Math.min(Math.max(netFin * 0.2, 20_000_000), 200_000_000)
 
   const totalDeduction = basicOrLumpSumDeduction + spouseDeduction + financialDeduction
   const taxBase = Math.max(taxableValue - totalDeduction, 0)

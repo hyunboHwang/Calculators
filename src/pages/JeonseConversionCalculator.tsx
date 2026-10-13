@@ -1,6 +1,9 @@
 import { useMemo, useState } from 'react'
 import { calcJeonseConversion } from '../lib/jeonseConversion'
-import { Field, Row, fmt, fmtPct } from '../components/ui'
+import { Field, Row, fmt } from '../components/ui'
+
+// 판정(초과/이내)과 표시가 어긋나지 않도록 소수 둘째 자리까지 표시
+const pct2 = (n: number) => `${(Math.round(n * 100) / 100).toFixed(2)}%`
 
 export default function JeonseConversionCalculator() {
   const [jeonseDeposit, setJeonseDeposit] = useState(300_000_000)
@@ -63,10 +66,10 @@ export default function JeonseConversionCalculator() {
             >
               <p className="text-sm text-slate-500">현재 조건의 전환율</p>
               <p className="text-3xl font-extrabold tabular-nums text-slate-800">
-                {fmtPct(r.actualRate)}
+                {pct2(r.actualRate)}
               </p>
               <p className="mt-2 text-sm text-slate-600">
-                법정 상한 {fmtPct(r.legalCapRate)} {r.isOverCap ? '초과' : '이내'}
+                법정 상한 {pct2(r.legalCapRate)} {r.isOverCap ? '초과' : '이내'}
               </p>
             </div>
           )}

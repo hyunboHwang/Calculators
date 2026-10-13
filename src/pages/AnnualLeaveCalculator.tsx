@@ -46,7 +46,7 @@ export default function AnnualLeaveCalculator() {
         <section className="space-y-4">
           {!r.valid ? (
             <div className="rounded-2xl border border-red-200 bg-red-50 p-5 text-sm text-red-700">
-              날짜를 확인해주세요. 정산 기준일이 입사일보다 빠릅니다.
+              {!joinDate || !referenceDate ? '입사일과 정산 기준일을 모두 입력해주세요.' : '날짜를 확인해주세요. 정산 기준일이 입사일보다 빠릅니다.'}
             </div>
           ) : (
             <>

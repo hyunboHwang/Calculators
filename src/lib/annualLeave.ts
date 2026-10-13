@@ -14,7 +14,7 @@
  * 달을 지날 때 실제보다 하루 이른 시점에 개월수가 올라가는 오차가 있었습니다.
  */
 
-import { ageParts, monthsBetween } from './age'
+import { ageParts, monthsBetween, parseDate, DAY } from './age.ts'
 
 export interface AnnualLeaveInput {
   joinDate: string // YYYY-MM-DD 입사일
@@ -33,13 +33,13 @@ export function calcAccruedDays(join: Date, ref: Date): number {
 }
 
 export function calcAnnualLeave(i: AnnualLeaveInput) {
-  const join = new Date(i.joinDate)
-  const ref = new Date(i.referenceDate)
-  if (Number.isNaN(join.getTime()) || Number.isNaN(ref.getTime())) {
+  const join = parseDate(i.joinDate)
+  const ref = parseDate(i.referenceDate)
+  if (!join || !ref) {
     return { valid: false as const }
   }
 
-  const serviceDays = Math.round((ref.getTime() - join.getTime()) / 86_400_000) + 1
+  const serviceDays = Math.round((ref.getTime() - join.getTime()) / DAY) + 1
   if (serviceDays <= 0) return { valid: false as const }
 
   const accruedDays = calcAccruedDays(join, ref)

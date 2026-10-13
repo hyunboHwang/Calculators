@@ -55,7 +55,7 @@ export default function SeveranceCalculator() {
         <section className="space-y-4">
           {!r.valid ? (
             <div className="rounded-2xl border border-red-200 bg-red-50 p-5 text-sm text-red-700">
-              날짜를 확인해주세요. 퇴사일이 입사일보다 빠릅니다.
+              {!joinDate || !leaveDate ? '입사일과 퇴사일(마지막 근무일)을 모두 입력해주세요.' : '날짜를 확인해주세요. 퇴사일이 입사일보다 빠릅니다.'}
             </div>
           ) : !r.eligible ? (
             <div className="rounded-2xl border border-red-200 bg-red-50 p-5">

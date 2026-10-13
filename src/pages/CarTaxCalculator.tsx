@@ -47,7 +47,7 @@ export default function CarTaxCalculator() {
                 <Field
                   label="차령"
                   value={yearsElapsed}
-                  onChange={setYearsElapsed}
+                  onChange={(v) => setYearsElapsed(Math.max(0, Math.floor(v)))}
                   suffix="년"
                   step={1}
                   hint="신차는 0"

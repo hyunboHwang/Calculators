@@ -2,6 +2,9 @@ import { useMemo, useState } from 'react'
 import { parseDate, todayStr, dday, fmtDate, addDays, addMonths } from '../lib/age'
 import { DateField, Field, Row } from '../components/ui'
 
+// 단위별 입력 상한 (일 36500 = 약 100년, 주 5200, 개월 1200)
+const MAX_AMOUNT = { days: 36500, weeks: 5200, months: 1200 } as const
+
 export default function DateCalculator() {
   // 두 날짜 사이
   const [fromStr, setFromStr] = useState(todayStr())
@@ -23,9 +26,11 @@ export default function DateCalculator() {
   const added = useMemo(() => {
     const base = parseDate(baseStr)
     if (!base) return null
+    if (amount > MAX_AMOUNT[unit]) return null
     const n = amount * direction
     const result =
       unit === 'days' ? addDays(base, n) : unit === 'weeks' ? addDays(base, n * 7) : addMonths(base, n)
+    if (Number.isNaN(result.getTime())) return null
     return { result }
   }, [baseStr, amount, unit, direction])
 
@@ -89,6 +94,12 @@ export default function DateCalculator() {
               </div>
             </div>
           </div>
+          {amount > MAX_AMOUNT[unit] && (
+            <p className="mt-3 text-xs text-red-600">
+              숫자가 너무 큽니다. 최대 {MAX_AMOUNT[unit].toLocaleString('ko-KR')}
+              {unit === 'days' ? '일' : unit === 'weeks' ? '주' : '개월'}(약 100년)까지 계산할 수 있습니다.
+            </p>
+          )}
           {added && (
             <div className="mt-4 rounded-xl bg-emerald-50 p-4 text-center">
               <p className="text-xl font-extrabold text-emerald-700">{fmtDate(added.result)}</p>

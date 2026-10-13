@@ -32,8 +32,9 @@ export function insurances(monthlyTaxable: number) {
   if (monthlyTaxable <= 0) {
     return { pension: 0, health: 0, care: 0, employment: 0, total: 0 }
   }
+  // 기준소득월액: 신고 소득월액의 천원 미만 절사 후 상·하한 적용 (국민연금법 시행령 제5조)
   const pensionBase = clamp(
-    monthlyTaxable,
+    Math.floor(monthlyTaxable / 1000) * 1000,
     RATES_2026.pensionFloorMonthly,
     RATES_2026.pensionCapMonthly,
   )

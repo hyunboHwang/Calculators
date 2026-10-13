@@ -31,8 +31,10 @@ export function calcCarTax(i: CarTaxInput) {
     }
   }
 
-  const baseTax = i.displacement * ccRate(i.displacement)
-  const depreciationPct = i.yearsElapsed < 3 ? 0 : Math.min((i.yearsElapsed - 2) * 5, 50)
+  const displacement = Math.max(0, i.displacement)
+  const years = Math.floor(Math.max(0, i.yearsElapsed)) // 차령은 정수 연 단위
+  const baseTax = displacement * ccRate(displacement)
+  const depreciationPct = years < 3 ? 0 : Math.min((years - 2) * 5, 50)
   const carTax = baseTax * (1 - depreciationPct / 100)
   const localEduTax = carTax * 0.3
   const total = carTax + localEduTax

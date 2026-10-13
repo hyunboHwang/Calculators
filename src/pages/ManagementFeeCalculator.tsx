@@ -60,7 +60,7 @@ export default function ManagementFeeCalculator() {
           <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
             <h2 className="mb-2 text-base font-semibold">전용면적당 관리비</h2>
             <div className="divide-y divide-slate-100">
-              <Row label="㎡당 관리비" value={`${fmt(r.feePerArea)}원/㎡`} strong />
+              <Row label="㎡당 관리비" value={exclusiveArea > 0 ? `${fmt(r.feePerArea)}원/㎡` : '-'} strong />
             </div>
           </div>
 

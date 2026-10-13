@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { amortize, REPAY_LABELS, type RepayType } from '../lib/loan'
+import { amortize, MAX_MONTHS, REPAY_LABELS, type RepayType } from '../lib/loan'
 import { Field, fmt } from '../components/ui'
 
 const types: RepayType[] = ['equalPayment', 'equalPrincipal', 'bullet']
@@ -11,7 +11,7 @@ export default function LoanCalculator() {
   const [selected, setSelected] = useState<RepayType>('equalPayment')
   const [showAll, setShowAll] = useState(false)
 
-  const months = Math.round(years * 12)
+  const months = Math.min(Math.max(Math.round(years * 12), 0), MAX_MONTHS)
 
   const results = useMemo(
     () =>

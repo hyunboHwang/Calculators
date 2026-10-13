@@ -1,4 +1,5 @@
 import type { InfoTable } from './infoTable.ts'
+import { parseDate, addMonths, DAY } from './age.ts'
 
 /**
  * 퇴직금 계산 (고용노동부 평균임금 방식) + 퇴직소득세(소득세법 제48조·제55조, 2026 시행분) 반영
@@ -43,7 +44,8 @@ export function serviceDeduction(years: number) {
 }
 export function convertedDeduction(conv: number) {
   const t = CONV_DED.find((x) => conv <= x.upTo)!
-  return Math.floor(t.base + (conv - t.from) * t.rate)
+  // 정수 연산(부동소수 오차 방지): 율은 % 정수로 곱하고 마지막에 나눗셈 절사
+  return t.base + Math.floor(((conv - t.from) * Math.round(t.rate * 100)) / 100)
 }
 
 /** 퇴직소득세 (원 미만 절사). years = 1년 미만 올림한 근속연수 */
@@ -53,7 +55,7 @@ export function calcRetirementTax(amount: number, years: number) {
   const convDed = convertedDeduction(converted)
   const base = Math.max(converted - convDed, 0)
   const r = RATES.find((x) => base <= x.upTo)!
-  const convTax = Math.max(Math.floor(base * r.rate - r.ded), 0)
+  const convTax = Math.max(Math.floor((base * Math.round(r.rate * 100)) / 100) - r.ded, 0)
   const incomeTax = Math.floor((convTax * years) / 12)
   const localTax = Math.floor(incomeTax * 0.1)
   return {
@@ -134,22 +136,21 @@ export interface SeveranceInput {
 }
 
 export function calcSeverance(i: SeveranceInput) {
-  const join = new Date(i.joinDate)
-  const leave = new Date(i.leaveDate)
-  if (Number.isNaN(join.getTime()) || Number.isNaN(leave.getTime())) {
+  const join = parseDate(i.joinDate)
+  const leave = parseDate(i.leaveDate)
+  if (!join || !leave) {
     return { valid: false as const }
   }
 
   // 재직일수: 입사일 ~ 마지막 근무일 (양 끝 포함)
-  const serviceDays = Math.round((leave.getTime() - join.getTime()) / 86_400_000) + 1
+  const serviceDays = Math.round((leave.getTime() - join.getTime()) / DAY) + 1
   if (serviceDays <= 0) return { valid: false as const }
 
   const eligible = serviceDays >= 365
 
-  // 퇴직 전 3개월의 실제 일수
-  const threeMonthsAgo = new Date(leave)
-  threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3)
-  const periodDays = Math.round((leave.getTime() - threeMonthsAgo.getTime()) / 86_400_000)
+  // 퇴직 전 3개월의 실제 일수: 산정사유 발생일(마지막 근무일 다음 날) 기준 3개월 전(말일 보정)부터 마지막 근무일까지
+  const retireDay = new Date(leave.getFullYear(), leave.getMonth(), leave.getDate() + 1)
+  const periodDays = Math.round((retireDay.getTime() - addMonths(retireDay, -3).getTime()) / DAY)
 
   const threeMonthPay =
     i.monthlySalary * 3 + (i.annualBonus * 3) / 12 + (i.annualLeavePay * 3) / 12

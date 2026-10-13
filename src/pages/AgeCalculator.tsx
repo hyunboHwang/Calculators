@@ -1,7 +1,6 @@
 import { useMemo, useState } from 'react'
 import {
   parseDate,
-  todayStr,
   ageParts,
   koreanAges,
   zodiacAnimal,
@@ -10,12 +9,16 @@ import {
   dday,
   fmtDate,
 } from '../lib/age'
+import { useToday } from '../hooks/useToday'
 import { DateField, Row } from '../components/ui'
 
 export default function AgeCalculator() {
   const [birthStr, setBirthStr] = useState('1990-01-01')
-  const [refStr, setRefStr] = useState(todayStr())
+  const today = useToday()
+  const [refInput, setRefStr] = useState<string | null>(null) // null = 기본(오늘, 자정에 자동 갱신)
+  const refStr = refInput ?? today
 
+  const invalid = !parseDate(birthStr) || !parseDate(refStr)
   const r = useMemo(() => {
     const birth = parseDate(birthStr)
     const ref = parseDate(refStr)
@@ -57,7 +60,9 @@ export default function AgeCalculator() {
         <section className="space-y-4">
           {!r ? (
             <div className="rounded-2xl border border-red-200 bg-red-50 p-5 text-sm text-red-700">
-              날짜를 확인해주세요. 생년월일이 기준일보다 늦습니다.
+              {invalid
+                ? '생년월일과 기준일을 올바른 날짜(YYYY-MM-DD)로 입력해주세요.'
+                : '생년월일이 기준일보다 늦습니다(아직 태어나지 않은 날짜). 기준일이나 생년월일을 확인해주세요.'}
             </div>
           ) : (
             <>

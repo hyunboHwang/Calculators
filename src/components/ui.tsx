@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 
 export const fmt = (n: number) =>
-  Number.isFinite(n) ? Math.round(n).toLocaleString('ko-KR') : '-'
+  Number.isFinite(n) ? (Math.round(n) + 0).toLocaleString('ko-KR') : '-'
 
 export const fmtPct = (n: number) => (Number.isFinite(n) ? `${n.toFixed(1)}%` : '-')
 
@@ -14,6 +14,7 @@ export function Field({
   suffix = '원',
   step = 100,
   hint,
+  allowNegative = false,
 }: {
   label: string
   value: number
@@ -21,6 +22,8 @@ export function Field({
   suffix?: string
   step?: number
   hint?: string
+  /** 음수가 정당한 필드(예: 수익률)만 true. 기본은 음수를 0으로 처리 */
+  allowNegative?: boolean
 }) {
   // 입력 중에는 문자열로 관리 → 0을 지우고 빈칸 상태로 타이핑 가능
   const [text, setText] = useState(() => (Number.isFinite(value) ? String(value) : ''))
@@ -43,10 +46,14 @@ export function Field({
           step={step}
           value={text}
           onChange={(e) => {
-            const raw = e.target.value
+            let raw = e.target.value
+            let n = raw === '' ? 0 : Number(raw)
+            if (!allowNegative && n < 0) {
+              raw = '0'
+              n = 0
+            }
             setText(raw)
-            const n = raw === '' ? 0 : Number(raw)
-            if (Number.isFinite(n)) onChange(n)
+            if (Number.isFinite(n)) onChange(n + 0)
           }}
           onBlur={() => setText(Number.isFinite(value) ? String(value) : '')}
           className="w-full min-w-0 rounded-lg border border-slate-300 bg-white px-3 py-2.5 pr-11 text-right text-sm tabular-nums transition-colors hover:border-slate-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 focus:outline-none"

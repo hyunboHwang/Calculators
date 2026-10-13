@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
-import { equalMonthly, maxPrincipal } from '../lib/loan'
-import { Field, Row, fmt, fmtPct } from '../components/ui'
+import { equalMonthly, maxPrincipal, MAX_MONTHS } from '../lib/loan'
+import { Field, Row, fmt } from '../components/ui'
 
 export default function DsrCalculator() {
   const [annualIncome, setAnnualIncome] = useState(50_000_000)
@@ -12,13 +12,13 @@ export default function DsrCalculator() {
   const [stressAdd, setStressAdd] = useState(1.5)
 
   const r = useMemo(() => {
-    const months = Math.round(years * 12)
+    const months = Math.min(Math.max(Math.round(years * 12), 0), MAX_MONTHS)
     const actualMonthly = equalMonthly(newLoan, rate, months)
     const dsrRate = useStress ? rate + stressAdd : rate
     const dsrMonthly = equalMonthly(newLoan, dsrRate, months)
 
     const annualRepay = (existingMonthly + dsrMonthly) * 12
-    const dsr = annualIncome > 0 ? (annualRepay / annualIncome) * 100 : NaN
+    const dsr = annualIncome > 0 && months > 0 ? (annualRepay / annualIncome) * 100 : NaN
 
     // 은행권 DSR 40% 기준 최대 신규 대출 (스트레스 금리로 역산)
     const roomMonthly = Math.max((annualIncome * 0.4) / 12 - existingMonthly, 0)
@@ -27,10 +27,13 @@ export default function DsrCalculator() {
     return { months, actualMonthly, dsrMonthly, dsrRate, dsr, maxLoan }
   }, [annualIncome, existingMonthly, newLoan, rate, years, useStress, stressAdd])
 
-  const verdict =
-    r.dsr <= 40
+  // 표시(소수 둘째 자리)와 판정을 같은 값으로 비교
+  const dsrShown = Number.isFinite(r.dsr) ? Number(r.dsr.toFixed(2)) : NaN
+  const verdict = !Number.isFinite(dsrShown)
+    ? { label: '연소득과 기간을 입력하세요', style: 'border-slate-200 bg-slate-50', badge: 'bg-slate-500' }
+    : dsrShown <= 40
       ? { label: '은행권 가능 범위', style: 'border-emerald-200 bg-emerald-50', badge: 'bg-emerald-600' }
-      : r.dsr <= 50
+      : dsrShown <= 50
         ? { label: '은행권 초과 · 2금융권 검토', style: 'border-amber-200 bg-amber-50', badge: 'bg-amber-500' }
         : { label: '한도 초과 · 대출 곤란', style: 'border-red-200 bg-red-50', badge: 'bg-red-600' }
 
@@ -62,7 +65,7 @@ export default function DsrCalculator() {
             <Field label="신규 대출 금액" value={newLoan} onChange={setNewLoan} step={10_000_000} />
             <div className="grid grid-cols-2 gap-x-3">
               <Field label="연 금리" value={rate} onChange={setRate} suffix="%" step={0.1} />
-              <Field label="기간" value={years} onChange={setYears} suffix="년" step={1} />
+              <Field label="기간" value={years} onChange={setYears} suffix="년" step={1} hint="최대 50년" />
             </div>
             <div className="rounded-xl bg-slate-50 p-3">
               <label className="flex items-center gap-2 text-sm text-slate-700">
@@ -96,7 +99,7 @@ export default function DsrCalculator() {
               <span className={`shrink-0 rounded-full px-3 py-1 text-sm font-bold whitespace-nowrap text-white ${verdict.badge}`}>
                 {verdict.label}
               </span>
-              <span className="text-3xl font-extrabold tabular-nums">{fmtPct(r.dsr)}</span>
+              <span className="text-3xl font-extrabold tabular-nums">{Number.isFinite(dsrShown) ? `${dsrShown.toFixed(2)}%` : '-'}</span>
               <span className="text-sm text-slate-500">DSR</span>
             </div>
             <p className="mt-3 text-sm text-slate-600">

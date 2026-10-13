@@ -76,7 +76,7 @@ export interface IncomeTaxInput {
 }
 
 export function calcBizIncomeTax(i: IncomeTaxInput) {
-  const income = Math.max(i.annualSales * (1 - i.expenseRate / 100), 0) // 소득금액
+  const income = Math.max(i.annualSales * (1 - Math.min(Math.max(i.expenseRate, 0), 100) / 100), 0) // 소득금액
   const taxBase = Math.max(income - Math.max(i.dependents, 1) * 1_500_000, 0)
   const calculated = basicTax(taxBase)
   const incomeTax = Math.max(calculated - 70_000, 0) // 표준세액공제

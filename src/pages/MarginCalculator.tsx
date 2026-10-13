@@ -115,7 +115,7 @@ const verdictStyle: Record<
     label: '애매 · 조건부로만',
     badge: 'bg-amber-500',
     box: 'border-amber-200 bg-amber-50',
-    desc: '마진율 10~25% 구간입니다. 광고비를 쓰기 시작하면 적자로 전환될 수 있으니 무료 노출 위주로 팔 수 있을 때만 등록하세요.',
+    desc: '마진율 10~25% 구간이거나, 마진율은 25% 이상이어도 건당 순이익이 5,000원 미만인 경우입니다. 광고비를 쓰기 시작하면 적자로 전환될 수 있으니 무료 노출 위주로 팔 수 있을 때만 등록하세요.',
   },
   risky: {
     label: '위험 · 등록 비추천',
@@ -165,7 +165,7 @@ export default function MarginCalculator() {
               label="구매자 배송비"
               value={input.buyerShipping}
               onChange={set('buyerShipping')}
-              hint="고객이 내는 배송비"
+              hint="실제 택배비와 상계된다고 보고 수수료 계산에만 포함"
             />
             <Field label="공급가" value={input.supplyPrice} onChange={set('supplyPrice')} hint="위탁 원가" />
             <Field
