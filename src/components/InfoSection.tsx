@@ -45,18 +45,6 @@ export default function InfoSection({ pageId }: { pageId: string }) {
         }
       : null
 
-  const howToJsonLd = c.formula
-    ? {
-        '@context': 'https://schema.org',
-        '@type': 'HowTo',
-        name: c.formula.title,
-        step: c.formula.steps.map((s) => ({
-          '@type': 'HowToStep',
-          text: stripStepNumber(s),
-        })),
-      }
-    : null
-
   return (
     <div className="mt-14 border-t border-slate-200 pt-8">
       {c.verification && (
@@ -168,7 +156,7 @@ export default function InfoSection({ pageId }: { pageId: string }) {
         </section>
       )}
 
-      <AdSlot key={`${pageId}-article`} slot={SLOTS.inArticle} className="my-8" />
+      <AdSlot key={`${pageId}-article`} slot={SLOTS.inArticle} className="my-8 min-h-[280px]" />
 
       {c.glossary && c.glossary.length > 0 && (
         <section className="mt-8">
@@ -304,12 +292,6 @@ export default function InfoSection({ pageId }: { pageId: string }) {
         </section>
       )}
 
-      {howToJsonLd && (
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(howToJsonLd) }}
-        />
-      )}
       {faqJsonLd && (
         <script
           type="application/ld+json"

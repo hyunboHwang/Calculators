@@ -1,6 +1,7 @@
 import { lazy, Suspense, useEffect, useState } from 'react'
 import routes from './routes.json'
 import GROUP_ORDER from './groups.json'
+import popularLinks from './popularLinks.json'
 import AdSlot from './components/AdSlot'
 import InfoSection from './components/InfoSection'
 import Sidebar, { MenuLink } from './components/Sidebar'
@@ -111,8 +112,8 @@ function useSeo(route: (typeof routes)[number]) {
     document
       .querySelector('meta[name="description"]')
       ?.setAttribute('content', route.description)
-    const url =
-      window.location.origin + (route.path === '/' ? '/' : `${route.path}/`)
+    // 접속 호스트(apex/www)와 무관하게 정식 호스트로 고정 — postbuild의 정적 canonical과 일치
+    const url = 'https://www.calculators.ai.kr' + (route.path === '/' ? '/' : `${route.path}/`)
     document.querySelector('link[rel="canonical"]')?.setAttribute('href', url)
     document.querySelector('meta[property="og:title"]')?.setAttribute('content', route.title)
     document
@@ -271,6 +272,31 @@ function App() {
 
           {!hideChrome && (
             <footer className="mt-14 border-t border-slate-200 pt-5 pb-2 text-xs text-slate-400">
+              {(
+                [
+                  ['인기 계산기', popularLinks.calculators],
+                  ['인기 가이드', popularLinks.guides],
+                ] as const
+              ).map(([title, ids]) => (
+                <nav key={title} aria-label={title} className="mb-3 flex flex-wrap items-center gap-x-3 gap-y-1.5">
+                  <span className="font-semibold text-slate-500">{title}</span>
+                  {routes
+                    .filter((r) => (ids as readonly string[]).includes(r.id) && r.id !== route.id)
+                    .map((r) => (
+                      <a
+                        key={r.id}
+                        href={`${r.path === '/' ? '' : r.path}/`}
+                        onClick={(e) => {
+                          e.preventDefault()
+                          navigate(r.path)
+                        }}
+                        className="text-slate-500 underline decoration-slate-300 underline-offset-2 hover:text-slate-700"
+                      >
+                        {r.label}
+                      </a>
+                    ))}
+                </nav>
+              ))}
               <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
                 {routes
                   .filter((r) => r.group === '정보')

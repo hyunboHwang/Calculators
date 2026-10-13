@@ -1,0 +1,22 @@
+{
+  "calculators": [
+    "salary",
+    "salaryTable",
+    "severance",
+    "yearEndTax",
+    "unemployment",
+    "partTime",
+    "acquisitionTax",
+    "comprehensiveRealEstateTax",
+    "loan",
+    "pensionTaxCredit"
+  ],
+  "guides": [
+    "guidesIndex",
+    "yearEndTaxProcedureGuide",
+    "unemploymentApplicationGuide",
+    "holdingTaxGuide",
+    "youthRentSubsidyGuide",
+    "glossaryHub"
+  ]
+}

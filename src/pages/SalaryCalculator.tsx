@@ -46,13 +46,13 @@ export default function SalaryCalculator() {
                 key={p}
                 type="button"
                 onClick={() => set('annualSalary')(p)}
-                className={`rounded-full border px-2.5 py-1 text-xs font-medium transition-colors ${
+                className={`min-h-11 rounded-full border px-3.5 text-sm font-medium transition-colors ${
                   input.annualSalary === p
                     ? 'border-emerald-600 bg-emerald-600 text-white'
                     : 'border-slate-200 text-slate-500 hover:bg-slate-100'
                 }`}
               >
-                {p / 10_000_000}천만
+                {p >= 100_000_000 ? `${p / 100_000_000}억` : `${p / 10_000_000}천만`}
               </button>
             ))}
           </div>

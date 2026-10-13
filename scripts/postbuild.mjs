@@ -13,6 +13,10 @@ import { pageContent } from '../src/lib/pageContent.js'
 import { buildSalaryTable } from '../src/lib/salary.ts'
 import { buildGlossaryIndex } from '../src/lib/glossaryIndex.ts'
 
+const popularLinks = JSON.parse(
+  readFileSync(new URL('../src/popularLinks.json', import.meta.url), 'utf8'),
+)
+
 const SITE_URL = 'https://www.calculators.ai.kr'
 
 const dist = new URL('../dist', import.meta.url).pathname
@@ -36,7 +40,10 @@ function prerenderBody(route) {
   let html = `<div class="mx-auto max-w-3xl px-4 py-8 text-sm leading-relaxed text-slate-600">`
   html += `<h1 class="text-2xl font-bold text-slate-900">${esc(h1)}</h1>`
   html += `<p class="mt-2">${esc(route.description)}</p>`
-  if (c?.updatedAt) html += `<p class="mt-1 text-xs">최종 업데이트: ${esc(c.updatedAt.replaceAll('-', '. '))}.</p>`
+  if (c?.updatedAt) {
+    html += `<p class="mt-1 text-xs">최종 업데이트: ${esc(c.updatedAt.replaceAll('-', '. '))}.</p>`
+    html += `<p class="mt-1 text-xs">작성·운영: 계산기 운영자(1인 개발자) · <a href="/about/">운영자 소개</a> · <a href="/verification/">검증 방식</a></p>`
+  }
 
   if (c) {
     if (c.operatorIntro?.length) {
@@ -115,6 +122,13 @@ function prerenderBody(route) {
             `<h3 class="mt-3 font-semibold text-slate-800">${esc(f.q)}</h3><p class="mt-1">${esc(f.a)}</p>`,
         )
         .join('')
+    }
+
+    if (c.changelog?.length) {
+      html += `<h2 class="mt-6 text-lg font-bold text-slate-900">변경 이력</h2>`
+      html += `<ul class="mt-2 list-disc pl-5">`
+      html += c.changelog.map((l) => `<li class="mt-1">${esc(l.date)} — ${esc(l.text)}</li>`).join('')
+      html += `</ul>`
     }
 
     if (c.sources?.length) {
@@ -206,8 +220,77 @@ function prerenderBody(route) {
       html += `</nav>`
     }
   }
+  // 전 페이지 공통 인기 링크 — 사이트 전체의 내부 링크 허브 (App.tsx 푸터와 같은 목록)
+  for (const [title, ids] of [
+    ['인기 계산기', popularLinks.calculators],
+    ['인기 가이드', popularLinks.guides],
+  ]) {
+    const links = routes.filter((r) => ids.includes(r.id) && r.id !== route.id)
+    html += `<nav class="mt-4 text-xs" aria-label="${title}"><b>${title}</b> `
+    html += links.map((r) => `<a href="${urlOf(r.path)}">${esc(r.label)}</a>`).join(' · ')
+    html += `</nav>`
+  }
   html += `</div>`
   return html
+}
+
+const NON_CALCULATOR_GROUPS = ['가이드', '정보', '용어사전', '게임']
+
+function jsonLdFor(route) {
+  const pageUrl = SITE_URL + urlOf(route.path)
+  const name = route.title.split(' | ')[0]
+  const org = {
+    '@type': 'Organization',
+    name: '계산기',
+    url: `${SITE_URL}/`,
+    logo: `${SITE_URL}/favicon.svg`,
+  }
+  const graph = []
+  if (route.path === '/') {
+    graph.push({ '@type': 'WebSite', name: '계산기', url: `${SITE_URL}/`, inLanguage: 'ko' }, org)
+  } else {
+    const crumbs = [{ name: '홈', url: `${SITE_URL}/` }]
+    if (route.group === '가이드' && route.id !== 'guidesIndex') {
+      crumbs.push({ name: '가이드', url: `${SITE_URL}/guides/` })
+    }
+    crumbs.push({ name, url: pageUrl })
+    graph.push({
+      '@type': 'BreadcrumbList',
+      itemListElement: crumbs.map((c, i) => ({
+        '@type': 'ListItem',
+        position: i + 1,
+        name: c.name,
+        item: c.url,
+      })),
+    })
+  }
+  if (!NON_CALCULATOR_GROUPS.includes(route.group)) {
+    graph.push({
+      '@type': 'WebApplication',
+      name,
+      url: pageUrl,
+      description: route.description,
+      applicationCategory: 'FinanceApplication',
+      operatingSystem: 'Web',
+      inLanguage: 'ko',
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'KRW' },
+    })
+  }
+  const updatedAt = pageContent[route.id]?.updatedAt
+  if (route.group === '가이드' && updatedAt) {
+    graph.push({
+      '@type': 'Article',
+      headline: name,
+      description: route.description,
+      inLanguage: 'ko',
+      mainEntityOfPage: pageUrl,
+      dateModified: updatedAt,
+      author: { '@type': 'Organization', name: '계산기 운영자', url: `${SITE_URL}/about/` },
+      publisher: org,
+    })
+  }
+  const json = JSON.stringify({ '@context': 'https://schema.org', '@graph': graph })
+  return `<script type="application/ld+json">${json.replace(/</g, '\\u003c')}</script>`
 }
 
 // meta 태그가 여러 줄로 포맷팅된 경우 대비: 개행 포함 매칭
@@ -236,10 +319,9 @@ function renderHead(html, route) {
 }
 
 for (const route of routes) {
-  const html = renderHead(template, route).replace(
-    '<div id="root"></div>',
-    `<div id="root">${prerenderBody(route)}</div>`,
-  )
+  const html = renderHead(template, route)
+    .replace('</head>', `${jsonLdFor(route)}\n  </head>`)
+    .replace('<div id="root"></div>', `<div id="root">${prerenderBody(route)}</div>`)
   if (route.path === '/') {
     writeFileSync(join(dist, 'index.html'), html)
   } else {
@@ -251,20 +333,42 @@ for (const route of routes) {
 }
 
 // sitemap.xml
-const today = new Date().toISOString().slice(0, 10)
 const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${routes
   .filter((r) => !r.noindex)
   .map((r) => {
     const url = SITE_URL + (r.path === '/' ? '/' : `${r.path}/`)
-    return `  <url>\n    <loc>${url}</loc>\n    <lastmod>${today}</lastmod>\n    <changefreq>monthly</changefreq>\n  </url>`
+    const c = pageContent[r.id]
+    const lastmod = c?.updatedAt ?? c?.verification?.lastVerified
+    return `  <url>\n    <loc>${url}</loc>\n${lastmod ? `    <lastmod>${lastmod}</lastmod>\n` : ''}  </url>`
   })
   .join('\n')}
 </urlset>
 `
 writeFileSync(join(dist, 'sitemap.xml'), sitemap)
 console.log('✓ sitemap.xml')
+
+// 404.html — 앱 번들 없이 정적으로, 색인 제외
+writeFileSync(
+  join(dist, '404.html'),
+  `<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex" />
+    <title>페이지를 찾을 수 없습니다 | 계산기</title>
+  </head>
+  <body style="font-family:system-ui,sans-serif;max-width:32rem;margin:4rem auto;padding:0 1rem;line-height:1.7">
+    <h1>페이지를 찾을 수 없습니다</h1>
+    <p>주소가 바뀌었거나 존재하지 않는 페이지입니다.</p>
+    <p><a href="/">계산기 홈</a> · <a href="/guides/">가이드</a> · <a href="/salary/">연봉 실수령액 계산기</a></p>
+  </body>
+</html>
+`,
+)
+console.log('✓ 404.html')
 
 // robots.txt
 writeFileSync(
