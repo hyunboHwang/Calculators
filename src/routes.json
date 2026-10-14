@@ -360,6 +360,14 @@
     "description": "사다리차·포장이사·청소·가전 이전설치·폐기물 처리 등 이사비용 항목을 입력하면 총 이사비용을 계산합니다."
   },
   {
+    "id": "generalCalculator",
+    "path": "/calculator",
+    "label": "일반 계산기",
+    "group": "생활",
+    "title": "일반 계산기 — 괄호·퍼센트·거듭제곱·제곱근 한 줄 수식 계산 | 계산기",
+    "description": "괄호, 사칙연산, 거듭제곱(^), 퍼센트(%), 제곱근을 한 줄 수식으로 계산하는 무료 웹 계산기입니다. 계산 기록과 직전 결과(Ans), 키보드 입력을 지원합니다."
+  },
+  {
     "id": "pensionTaxCredit",
     "path": "/pension-tax-credit",
     "label": "연금저축·IRP 세액공제",

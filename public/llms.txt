@@ -12,6 +12,7 @@
 - [실업급여 계산기](https://www.calculators.ai.kr/unemployment/)
 - [취득세 계산기](https://www.calculators.ai.kr/acquisition-tax/)
 - [종합부동산세 계산기](https://www.calculators.ai.kr/comprehensive-real-estate-tax/)
+- [일반 계산기(괄호·퍼센트·거듭제곱·제곱근)](https://www.calculators.ai.kr/calculator/)
 
 ## 가이드
 - [가이드 전체 목록](https://www.calculators.ai.kr/guides/)

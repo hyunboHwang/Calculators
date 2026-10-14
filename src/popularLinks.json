@@ -9,7 +9,8 @@
     "acquisitionTax",
     "comprehensiveRealEstateTax",
     "loan",
-    "pensionTaxCredit"
+    "pensionTaxCredit",
+    "generalCalculator"
   ],
   "guides": [
     "guidesIndex",
