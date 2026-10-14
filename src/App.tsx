@@ -194,6 +194,21 @@ function App() {
               aria-label="계산기 메뉴"
             >
               <a
+                href="/calculator/"
+                onClick={(e) => {
+                  e.preventDefault()
+                  handleNavigate('/calculator')
+                }}
+                aria-current={route.id === 'generalCalculator' ? 'page' : undefined}
+                className={`mb-2 flex items-center gap-1.5 rounded-lg border px-3 py-2 text-sm font-medium ${
+                  route.id === 'generalCalculator'
+                    ? 'border-emerald-500 bg-emerald-50 text-emerald-700'
+                    : 'border-slate-200 text-slate-600'
+                }`}
+              >
+                🧮 일반 계산기
+              </a>
+              <a
                 href="/guides/"
                 onClick={(e) => {
                   e.preventDefault()
@@ -245,7 +260,22 @@ function App() {
               </a>
               <p className="mt-1.5 text-xs text-slate-400">돈·나이·날짜 계산부터 생활 가이드까지, 한곳에서</p>
             </div>
-            <div className="px-5 pb-3">
+            <div className="space-y-2 px-5 pb-3">
+              <a
+                href="/calculator/"
+                onClick={(e) => {
+                  e.preventDefault()
+                  navigate('/calculator')
+                }}
+                aria-current={route.id === 'generalCalculator' ? 'page' : undefined}
+                className={`flex items-center gap-1.5 rounded-lg border px-3 py-2 text-sm font-medium transition-colors ${
+                  route.id === 'generalCalculator'
+                    ? 'border-emerald-500 bg-emerald-50 text-emerald-700'
+                    : 'border-slate-200 text-slate-600 hover:border-emerald-300 hover:bg-emerald-50/40'
+                }`}
+              >
+                🧮 일반 계산기
+              </a>
               <a
                 href="/guides/"
                 onClick={(e) => {
