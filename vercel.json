@@ -2,10 +2,10 @@
   "trailingSlash": true,
   "redirects": [
     {
-      "source": "/(.*)",
+      "source": "/((?!ads\\.txt$).*)",
       "has": [{ "type": "host", "value": "calculators.ai.kr" }],
       "destination": "https://www.calculators.ai.kr/$1",
-      "permanent": true
+      "statusCode": 301
     }
   ],
   "headers": [
