@@ -1,15 +1,12 @@
 {
   "calculators": [
     "salary",
-    "salaryTable",
     "severance",
     "yearEndTax",
     "unemployment",
-    "partTime",
     "acquisitionTax",
     "comprehensiveRealEstateTax",
     "loan",
-    "pensionTaxCredit",
     "generalCalculator"
   ],
   "guides": [

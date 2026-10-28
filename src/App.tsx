@@ -9,7 +9,6 @@ import { loadAnalytics, trackPageView } from './lib/analytics'
 
 /** 라우트별 코드 스플리팅: 방문한 계산기의 JS만 내려받도록 지연 로드 */
 const components: Record<string, React.LazyExoticComponent<() => React.JSX.Element>> = {
-  home: lazy(() => import('./pages/HomePage')),
   margin: lazy(() => import('./pages/MarginCalculator')),
   bizTax: lazy(() => import('./pages/BizTaxCalculator')),
   salary: lazy(() => import('./pages/SalaryCalculator')),
@@ -79,7 +78,7 @@ const components: Record<string, React.LazyExoticComponent<() => React.JSX.Eleme
   yutnori: lazy(() => import('./pages/YutnoriGame')),
 }
 const TopicPage = lazy(() => import('./pages/TopicPage'))
-const DEFAULT_PAGE = components.home
+const HomePage = lazy(() => import('./pages/HomePage'))
 
 /** 끝 슬래시 제거 정규화 */
 const normalize = (p: string) => p.replace(/\/+$/, '') || '/'
@@ -130,7 +129,7 @@ function App() {
   const { route, navigate } = useRoute()
   useSeo(route)
   useEffect(loadAdsense, []) // 자동 광고 (ADSENSE_CLIENT 설정 시에만 동작)
-  const Current = components[route.id] ?? DEFAULT_PAGE
+  const Current = components[route.id]
   const hideChrome = route.group === '게임' // 숨김 페이지(예: 윷놀이)는 좌측 메뉴·광고 없이 전체 폭으로 렌더
 
   return (
@@ -138,7 +137,13 @@ function App() {
       {!hideChrome && <Masthead activeRouteId={route.id} onNavigate={navigate} />}
       <main className={hideChrome ? 'min-w-0 px-4 py-6 sm:px-6 sm:py-8' : 'mx-auto max-w-5xl px-4 py-8'}>
         <Suspense fallback={<div className="h-40 animate-pulse bg-tint" />}>
-          {route.group === '주제' ? <TopicPage pageId={route.id} navigate={navigate} /> : <Current />}
+          {route.group === '주제' ? (
+            <TopicPage pageId={route.id} navigate={navigate} />
+          ) : route.id === 'home' ? (
+            <HomePage navigate={navigate} />
+          ) : (
+            <Current />
+          )}
         </Suspense>
         {!hideChrome && <AdSlot key={`${route.id}-mid`} slot={SLOTS.belowResult} />}
         {route.group !== '가이드' && route.group !== '주제' && <InfoSection pageId={route.id} />}
