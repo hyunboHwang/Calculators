@@ -29,7 +29,7 @@ const stripStepNumber = (s: string) => s.replace(/^\d+\.\s+/, '')
  * 페이지 하단 설명 + FAQ 섹션.
  * FAQ는 구글 리치 결과용 FAQPage JSON-LD로, formula는 HowTo JSON-LD로도 출력됩니다.
  */
-export default function InfoSection({ pageId }: { pageId: string }) {
+export default function InfoSection({ pageId, guide = false }: { pageId: string; guide?: boolean }) {
   const c = content[pageId]
   if (!c || c.hidden) return null
   const tables = tablesFor(pageId)
@@ -48,44 +48,42 @@ export default function InfoSection({ pageId }: { pageId: string }) {
       : null
 
   return (
-    <div className="mt-14 border-t border-slate-200 pt-8">
+    <div className={guide ? 'mt-6' : 'mt-14 border-t border-ink pt-8'}>
       {c.verification && (
-        <section className="mb-8 rounded-2xl border border-emerald-200 bg-emerald-50/40 p-5">
-          <h2 className="flex items-center gap-2 text-base font-bold text-slate-800">
-            <span aria-hidden="true">🔎</span> 계산 기준
-          </h2>
-          <dl className="mt-3 space-y-1.5 text-sm">
+        <section className="mb-8 border-l-[3px] border-accent bg-tint px-4 py-3">
+          <h2 className="font-serif text-base font-bold text-ink">계산 기준</h2>
+          <dl className="mt-3 space-y-1.5 text-[13px] leading-[1.7]">
             <div className="flex gap-2">
-              <dt className="w-24 shrink-0 text-slate-500">적용 기준</dt>
-              <dd className="text-slate-700">{c.verification.basis}</dd>
+              <dt className="w-24 shrink-0 text-muted">적용 기준</dt>
+              <dd className="text-body">{c.verification.basis}</dd>
             </div>
             <div className="flex gap-2">
-              <dt className="w-24 shrink-0 text-slate-500">마지막 검증</dt>
-              <dd className="text-slate-700">{c.verification.lastVerified}</dd>
+              <dt className="w-24 shrink-0 text-muted">마지막 검증</dt>
+              <dd className="text-body">{c.verification.lastVerified}</dd>
             </div>
             {c.sources && c.sources.length > 0 && (
               <div className="flex gap-2">
-                <dt className="w-24 shrink-0 text-slate-500">공식 자료</dt>
-                <dd className="text-slate-700">{c.sources.map((s) => s.label).join(' / ')}</dd>
+                <dt className="w-24 shrink-0 text-muted">공식 자료</dt>
+                <dd className="text-body">{c.sources.map((s) => s.label).join(' / ')}</dd>
               </div>
             )}
             <div className="flex gap-2">
-              <dt className="w-24 shrink-0 text-slate-500">계산 대상</dt>
-              <dd className="text-slate-700">{c.verification.scope}</dd>
+              <dt className="w-24 shrink-0 text-muted">계산 대상</dt>
+              <dd className="text-body">{c.verification.scope}</dd>
             </div>
             <div className="flex gap-2">
-              <dt className="w-24 shrink-0 text-slate-500">제외 사항</dt>
-              <dd className="text-slate-700">{c.verification.excludes}</dd>
+              <dt className="w-24 shrink-0 text-muted">제외 사항</dt>
+              <dd className="text-body">{c.verification.excludes}</dd>
             </div>
           </dl>
 
           {verificationSteps.length > 0 && (
-            <details className="group mt-4 rounded-lg border border-emerald-200 bg-white p-3">
-              <summary className="cursor-pointer list-none text-sm font-semibold text-slate-700 marker:content-none">
+            <details className="group mt-4 border border-rule bg-paper p-3">
+              <summary className="cursor-pointer list-none text-sm font-semibold text-ink marker:content-none">
                 이 계산기는 어떻게 검증했나요?{' '}
-                <span className="text-emerald-600 transition-transform group-open:rotate-180">▾</span>
+                <span className="text-accent transition-transform group-open:rotate-180">▾</span>
               </summary>
-              <ol className="mt-2 list-decimal space-y-1 pl-5 text-xs leading-relaxed text-slate-600">
+              <ol className="mt-2 list-decimal space-y-1 pl-5 text-xs leading-relaxed text-body">
                 {verificationSteps.map((s, i) => (
                   <li key={i}>
                     <b>{s.title}</b> — {s.desc}
@@ -94,7 +92,7 @@ export default function InfoSection({ pageId }: { pageId: string }) {
               </ol>
               <a
                 href="/verification/"
-                className="mt-2 inline-block text-xs font-medium text-emerald-700 underline decoration-emerald-300 underline-offset-2 hover:text-emerald-800"
+                className="mt-2 inline-block text-xs font-medium text-accent underline underline-offset-2"
               >
                 전체 검증 방식·실제 수정 사례 보기 →
               </a>
@@ -106,33 +104,31 @@ export default function InfoSection({ pageId }: { pageId: string }) {
       {c.highlights && c.highlights.length > 0 && (
         <section className="mb-8 grid grid-cols-2 gap-3">
           {c.highlights.map((h, i) => (
-            <div key={i} className="rounded-xl border border-slate-200 bg-white p-3">
+            <div key={i} className="border border-rule p-3">
               <span className="text-base" aria-hidden="true">
                 {h.icon}
               </span>
-              <p className="mt-1 text-xs font-bold text-slate-800">{h.label}</p>
-              <p className="mt-0.5 text-xs leading-relaxed text-slate-500">{h.text}</p>
+              <p className="mt-1 text-xs font-bold text-ink">{h.label}</p>
+              <p className="mt-0.5 text-xs leading-relaxed text-muted">{h.text}</p>
             </div>
           ))}
         </section>
       )}
 
       <section>
-        <h2 className="flex items-center gap-2 text-lg font-bold">
-          <span className="h-4 w-1 rounded-full bg-emerald-500" aria-hidden="true" />
-          알아두면 좋은 것
+        <h2 className="font-serif text-lg font-bold text-ink">
+            알아두면 좋은 것
         </h2>
         {c.intro.map((p, i) => (
-          <p key={i} className="mt-3 text-sm leading-relaxed text-slate-600">
+          <p key={i} className="mt-3 text-[15px] leading-[1.9] text-body">
             {p}
           </p>
         ))}
       </section>
 
       {c.formula && (
-        <section className="mt-8">
-          <h2 className="flex items-center gap-2 text-lg font-bold">
-            <span className="h-4 w-1 rounded-full bg-emerald-500" aria-hidden="true" />
+        <section className="mt-8 border-t border-rule pt-6">
+          <h2 className="font-serif text-lg font-bold text-ink">
             {c.formula.title}
           </h2>
           {c.stepChips && c.stepChips.length > 0 && (
@@ -140,7 +136,7 @@ export default function InfoSection({ pageId }: { pageId: string }) {
               {c.stepChips.map((chip, i) => (
                 <span
                   key={i}
-                  className="shrink-0 whitespace-nowrap rounded-lg bg-slate-800 px-3 py-1.5 text-xs font-semibold text-white"
+                  className="shrink-0 whitespace-nowrap border border-ink px-3 py-1.5 text-xs font-semibold text-ink"
                 >
                   <span aria-hidden="true">{chip.icon}</span> {chip.label}
                 </span>
@@ -149,8 +145,8 @@ export default function InfoSection({ pageId }: { pageId: string }) {
           )}
           <ol className={c.stepChips && c.stepChips.length > 0 ? 'mt-4 space-y-2' : 'mt-3 space-y-2'}>
             {c.formula.steps.map((step, i) => (
-              <li key={i} className="flex gap-2 text-sm leading-relaxed text-slate-600">
-                <span className="shrink-0 font-semibold text-emerald-600">{i + 1}.</span>
+              <li key={i} className="flex gap-2 text-sm leading-relaxed text-body">
+                <span className="shrink-0 font-semibold text-accent">{i + 1}.</span>
                 <span>{stripStepNumber(step)}</span>
               </li>
             ))}
@@ -162,10 +158,10 @@ export default function InfoSection({ pageId }: { pageId: string }) {
 
       {tables.map((t) => (
         <section key={t.title} className="mt-8">
-          <h2 className="text-lg font-bold text-slate-800">{t.title}</h2>
-          <div className="mt-3 overflow-x-auto rounded-xl border border-slate-200">
+          <h2 className="font-serif text-lg font-bold text-ink">{t.title}</h2>
+          <div className="mt-3 overflow-x-auto border border-rule">
             <table className="w-full min-w-max text-left text-sm">
-              <thead className="bg-slate-50 text-xs text-slate-500">
+              <thead className="bg-tint text-xs text-muted">
                 <tr>
                   {t.headers.map((h) => (
                     <th key={h} className="px-3 py-2 font-semibold">
@@ -174,7 +170,7 @@ export default function InfoSection({ pageId }: { pageId: string }) {
                   ))}
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100 text-slate-700">
+              <tbody className="divide-y divide-rule text-body">
                 {t.rows.map((row, i) => (
                   <tr key={i}>
                     {row.map((cell, j) => (
@@ -187,21 +183,20 @@ export default function InfoSection({ pageId }: { pageId: string }) {
               </tbody>
             </table>
           </div>
-          {t.note && <p className="mt-2 text-xs text-slate-500">{t.note}</p>}
+          {t.note && <p className="mt-2 text-xs text-muted">{t.note}</p>}
         </section>
       ))}
 
       {c.glossary && c.glossary.length > 0 && (
-        <section className="mt-8">
-          <h2 className="flex items-center gap-2 text-lg font-bold">
-            <span className="h-4 w-1 rounded-full bg-emerald-500" aria-hidden="true" />
+        <section className="mt-8 border-t border-rule pt-6">
+          <h2 className="font-serif text-lg font-bold text-ink">
             용어 설명
           </h2>
           <dl className="mt-3 space-y-3">
             {c.glossary.map((g) => (
               <div key={g.term}>
-                <dt className="text-sm font-semibold text-slate-800">{g.term}</dt>
-                <dd className="mt-1 text-sm leading-relaxed text-slate-600">{g.definition}</dd>
+                <dt className="text-sm font-semibold text-ink">{g.term}</dt>
+                <dd className="mt-1 text-sm leading-relaxed text-body">{g.definition}</dd>
               </div>
             ))}
           </dl>
@@ -209,16 +204,15 @@ export default function InfoSection({ pageId }: { pageId: string }) {
       )}
 
       {c.examples && c.examples.length > 0 && (
-        <section className="mt-8">
-          <h2 className="flex items-center gap-2 text-lg font-bold">
-            <span className="h-4 w-1 rounded-full bg-emerald-500" aria-hidden="true" />
+        <section className="mt-8 border-t border-rule pt-6">
+          <h2 className="font-serif text-lg font-bold text-ink">
             숫자로 보는 예시
           </h2>
           <div className="mt-3 space-y-2">
             {c.examples.map((ex, i) => (
-              <div key={i} className="rounded-xl border border-slate-200 bg-white p-4">
-                <p className="text-sm font-semibold text-slate-800">{ex.title}</p>
-                <p className="mt-1 text-sm leading-relaxed text-slate-600">{ex.result}</p>
+              <div key={i} className="border border-rule p-4">
+                <p className="text-sm font-semibold text-ink">{ex.title}</p>
+                <p className="mt-1 text-sm leading-relaxed text-body">{ex.result}</p>
               </div>
             ))}
           </div>
@@ -226,27 +220,26 @@ export default function InfoSection({ pageId }: { pageId: string }) {
       )}
 
       {c.faqs.length > 0 && (
-        <section className="mt-8">
-          <h2 className="flex items-center gap-2 text-lg font-bold">
-            <span className="h-4 w-1 rounded-full bg-emerald-500" aria-hidden="true" />
+        <section className="mt-8 border-t border-rule pt-6">
+          <h2 className="font-serif text-lg font-bold text-ink">
             자주 묻는 질문
           </h2>
           <div className="mt-3 space-y-2">
             {c.faqs.map((f) => (
               <details
                 key={f.q}
-                className="group rounded-xl border border-slate-200 bg-white p-4 transition-colors open:border-emerald-200 open:bg-emerald-50/30"
+                className="group border border-rule p-4 open:bg-tint"
               >
-                <summary className="flex cursor-pointer list-none items-start justify-between gap-3 text-sm font-semibold text-slate-800 marker:content-none">
+                <summary className="flex cursor-pointer list-none items-start justify-between gap-3 text-sm font-semibold text-ink marker:content-none">
                   <span>
-                    <span className="mr-1.5 text-emerald-600">Q.</span>
+                    <span className="mr-1.5 text-accent">Q.</span>
                     {f.q}
                   </span>
                   <svg
                     viewBox="0 0 20 20"
                     fill="currentColor"
                     aria-hidden="true"
-                    className="mt-0.5 h-4 w-4 shrink-0 text-slate-400 transition-transform group-open:rotate-180"
+                    className="mt-0.5 h-4 w-4 shrink-0 text-muted transition-transform group-open:rotate-180"
                   >
                     <path
                       fillRule="evenodd"
@@ -255,7 +248,7 @@ export default function InfoSection({ pageId }: { pageId: string }) {
                     />
                   </svg>
                 </summary>
-                <p className="mt-2 pl-6 text-sm leading-relaxed text-slate-600">{f.a}</p>
+                <p className="mt-2 pl-6 text-sm leading-relaxed text-body">{f.a}</p>
               </details>
             ))}
           </div>
@@ -263,9 +256,8 @@ export default function InfoSection({ pageId }: { pageId: string }) {
       )}
 
       {c.sources && c.sources.length > 0 && (
-        <section className="mt-8">
-          <h2 className="flex items-center gap-2 text-lg font-bold">
-            <span className="h-4 w-1 rounded-full bg-emerald-500" aria-hidden="true" />
+        <section className="mt-8 border-t border-rule pt-6">
+          <h2 className="font-serif text-lg font-bold text-ink">
             참고 자료
           </h2>
           <ul className="mt-3 space-y-1">
@@ -275,7 +267,7 @@ export default function InfoSection({ pageId }: { pageId: string }) {
                   href={s.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-sm text-emerald-700 underline decoration-emerald-300 underline-offset-2 hover:text-emerald-800"
+                  className="text-sm text-accent underline underline-offset-2"
                 >
                   {s.label} ↗
                 </a>
@@ -286,16 +278,14 @@ export default function InfoSection({ pageId }: { pageId: string }) {
       )}
 
       {c.relatedGuides && c.relatedGuides.length > 0 && (
-        <section className="mt-8 rounded-2xl border border-emerald-200 bg-emerald-50/40 p-5">
-          <h2 className="flex items-center gap-2 text-base font-bold text-slate-800">
-            <span aria-hidden="true">📖</span> 관련 가이드
-          </h2>
+        <section className="mt-8 border-t border-ink pt-6">
+          <h2 className="font-serif text-lg font-bold text-ink">관련 가이드</h2>
           <ul className="mt-3 space-y-1">
             {c.relatedGuides.map((g) => (
               <li key={g.path}>
                 <a
                   href={`${g.path}/`}
-                  className="text-sm font-medium text-emerald-700 underline decoration-emerald-300 underline-offset-2 hover:text-emerald-800"
+                  className="text-sm font-medium text-accent underline underline-offset-2"
                 >
                   {g.label} →
                 </a>
@@ -306,16 +296,14 @@ export default function InfoSection({ pageId }: { pageId: string }) {
       )}
 
       {c.relatedCalculators && c.relatedCalculators.length > 0 && (
-        <section className="mt-8 rounded-2xl border border-emerald-200 bg-emerald-50/40 p-5">
-          <h2 className="flex items-center gap-2 text-base font-bold text-slate-800">
-            <span aria-hidden="true">🧮</span> 관련 계산기
-          </h2>
+        <section className="mt-8 border-t border-ink pt-6">
+          <h2 className="font-serif text-lg font-bold text-ink">관련 계산기</h2>
           <ul className="mt-3 space-y-1">
             {c.relatedCalculators.map((cal) => (
               <li key={cal.path}>
                 <a
                   href={`${cal.path}/`}
-                  className="text-sm font-medium text-emerald-700 underline decoration-emerald-300 underline-offset-2 hover:text-emerald-800"
+                  className="text-sm font-medium text-accent underline underline-offset-2"
                 >
                   {cal.label} →
                 </a>
