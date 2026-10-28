@@ -79,6 +79,7 @@ const components: Record<string, React.LazyExoticComponent<() => React.JSX.Eleme
   privacy: lazy(() => import('./pages/PrivacyPage')),
   yutnori: lazy(() => import('./pages/YutnoriGame')),
 }
+const TopicPage = lazy(() => import('./pages/TopicPage'))
 const DEFAULT_PAGE = components.home
 
 /** 사이드바 그룹 표시 순서 ('정보' 그룹은 푸터에만 노출) */
@@ -297,10 +298,10 @@ function App() {
 
         <main className="min-w-0 flex-1 px-4 py-6 sm:px-6 sm:py-8 lg:px-10">
           <Suspense fallback={<div className="h-40 animate-pulse rounded-2xl bg-slate-100" />}>
-            <Current />
+            {route.group === '주제' ? <TopicPage pageId={route.id} navigate={navigate} /> : <Current />}
           </Suspense>
           {!hideChrome && <AdSlot key={`${route.id}-mid`} slot={SLOTS.belowResult} />}
-          {route.group !== '가이드' && <InfoSection pageId={route.id} />}
+          {route.group !== '가이드' && route.group !== '주제' && <InfoSection pageId={route.id} />}
           {!hideChrome && <AdSlot key={`${route.id}-bottom`} slot={SLOTS.bottomOfPage} />}
 
           {!hideChrome && (

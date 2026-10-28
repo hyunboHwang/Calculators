@@ -1,5 +1,6 @@
 // 모든 가이드·계산기 라우트가 정확히 한 주제에 속하는지 검사. 새 계산기/가이드 추가 시 topics.json 갱신 필요.
 import { readFileSync } from 'node:fs'
+import { pageContent } from '../src/lib/pageContent.js'
 
 const read = (p) => JSON.parse(readFileSync(new URL(p, import.meta.url), 'utf8'))
 const routes = read('../src/routes.json')
@@ -27,5 +28,20 @@ if (dup.length) errs.push(`중복: ${dup}`)
 if (unknown.length) errs.push(`routes에 없는 id: ${unknown}`)
 if (missing.length) errs.push(`누락: ${missing}`)
 if (extra.length) errs.push(`주제 대상이 아닌 id: ${extra}`)
+
+// 허브 라우트: topics와 1:1, id/path 일관성, 본문 존재
+const hubs = routes.filter((r) => r.group === '주제')
+if (hubs.length !== topics.length) errs.push(`허브 라우트 ${hubs.length}개 (주제 ${topics.length}개)`)
+for (const t of topics) {
+  const rid = 'topic' + t.id[0].toUpperCase() + t.id.slice(1)
+  if (t.path !== '/topics/' + t.slug) errs.push(`${t.id}: path ${t.path}`)
+  if (t.id !== t.slug) errs.push(`${t.id}: slug ${t.slug}`)
+  const h = hubs.find((r) => r.id === rid)
+  if (!h) { errs.push(`허브 라우트 없음: ${rid}`); continue }
+  if (h.path !== t.path) errs.push(`${rid}: route path ${h.path} != ${t.path}`)
+  const c = pageContent[rid]
+  if (!c || !Array.isArray(c.intro) || c.intro.length < 2) errs.push(`${rid}: intro 부족`)
+  if (!c || !c.faqs || c.faqs.length < 2) errs.push(`${rid}: faqs 부족`)
+}
 if (errs.length) { console.error('FAIL\n' + errs.join('\n')); process.exit(1) }
 console.log(`OK — 주제 ${topics.length}개, 가이드 ${guides.length}, 계산기 ${calcs.length}`)
