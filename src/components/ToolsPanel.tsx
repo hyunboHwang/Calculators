@@ -29,7 +29,7 @@ export default function ToolsPanel({
 }) {
   const [query, setQuery] = useState('')
   const inputRef = useRef<HTMLInputElement>(null)
-  useEffect(() => inputRef.current?.focus(), [])
+  useEffect(() => inputRef.current?.focus({ preventScroll: true }), [])
 
   const q = query.trim().toLowerCase()
   const results = q ? ALL.filter((r) => `${r.label} ${r.description}`.toLowerCase().includes(q)) : []

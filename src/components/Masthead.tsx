@@ -3,6 +3,18 @@ import routes from '../routes.json'
 import { topics, topicOf, LIFE_IDS } from '../lib/topics'
 import ToolsPanel from './ToolsPanel'
 
+function useIsDesktop() {
+  const mq = '(min-width: 1024px)'
+  const [v, setV] = useState(() => window.matchMedia(mq).matches)
+  useEffect(() => {
+    const m = window.matchMedia(mq)
+    const on = () => setV(m.matches)
+    m.addEventListener('change', on)
+    return () => m.removeEventListener('change', on)
+  }, [])
+  return v
+}
+
 const hubId = (path: string) => routes.find((r) => r.path === path)?.id
 
 export default function Masthead({
@@ -14,6 +26,7 @@ export default function Masthead({
 }) {
   const [toolsOpen, setToolsOpen] = useState(false) // 데스크톱 패널 / 모바일 도구 접이식 공용
   const [menuOpen, setMenuOpen] = useState(false) // 모바일 햄버거
+  const isDesktop = useIsDesktop()
   const rootRef = useRef<HTMLElement>(null)
   const toolsBtn = useRef<HTMLButtonElement>(null)
   const burgerBtn = useRef<HTMLButtonElement>(null)
@@ -78,7 +91,8 @@ export default function Masthead({
   )
 
   return (
-    <header ref={rootRef} className="relative mx-auto max-w-5xl px-4">
+    <header ref={rootRef} className="sticky top-0 z-20 bg-paper lg:static">
+    <div className="relative mx-auto max-w-5xl px-4">
       <div className="flex items-baseline justify-between border-b-[3px] border-double border-ink pt-5 pb-3">
         <a
           href="/"
@@ -125,18 +139,18 @@ export default function Masthead({
       </div>
 
       {/* 데스크톱 도구 패널 */}
-      {toolsOpen && (
-        <div className="animate-menu-in absolute inset-x-4 top-full z-30 hidden border-b border-rule bg-paper pt-5 pb-6 shadow-lg lg:block">
+      {isDesktop && toolsOpen && (
+        <div className="animate-menu-in absolute inset-x-4 top-full z-30 border-y border-rule bg-paper pt-5 pb-6 lg:block">
           <ToolsPanel id="tools-panel-desktop" activeRouteId={activeRouteId} onNavigate={go} />
         </div>
       )}
 
       {/* 모바일 메뉴 */}
-      {menuOpen && (
+      {!isDesktop && menuOpen && (
         <nav
           id="mobile-menu"
           aria-label="모바일 메뉴"
-          className="animate-menu-in absolute inset-x-0 top-full z-30 max-h-[calc(100vh-4.5rem)] overflow-y-auto border-b border-rule bg-paper px-4 pb-4 shadow-lg lg:hidden"
+          className="animate-menu-in absolute inset-x-0 top-full z-30 max-h-[calc(100vh-4.5rem)] overflow-y-auto border-y border-rule bg-paper px-4 pb-4 lg:hidden"
         >
           {a('/', '홈', mobileItem(activeRouteId === 'home'), activeRouteId === 'home')}
           {topics.map((t) => a(t.path, t.label, mobileItem(topicActive(t)), topicActive(t)))}
@@ -158,6 +172,7 @@ export default function Masthead({
           )}
         </nav>
       )}
+    </div>
     </header>
   )
 }

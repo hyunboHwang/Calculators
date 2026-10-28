@@ -137,66 +137,66 @@ function App() {
     <div className="min-h-screen bg-paper">
       {!hideChrome && <Masthead activeRouteId={route.id} onNavigate={navigate} />}
       <main className={hideChrome ? 'min-w-0 px-4 py-6 sm:px-6 sm:py-8' : 'mx-auto max-w-5xl px-4 py-8'}>
-          <Suspense fallback={<div className="h-40 animate-pulse bg-tint" />}>
-            {route.group === '주제' ? <TopicPage pageId={route.id} navigate={navigate} /> : <Current />}
-          </Suspense>
-          {!hideChrome && <AdSlot key={`${route.id}-mid`} slot={SLOTS.belowResult} />}
-          {route.group !== '가이드' && route.group !== '주제' && <InfoSection pageId={route.id} />}
-          {!hideChrome && <AdSlot key={`${route.id}-bottom`} slot={SLOTS.bottomOfPage} />}
+        <Suspense fallback={<div className="h-40 animate-pulse bg-tint" />}>
+          {route.group === '주제' ? <TopicPage pageId={route.id} navigate={navigate} /> : <Current />}
+        </Suspense>
+        {!hideChrome && <AdSlot key={`${route.id}-mid`} slot={SLOTS.belowResult} />}
+        {route.group !== '가이드' && route.group !== '주제' && <InfoSection pageId={route.id} />}
+        {!hideChrome && <AdSlot key={`${route.id}-bottom`} slot={SLOTS.bottomOfPage} />}
 
-          {!hideChrome && (
-            <footer className="mt-14 border-t border-ink pt-5 pb-2 text-xs text-muted">
-              {(
-                [
-                  ['인기 계산기', popularLinks.calculators],
-                  ['인기 가이드', popularLinks.guides],
-                ] as const
-              ).map(([title, ids]) => (
-                <nav key={title} aria-label={title} className="mb-3 flex flex-wrap items-center gap-x-3 gap-y-1.5">
-                  <span className="font-semibold text-ink">{title}</span>
-                  {routes
-                    .filter((r) => (ids as readonly string[]).includes(r.id) && r.id !== route.id)
-                    .map((r) => (
-                      <a
-                        key={r.id}
-                        href={`${r.path === '/' ? '' : r.path}/`}
-                        onClick={(e) => {
-                          e.preventDefault()
-                          navigate(r.path)
-                        }}
-                        className="text-body underline decoration-rule underline-offset-2 hover:text-accent"
-                      >
-                        {r.label}
-                      </a>
-                    ))}
-                </nav>
-              ))}
-              <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+        {!hideChrome && (
+          <footer className="mt-14 border-t border-ink pt-5 pb-2 text-xs text-muted">
+            {(
+              [
+                ['인기 계산기', popularLinks.calculators],
+                ['인기 가이드', popularLinks.guides],
+              ] as const
+            ).map(([title, ids]) => (
+              <nav key={title} aria-label={title} className="mb-3 flex flex-wrap items-center gap-x-3 gap-y-1.5">
+                <span className="font-semibold text-ink">{title}</span>
                 {routes
-                  .filter((r) => r.group === '정보')
+                  .filter((r) => (ids as readonly string[]).includes(r.id) && r.id !== route.id)
                   .map((r) => (
                     <a
                       key={r.id}
-                      href={`${r.path}/`}
+                      href={`${r.path === '/' ? '' : r.path}/`}
                       onClick={(e) => {
                         e.preventDefault()
                         navigate(r.path)
                       }}
-                      className="font-medium text-body underline decoration-rule underline-offset-2 hover:text-accent hover:decoration-slate-400"
+                      className="text-body underline decoration-rule underline-offset-2 hover:text-accent"
                     >
                       {r.label}
                     </a>
                   ))}
-              </div>
-              <p className="mt-3 leading-relaxed">
-                모든 계산 결과는 참고용 추정치이며, 세무·법률·투자 판단의 근거로 사용할 수
-                없습니다.
-              </p>
-              <p className="mt-1">
-                © {new Date().getFullYear()} 계산기 · calculators.ai.kr
-              </p>
-            </footer>
-          )}
+              </nav>
+            ))}
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+              {routes
+                .filter((r) => r.group === '정보' || r.id === 'glossaryHub')
+                .map((r) => (
+                  <a
+                    key={r.id}
+                    href={`${r.path}/`}
+                    onClick={(e) => {
+                      e.preventDefault()
+                      navigate(r.path)
+                    }}
+                    className="font-medium text-body underline decoration-rule underline-offset-2 hover:text-accent hover:decoration-accent"
+                  >
+                    {r.label}
+                  </a>
+                ))}
+            </div>
+            <p className="mt-3 leading-relaxed">
+              모든 계산 결과는 참고용 추정치이며, 세무·법률·투자 판단의 근거로 사용할 수
+              없습니다.
+            </p>
+            <p className="mt-1">
+              © {new Date().getFullYear()} 계산기 · calculators.ai.kr
+            </p>
+          </footer>
+        )}
       </main>
     </div>
   )
