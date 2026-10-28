@@ -37,7 +37,7 @@ export function Field({
 
   return (
     <label className="block">
-      <span className="mb-1.5 block text-sm font-medium text-slate-700">{label}</span>
+      <span className="block text-xs font-medium text-muted">{label}</span>
       <div className="relative">
         <input
           type="number"
@@ -56,13 +56,13 @@ export function Field({
             if (Number.isFinite(n)) onChange(n + 0)
           }}
           onBlur={() => setText(Number.isFinite(value) ? String(value) : '')}
-          className="w-full min-w-0 rounded-lg border border-slate-300 bg-white px-3 py-2.5 pr-11 text-right text-sm tabular-nums transition-colors hover:border-slate-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 focus:outline-none"
+          className="w-full min-w-0 border-0 border-b-2 border-ink bg-transparent px-0 py-2 pr-9 text-right font-mono text-xl text-ink tabular-nums focus:border-accent focus:outline-none"
         />
-        <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-xs text-slate-400">
+        <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center text-xs text-muted">
           {suffix}
         </span>
       </div>
-      {hint && <span className="mt-1.5 block text-xs leading-relaxed text-slate-400">{hint}</span>}
+      {hint && <span className="mt-1.5 block text-xs leading-relaxed text-muted">{hint}</span>}
     </label>
   )
 }
@@ -81,16 +81,20 @@ export function Row({
   negative?: boolean
 }) {
   return (
-    <div className="flex flex-wrap items-baseline justify-between gap-x-3 py-2">
+    <div
+      className={`flex flex-wrap items-baseline justify-between gap-x-3 border-b py-2 ${
+        strong ? 'border-t border-t-ink border-b-rule' : 'border-rule'
+      }`}
+    >
       <span
-        className={`min-w-0 text-sm ${strong ? 'font-semibold text-slate-800' : 'text-slate-500'}`}
+        className={`min-w-0 text-sm ${strong ? 'font-semibold text-ink' : 'text-muted'}`}
       >
         {label}
-        {sub && <span className="ml-1.5 text-xs text-slate-400">{sub}</span>}
+        {sub && <span className="ml-1.5 text-xs text-muted">{sub}</span>}
       </span>
       <span
-        className={`ml-auto text-right tabular-nums ${strong ? 'text-base font-bold' : 'text-sm font-medium'} ${
-          negative ? 'text-red-600' : 'text-slate-800'
+        className={`ml-auto text-right font-mono tabular-nums ${strong ? 'text-base font-bold' : 'text-sm font-medium'} ${
+          negative ? 'text-accent' : 'text-ink'
         }`}
       >
         {value}
@@ -112,14 +116,14 @@ export function DateField({
 }) {
   return (
     <label className="block">
-      <span className="mb-1.5 block text-sm font-medium text-slate-700">{label}</span>
+      <span className="block text-xs font-medium text-muted">{label}</span>
       <input
         type="date"
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm tabular-nums transition-colors hover:border-slate-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 focus:outline-none"
+        className="w-full border-0 border-b-2 border-ink bg-transparent px-0 py-2 font-mono text-base text-ink tabular-nums focus:border-accent focus:outline-none"
       />
-      {hint && <span className="mt-1.5 block text-xs leading-relaxed text-slate-400">{hint}</span>}
+      {hint && <span className="mt-1.5 block text-xs leading-relaxed text-muted">{hint}</span>}
     </label>
   )
 }
@@ -132,14 +136,21 @@ export function Card({
   children: React.ReactNode
 }) {
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-shadow hover:shadow-md">
-      {title && (
-        <h2 className="mb-3 flex items-center gap-2 text-base font-semibold">
-          <span className="h-4 w-1 rounded-full bg-emerald-500" aria-hidden="true" />
-          {title}
-        </h2>
-      )}
+    <div className="border-t border-ink pt-4">
+      {title && <h2 className="mb-3 font-serif text-base font-semibold text-ink">{title}</h2>}
       {children}
+    </div>
+  )
+}
+
+export function Result({ label, value, unit }: { label: string; value: string; unit?: string }) {
+  return (
+    <div className="border-t-4 border-double border-ink pt-3">
+      <div className="text-xs font-medium text-muted">{label}</div>
+      <div className="mt-1 font-serif text-3xl font-bold text-ink tabular-nums">
+        {value}
+        {unit && <span className="ml-1 text-base font-semibold">{unit}</span>}
+      </div>
     </div>
   )
 }
