@@ -27,7 +27,7 @@ export default function TopicPage({
 
   const link = (to: string, text: string, cls = '') => (
     <a
-      href={`${to}/`}
+      href={to === '/' ? '/' : `${to}/`}
       onClick={(e) => {
         e.preventDefault()
         navigate(to)
@@ -46,8 +46,8 @@ export default function TopicPage({
       <h1 className="mt-3 font-serif text-3xl font-bold text-ink">{topic.label}</h1>
       <p className="mt-2 text-sm text-muted">{topic.summary}</p>
       <div className="mt-6 space-y-4 leading-relaxed">
-        {intro.map((p) => (
-          <p key={p.slice(0, 20)}>{p}</p>
+        {intro.map((p, i) => (
+          <p key={i}>{p}</p>
         ))}
       </div>
 
@@ -55,17 +55,20 @@ export default function TopicPage({
         <section className="mt-10" aria-labelledby="topic-guides">
           <h2 id="topic-guides" className="font-serif text-xl font-bold text-ink">이 주제의 가이드</h2>
           <ul className="mt-3 border-t border-rule">
-            {guides.map((g) => (
+            {guides.map((g) => {
+              const updatedAt = content[g.id]?.updatedAt
+              return (
               <li key={g.id} className="border-b border-rule py-3">
                 {link(g.path, g.label, 'font-medium text-ink hover:text-accent')}
                 <p className="mt-1 text-sm text-muted">{g.description}</p>
-                {content[g.id]?.updatedAt && (
+                {updatedAt && (
                   <p className="mt-1 text-xs text-muted">
-                    최종 업데이트 {content[g.id].updatedAt!.replaceAll('-', '. ')}.
+                    최종 업데이트 {updatedAt.replaceAll('-', '. ')}.
                   </p>
                 )}
               </li>
-            ))}
+              )
+            })}
           </ul>
         </section>
       )}
