@@ -1,10 +1,9 @@
 import { lazy, Suspense, useEffect, useState } from 'react'
 import routes from './routes.json'
-import GROUP_ORDER from './groups.json'
 import popularLinks from './popularLinks.json'
 import AdSlot from './components/AdSlot'
 import InfoSection from './components/InfoSection'
-import Sidebar, { MenuLink } from './components/Sidebar'
+import Masthead from './components/Masthead'
 import { SLOTS, loadAdsense } from './lib/ads'
 import { loadAnalytics, trackPageView } from './lib/analytics'
 
@@ -82,9 +81,6 @@ const components: Record<string, React.LazyExoticComponent<() => React.JSX.Eleme
 const TopicPage = lazy(() => import('./pages/TopicPage'))
 const DEFAULT_PAGE = components.home
 
-/** 사이드바 그룹 표시 순서 ('정보' 그룹은 푸터에만 노출) */
-const groups = GROUP_ORDER.filter((g) => routes.some((r) => r.group === g))
-
 /** 끝 슬래시 제거 정규화 */
 const normalize = (p: string) => p.replace(/\/+$/, '') || '/'
 
@@ -137,167 +133,11 @@ function App() {
   const Current = components[route.id] ?? DEFAULT_PAGE
   const hideChrome = route.group === '게임' // 숨김 페이지(예: 윷놀이)는 좌측 메뉴·광고 없이 전체 폭으로 렌더
 
-  const [menuOpen, setMenuOpen] = useState(false)
-  useEffect(() => setMenuOpen(false), [route])
-
-  const handleNavigate = (to: string) => {
-    navigate(to)
-    setMenuOpen(false)
-  }
-
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900">
-      {/* 모바일 상단 바 */}
-      <header className="sticky top-0 z-20 border-b border-slate-200 bg-white/90 backdrop-blur-sm lg:hidden">
-        <div className="flex items-center justify-between gap-3 px-4 py-3">
-          <a
-            href="/"
-            onClick={(e) => {
-              e.preventDefault()
-              handleNavigate('/')
-            }}
-            className="flex shrink-0 items-center gap-1.5 text-lg font-bold"
-          >
-            <img src="/favicon.svg" alt="" className="h-6 w-6" aria-hidden="true" />
-            계산기
-          </a>
-          <button
-            type="button"
-            onClick={() => setMenuOpen((v) => !v)}
-            aria-expanded={menuOpen}
-            aria-label="전체 계산기 메뉴 열기"
-            className="flex min-w-0 items-center gap-1.5 rounded-lg border border-slate-200 px-3 py-1.5 text-sm font-medium text-slate-600 transition-colors hover:border-slate-300 hover:bg-slate-50"
-          >
-            <span className="max-w-40 truncate">{route.label}</span>
-            <svg
-              viewBox="0 0 20 20"
-              fill="currentColor"
-              className={`h-4 w-4 shrink-0 transition-transform ${menuOpen ? 'rotate-180' : ''}`}
-            >
-              <path
-                fillRule="evenodd"
-                d="M5.23 7.21a.75.75 0 011.06.02L10 11.148l3.71-3.918a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
-                clipRule="evenodd"
-              />
-            </svg>
-          </button>
-        </div>
-
-        {menuOpen && (
-          <>
-            <div
-              className="fixed inset-0 z-10 bg-slate-900/30"
-              onClick={() => setMenuOpen(false)}
-              aria-hidden="true"
-            />
-            <nav
-              className="animate-menu-in absolute inset-x-0 top-full z-20 max-h-[calc(100vh-56px)] overflow-y-auto border-t border-slate-200 bg-white px-4 py-4 shadow-lg"
-              aria-label="계산기 메뉴"
-            >
-              <a
-                href="/calculator/"
-                onClick={(e) => {
-                  e.preventDefault()
-                  handleNavigate('/calculator')
-                }}
-                aria-current={route.id === 'generalCalculator' ? 'page' : undefined}
-                className={`mb-2 flex items-center gap-1.5 rounded-lg border px-3 py-2 text-sm font-medium ${
-                  route.id === 'generalCalculator'
-                    ? 'border-emerald-500 bg-emerald-50 text-emerald-700'
-                    : 'border-slate-200 text-slate-600'
-                }`}
-              >
-                🧮 일반 계산기
-              </a>
-              <a
-                href="/guides/"
-                onClick={(e) => {
-                  e.preventDefault()
-                  handleNavigate('/guides')
-                }}
-                className="mb-4 flex items-center gap-1.5 rounded-lg border border-slate-200 px-3 py-2 text-sm font-medium text-slate-600"
-              >
-                📖 가이드
-              </a>
-              {groups.map((g) => (
-                <div key={g} className="mb-4 last:mb-0">
-                  <p className="mb-1.5 text-xs font-semibold tracking-wide text-slate-400">{g}</p>
-                  <div className="flex flex-wrap gap-1.5">
-                    {routes
-                      .filter((r) => r.group === g)
-                      .map((r) => (
-                        <MenuLink
-                          key={r.id}
-                          to={r.path}
-                          label={r.label}
-                          active={route.id === r.id}
-                          onNavigate={handleNavigate}
-                          compact
-                        />
-                      ))}
-                  </div>
-                </div>
-              ))}
-            </nav>
-          </>
-        )}
-      </header>
-
-      <div className="mx-auto flex max-w-6xl">
-        {/* 데스크톱 사이드바 (숨김 페이지에서는 렌더하지 않음) */}
-        {!hideChrome && (
-          <aside className="sticky top-0 hidden h-screen w-60 shrink-0 flex-col border-r border-slate-200 bg-white lg:flex">
-            <div className="px-5 py-6">
-              <a
-                href="/"
-                onClick={(e) => {
-                  e.preventDefault()
-                  navigate('/')
-                }}
-                className="flex items-center gap-2 text-xl font-extrabold tracking-tight"
-              >
-                <img src="/favicon.svg" alt="" className="h-7 w-7" aria-hidden="true" />
-                계산기
-              </a>
-              <p className="mt-1.5 text-xs text-slate-400">돈·나이·날짜 계산부터 생활 가이드까지, 한곳에서</p>
-            </div>
-            <div className="space-y-2 px-5 pb-3">
-              <a
-                href="/calculator/"
-                onClick={(e) => {
-                  e.preventDefault()
-                  navigate('/calculator')
-                }}
-                aria-current={route.id === 'generalCalculator' ? 'page' : undefined}
-                className={`flex items-center gap-1.5 rounded-lg border px-3 py-2 text-sm font-medium transition-colors ${
-                  route.id === 'generalCalculator'
-                    ? 'border-emerald-500 bg-emerald-50 text-emerald-700'
-                    : 'border-slate-200 text-slate-600 hover:border-emerald-300 hover:bg-emerald-50/40'
-                }`}
-              >
-                🧮 일반 계산기
-              </a>
-              <a
-                href="/guides/"
-                onClick={(e) => {
-                  e.preventDefault()
-                  navigate('/guides')
-                }}
-                className="flex items-center gap-1.5 rounded-lg border border-slate-200 px-3 py-2 text-sm font-medium text-slate-600 transition-colors hover:border-emerald-300 hover:bg-emerald-50/40"
-              >
-                📖 가이드
-              </a>
-            </div>
-            <Sidebar activeRouteId={route.id} activeGroup={route.group} onNavigate={navigate} />
-            <AdSlot slot={SLOTS.sidebar} className="min-h-[250px] shrink-0 px-3 pt-2" />
-            <p className="px-5 py-4 text-[11px] leading-relaxed text-slate-300">
-              모든 결과는 참고용 추정치입니다.
-            </p>
-          </aside>
-        )}
-
-        <main className="min-w-0 flex-1 px-4 py-6 sm:px-6 sm:py-8 lg:px-10">
-          <Suspense fallback={<div className="h-40 animate-pulse rounded-2xl bg-slate-100" />}>
+    <div className="min-h-screen bg-paper">
+      {!hideChrome && <Masthead activeRouteId={route.id} onNavigate={navigate} />}
+      <main className={hideChrome ? 'min-w-0 px-4 py-6 sm:px-6 sm:py-8' : 'mx-auto max-w-5xl px-4 py-8'}>
+          <Suspense fallback={<div className="h-40 animate-pulse bg-tint" />}>
             {route.group === '주제' ? <TopicPage pageId={route.id} navigate={navigate} /> : <Current />}
           </Suspense>
           {!hideChrome && <AdSlot key={`${route.id}-mid`} slot={SLOTS.belowResult} />}
@@ -305,7 +145,7 @@ function App() {
           {!hideChrome && <AdSlot key={`${route.id}-bottom`} slot={SLOTS.bottomOfPage} />}
 
           {!hideChrome && (
-            <footer className="mt-14 border-t border-slate-200 pt-5 pb-2 text-xs text-slate-400">
+            <footer className="mt-14 border-t border-ink pt-5 pb-2 text-xs text-muted">
               {(
                 [
                   ['인기 계산기', popularLinks.calculators],
@@ -313,7 +153,7 @@ function App() {
                 ] as const
               ).map(([title, ids]) => (
                 <nav key={title} aria-label={title} className="mb-3 flex flex-wrap items-center gap-x-3 gap-y-1.5">
-                  <span className="font-semibold text-slate-500">{title}</span>
+                  <span className="font-semibold text-ink">{title}</span>
                   {routes
                     .filter((r) => (ids as readonly string[]).includes(r.id) && r.id !== route.id)
                     .map((r) => (
@@ -324,7 +164,7 @@ function App() {
                           e.preventDefault()
                           navigate(r.path)
                         }}
-                        className="text-slate-500 underline decoration-slate-300 underline-offset-2 hover:text-slate-700"
+                        className="text-body underline decoration-rule underline-offset-2 hover:text-accent"
                       >
                         {r.label}
                       </a>
@@ -342,7 +182,7 @@ function App() {
                         e.preventDefault()
                         navigate(r.path)
                       }}
-                      className="font-medium text-slate-500 underline decoration-slate-300 underline-offset-2 hover:text-slate-700 hover:decoration-slate-400"
+                      className="font-medium text-body underline decoration-rule underline-offset-2 hover:text-accent hover:decoration-slate-400"
                     >
                       {r.label}
                     </a>
@@ -352,13 +192,12 @@ function App() {
                 모든 계산 결과는 참고용 추정치이며, 세무·법률·투자 판단의 근거로 사용할 수
                 없습니다.
               </p>
-              <p className="mt-1 text-slate-300">
+              <p className="mt-1">
                 © {new Date().getFullYear()} 계산기 · calculators.ai.kr
               </p>
             </footer>
           )}
-        </main>
-      </div>
+      </main>
     </div>
   )
 }

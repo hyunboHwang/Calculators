@@ -9,7 +9,11 @@ let topics
 try { topics = read('../src/topics.json') } catch (e) { console.error('FAIL — topics.json 읽기 실패:', e.message); process.exit(1) }
 
 // 주제에 속하지 않는 생활 계산기 10개(도구 패널 전용). routes.json의 group 값 '생활'은 4개뿐이라 id로 지정한다.
+// src/lib/topics.ts의 LIFE_IDS와 반드시 같아야 한다 (아래에서 검사).
 const LIFE = ['age','celebration','insuranceAge','pensionAge','dday','dateCalc','discharge','dueDate','bmi','generalCalculator']
+if (!/LIFE_IDS = \[([^\]]*)\]/.test(readFileSync(new URL('../src/lib/topics.ts', import.meta.url), 'utf8'))) { console.error('FAIL — topics.ts LIFE_IDS 없음'); process.exit(1) }
+const tsLife = [...readFileSync(new URL('../src/lib/topics.ts', import.meta.url), 'utf8').match(/LIFE_IDS = \[([^\]]*)\]/)[1].matchAll(/'(\w+)'/g)].map((m) => m[1])
+if (tsLife.join() !== LIFE.join()) { console.error('FAIL — topics.ts LIFE_IDS와 불일치'); process.exit(1) }
 const ids = new Set(routes.map((r) => r.id))
 const guides = routes.filter((r) => r.group === '가이드' && r.id !== 'guidesIndex').map((r) => r.id)
 const calcs = routes.filter((r) => groups.includes(r.group) && r.group !== '용어사전' && !LIFE.includes(r.id)).map((r) => r.id)
