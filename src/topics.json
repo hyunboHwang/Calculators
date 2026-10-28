@@ -1,0 +1,42 @@
+[
+  {
+    "id": "work",
+    "slug": "work",
+    "label": "월급·직장",
+    "path": "/topics/work",
+    "summary": "월급·퇴직·실업급여 등 직장 생활의 돈 계산",
+    "members": ["unemploymentApplicationGuide", "severanceInterimGuide", "salary", "salaryTable", "raise", "partTime", "annualLeave", "parentalLeave", "unemployment", "severance"]
+  },
+  {
+    "id": "tax",
+    "slug": "tax",
+    "label": "세금",
+    "path": "/topics/tax",
+    "summary": "연말정산부터 증여·상속까지 세금 신고와 계산",
+    "members": ["yearEndTaxProcedureGuide", "yearEndTax2026Guide", "pensionTaxCreditGuide", "giftTaxProcedureGuide", "inheritanceTaxProcedureGuide", "yearEndTax", "freelanceTax", "bizTax", "margin", "pensionTaxCredit", "usStockTax", "dividend", "giftTax", "inheritanceTax", "carTax", "carAcquisitionTax"]
+  },
+  {
+    "id": "property",
+    "slug": "property",
+    "label": "부동산",
+    "path": "/topics/property",
+    "summary": "취득·보유 세금, 청약, 전월세 관련 계산",
+    "members": ["holdingTaxGuide", "subscriptionScoreGuide", "subscriptionRankGuide", "jeonseDepositRecoveryGuide", "acquisitionTax", "propertyTax", "comprehensiveRealEstateTax", "jeonseConversion", "subscriptionScore", "subscriptionRank", "managementFee", "movingCost"]
+  },
+  {
+    "id": "support",
+    "slug": "support",
+    "label": "정부지원·청년",
+    "path": "/topics/support",
+    "summary": "청년 월세·전세·자산 형성과 취업 지원 제도 안내",
+    "members": ["youthRentSubsidyGuide", "youthLeapAccountGuide", "youthJeonseLoanGuide", "nationalEmploymentSupportGuide"]
+  },
+  {
+    "id": "finance",
+    "slug": "finance",
+    "label": "대출·금융",
+    "path": "/topics/finance",
+    "summary": "대출 상환부터 예적금·투자 수익률까지 금융 계산",
+    "members": ["loan", "dsr", "prepayment", "refinance", "deposit", "compound", "stockReturn", "averagePrice", "lossRecovery"]
+  }
+]
