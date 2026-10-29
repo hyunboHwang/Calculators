@@ -115,7 +115,7 @@ export default function SalaryCalculator() {
               <div>
                 <Result label="월 예상 실수령액" value={fmt(r.monthlyNet)} unit="원" />
               </div>
-              <div className="text-right">
+              <div className="sm:text-right">
                 <p className="text-sm text-muted">연 예상 실수령액</p>
                 <p className="text-lg font-bold tabular-nums">{fmt(r.annualNet)}원</p>
               </div>
