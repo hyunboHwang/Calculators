@@ -105,10 +105,7 @@ export default function InfoSection({ pageId, guide = false }: { pageId: string;
         <section className="mb-8 grid grid-cols-2 gap-3">
           {c.highlights.map((h, i) => (
             <div key={i} className="border border-rule p-3">
-              <span className="text-base" aria-hidden="true">
-                {h.icon}
-              </span>
-              <p className="mt-1 text-xs font-bold text-ink">{h.label}</p>
+              <p className="text-xs font-bold text-ink">{h.label}</p>
               <p className="mt-0.5 text-xs leading-relaxed text-muted">{h.text}</p>
             </div>
           ))}
@@ -138,7 +135,7 @@ export default function InfoSection({ pageId, guide = false }: { pageId: string;
                   key={i}
                   className="shrink-0 whitespace-nowrap border border-ink px-3 py-1.5 text-xs font-semibold text-ink"
                 >
-                  <span aria-hidden="true">{chip.icon}</span> {chip.label}
+                  {chip.label}
                 </span>
               ))}
             </div>

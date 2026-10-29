@@ -14,6 +14,9 @@ import { buildSalaryTable } from '../src/lib/salary.ts'
 import { buildGlossaryIndex } from '../src/lib/glossaryIndex.ts'
 import { tablesFor } from '../src/lib/tables.ts'
 
+// topics.ts는 JSON import(Vite 전용)라 postbuild에서는 fs로 직접 읽는다
+const topics = JSON.parse(readFileSync(new URL('../src/topics.json', import.meta.url), 'utf8'))
+
 const popularLinks = JSON.parse(
   readFileSync(new URL('../src/popularLinks.json', import.meta.url), 'utf8'),
 )
@@ -185,33 +188,60 @@ function prerenderBody(route) {
     html += `</ul>`
   }
 
-  if (route.id === 'home') {
-    const link = (r) => `<a href="${urlOf(r.path)}">${esc(r.label)}</a>`
-    html += `<h2 class="mt-6 text-lg font-bold text-slate-900">카테고리별 계산기</h2>`
-    for (const g of groupOrder.filter((g) => g !== '용어사전')) {
-      const items = routes.filter((r) => r.group === g)
-      if (!items.length) continue
-      html += `<h3 class="mt-3 font-semibold text-slate-800">${esc(g)}</h3><ul class="mt-1 list-disc pl-5">`
-      html += items.map((r) => `<li class="mt-1">${link(r)} — ${esc(r.description)}</li>`).join('')
-      html += `</ul>`
+  const H2 = 'mt-8 font-serif text-xl font-bold text-ink'
+  const link = (r) => `<a href="${urlOf(r.path)}">${esc(r.label)}</a>`
+  const topicStats = (t) => {
+    const members = t.members.flatMap((id) => routes.find((r) => r.id === id) ?? [])
+    const guides = members.filter((r) => r.group === '가이드')
+    return { members, guides, calcs: members.filter((r) => r.group !== '가이드') }
+  }
+  const operatorLine = `<a href="/about/">운영자 소개</a> · <a href="/verification/">계산기 검증 방식</a>`
+
+  if (route.group === '주제') {
+    const topic = topics.find((t) => t.path === route.path)
+    if (topic) {
+      const { guides, calcs } = topicStats(topic)
+      html += `<nav aria-label="현재 위치" class="text-xs text-muted"><a href="/">홈</a> › ${esc(topic.label)}</nav>`
+      html += `<h2 class="${H2}">이 주제의 가이드</h2><ul class="mt-2 list-disc pl-5">`
+      html += guides
+        .map((g) => {
+          const u = pageContent[g.id]?.updatedAt
+          return `<li class="mt-1">${link(g)} — ${esc(g.description)}${u ? ` (최종 업데이트 ${esc(u.replaceAll('-', '. '))}.)` : ''}</li>`
+        })
+        .join('')
+      html += `</ul><h2 class="${H2}">이 주제의 계산기</h2><ul class="mt-2 list-disc pl-5">`
+      html += calcs.map((r) => `<li class="mt-1">${link(r)} — ${esc(r.description)}</li>`).join('')
+      html += `</ul><nav class="mt-6 text-sm" aria-label="다른 주제"><b>다른 주제</b> `
+      html += topics.filter((t) => t.id !== topic.id).map((t) => `<a href="${urlOf(t.path)}">${esc(t.label)}</a>`).join(' · ')
+      html += `</nav><p class="mt-3 text-xs">작성·운영: 계산기 운영자(1인 개발자) · ${operatorLine}</p>`
     }
-    html += `<h2 class="mt-6 text-lg font-bold text-slate-900">세금·정책 가이드</h2><ul class="mt-2 list-disc pl-5">`
-    html += routes
-      .filter((r) => r.group === '가이드' && r.id !== 'guidesIndex')
-      .map((r) => `<li class="mt-1">${link(r)}</li>`)
+  }
+
+  if (route.id === 'home') {
+    html += `<h2 class="${H2}">주제별로 보기</h2><ol class="mt-2 list-decimal pl-5">`
+    html += topics
+      .map((t) => {
+        const { guides, calcs } = topicStats(t)
+        return `<li class="mt-1"><a href="${urlOf(t.path)}">${esc(t.label)}</a> — ${esc(t.summary)} (가이드 ${guides.length} · 계산기 ${calcs.length})</li>`
+      })
       .join('')
-    html += `</ul>`
+    html += `</ol><p class="mt-2"><a href="/guides/">가이드 전체 보기</a></p>`
     const recent = routes
       .filter((r) => r.group === '가이드')
       .flatMap((r) => (pageContent[r.id]?.changelog ?? []).map((l) => ({ ...l, r })))
       .sort((a, b) => b.date.localeCompare(a.date))
       .slice(0, 5)
     if (recent.length) {
-      html += `<h2 class="mt-6 text-lg font-bold text-slate-900">최근 업데이트</h2><ul class="mt-2 list-disc pl-5">`
+      html += `<h2 class="${H2}">최근 업데이트된 가이드</h2><ul class="mt-2 list-disc pl-5">`
       html += recent.map((u) => `<li class="mt-1">${esc(u.date)} ${link(u.r)} — ${esc(u.text)}</li>`).join('')
       html += `</ul>`
     }
-    html += `<h2 class="mt-6 text-lg font-bold text-slate-900">운영자와 검증 방식</h2><p class="mt-2">1인 개발자가 직접 만들고 운영하며, 계산 기준은 공식기관 자료로 확인하고 수정 이력을 남깁니다. <a href="/about/">운영자 소개</a> · <a href="/verification/">계산기 검증 방식</a></p>`
+    html += `<h2 class="${H2}">많이 쓰는 계산기</h2><ul class="mt-2 list-disc pl-5">`
+    html += popularLinks.calculators
+      .flatMap((id) => routes.find((r) => r.id === id) ?? [])
+      .map((r) => `<li class="mt-1">${link(r)}</li>`)
+      .join('')
+    html += `</ul><h2 class="${H2}">운영자와 검증 방식</h2><p class="mt-2">1인 개발자가 직접 만들고 운영합니다. 계산 기준은 공식기관 자료로 확인하고, 실제 사례와 대조하며, 기준이 바뀌면 수정 이력을 남깁니다. ${operatorLine}</p>`
   }
 
   if (route.id === 'salaryTable') {
@@ -253,7 +283,7 @@ function prerenderBody(route) {
   // 내부 링크 — 전체 라우트를 나열하지 않고, 실제로 연관 있는 같은 카테고리
   // 계산기만 남깁니다(가이드/정보/용어사전은 그룹 규모가 다르거나 이미 자체
   // relatedGuides/relatedCalculators로 연결되어 있어 제외).
-  if (!['가이드', '정보', '용어사전'].includes(route.group)) {
+  if (!['가이드', '정보', '용어사전', '주제'].includes(route.group)) {
     const siblings = routes.filter((r) => r.group === route.group && r.id !== route.id)
     if (siblings.length > 0) {
       html += `<h2 class="mt-6 text-lg font-bold text-slate-900">${esc(route.group)} 관련 계산기</h2>`
@@ -276,7 +306,7 @@ function prerenderBody(route) {
   return html
 }
 
-const NON_CALCULATOR_GROUPS = ['홈', '가이드', '정보', '용어사전', '게임']
+const NON_CALCULATOR_GROUPS = ['홈', '가이드', '정보', '용어사전', '게임', '주제']
 
 function jsonLdFor(route) {
   const pageUrl = SITE_URL + urlOf(route.path)
@@ -296,6 +326,19 @@ function jsonLdFor(route) {
       crumbs.push({ name: '가이드', url: `${SITE_URL}/guides/` })
     }
     crumbs.push({ name, url: pageUrl })
+    if (route.group === '주제') {
+      const topic = topics.find((t) => t.path === route.path)
+      graph.push({
+        '@type': 'CollectionPage',
+        name,
+        url: pageUrl,
+        description: route.description,
+        inLanguage: 'ko',
+        hasPart: (topic?.members ?? [])
+          .flatMap((id) => routes.find((r) => r.id === id && r.group === '가이드') ?? [])
+          .map((r) => ({ '@type': 'WebPage', name: r.label, url: SITE_URL + urlOf(r.path) })),
+      })
+    }
     graph.push({
       '@type': 'BreadcrumbList',
       itemListElement: crumbs.map((c, i) => ({
