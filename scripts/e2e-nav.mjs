@@ -1,11 +1,12 @@
 // 내비·도구 패널 상호작용 점검. 사용: node scripts/e2e-nav.mjs [baseUrl] (먼저 npm run build && npm run preview)
+// 환경변수: PLAYWRIGHT_MODULE=playwright가 설치된 node_modules 경로(끝 슬래시 포함), CHROMIUM_PATH=chromium 실행 파일, SHOTS_DIR=스크린샷 폴더
 import assert from 'node:assert/strict'
 import { mkdirSync } from 'node:fs'
 import { createRequire } from 'node:module'
 import { homedir } from 'node:os'
 import { join } from 'node:path'
 
-const require = createRequire(join(homedir(), '.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/'))
+const require = createRequire(process.env.PLAYWRIGHT_MODULE ?? join(homedir(), '.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/'))
 const { chromium } = require('playwright')
 const base = (process.argv[2] ?? 'http://localhost:4173').replace(/\/$/, '')
 const shots = process.env.SHOTS_DIR

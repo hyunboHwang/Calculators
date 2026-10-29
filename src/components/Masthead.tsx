@@ -41,6 +41,11 @@ export default function Masthead({
   }
 
   useEffect(() => {
+    setToolsOpen(false)
+    setMenuOpen(false)
+  }, [activeRouteId])
+
+  useEffect(() => {
     if (!toolsOpen && !menuOpen) return
     const onKey = (e: KeyboardEvent) => {
       if (e.key !== 'Escape') return
@@ -62,6 +67,7 @@ export default function Masthead({
 
   const topicActive = (t: (typeof topics)[number]) =>
     activeRouteId === hubId(t.path) || topicOf(activeRouteId)?.id === t.id
+  const guidesActive = activeRouteId === 'guidesIndex' || routes.find((r) => r.id === activeRouteId)?.group === '가이드'
   const toolsActive = LIFE_IDS.includes(activeRouteId) || toolsOpen
 
   const item = (active: boolean) =>
@@ -110,6 +116,7 @@ export default function Masthead({
         <nav aria-label="주 메뉴" className="hidden items-baseline gap-5 text-[13px] text-body lg:flex">
           {a('/', '홈', item(activeRouteId === 'home'), activeRouteId === 'home')}
           {topics.map((t) => a(t.path, t.label, item(topicActive(t)), topicActive(t)))}
+          {a('/guides', '가이드', item(guidesActive), guidesActive)}
           <button
             ref={toolsBtn}
             type="button"
@@ -155,7 +162,7 @@ export default function Masthead({
           {a('/', '홈', mobileItem(activeRouteId === 'home'), activeRouteId === 'home')}
           {topics.map((t) => a(t.path, t.label, mobileItem(topicActive(t)), topicActive(t)))}
           {a('/guides', '가이드 전체', mobileItem(activeRouteId === 'guidesIndex'), activeRouteId === 'guidesIndex')}
-          {a('/calculator', '일반 계산기', `${mobileItem(activeRouteId === 'generalCalculator')} font-semibold text-accent`, activeRouteId === 'generalCalculator')}
+          {a('/calculator', '일반 계산기', 'flex min-h-11 items-center border-b border-rule text-[15px] font-semibold text-accent', activeRouteId === 'generalCalculator')}
           <button
             type="button"
             aria-expanded={toolsOpen}

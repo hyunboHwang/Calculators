@@ -5,6 +5,7 @@ import AdSlot from './components/AdSlot'
 import InfoSection from './components/InfoSection'
 import Masthead from './components/Masthead'
 import { SLOTS, loadAdsense } from './lib/ads'
+import { LIFE_IDS } from './lib/topics'
 import { loadAnalytics, trackPageView } from './lib/analytics'
 
 /** 라우트별 코드 스플리팅: 방문한 계산기의 JS만 내려받도록 지연 로드 */
@@ -144,8 +145,8 @@ function App() {
           ) : (
             <Current />
           )}
-        </Suspense>
-        {!hideChrome && <AdSlot key={`${route.id}-mid`} slot={SLOTS.belowResult} />}
+          {/* 페이지·광고·푸터를 한 경계 안에 둬서, 지연 로드 중 아래 요소가 먼저 보였다 밀리는 CLS를 막는다 */}
+          {!hideChrome && route.group !== '주제' && <AdSlot key={`${route.id}-mid`} slot={SLOTS.belowResult} />}
         {route.group !== '가이드' && route.group !== '주제' && <InfoSection pageId={route.id} />}
         {!hideChrome && <AdSlot key={`${route.id}-bottom`} slot={SLOTS.bottomOfPage} />}
 
@@ -155,6 +156,7 @@ function App() {
               [
                 ['인기 계산기', popularLinks.calculators],
                 ['인기 가이드', popularLinks.guides],
+                ['생활 계산기', LIFE_IDS],
               ] as const
             ).map(([title, ids]) => (
               <nav key={title} aria-label={title} className="mb-3 flex flex-wrap items-center gap-x-3 gap-y-1.5">
@@ -202,6 +204,7 @@ function App() {
             </p>
           </footer>
         )}
+        </Suspense>
       </main>
     </div>
   )

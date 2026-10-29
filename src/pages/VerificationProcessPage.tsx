@@ -2,7 +2,7 @@ import { pageContent } from '../lib/pageContent'
 
 export default function VerificationProcessPage() {
   const paras: string[] = pageContent.verificationProcess.intro
-  const STEPS: { icon: string; title: string; desc: string }[] = pageContent.verificationProcess.steps
+  const STEPS: { title: string; desc: string }[] = pageContent.verificationProcess.steps
   const CORRECTIONS: { title: string; desc: string }[] = pageContent.verificationProcess.corrections
   const faqs: { q: string; a: string }[] = pageContent.verificationProcess.faqs
 
@@ -21,20 +21,20 @@ export default function VerificationProcessPage() {
 
   return (
     <div className="max-w-3xl">
-      <h1 className="text-2xl font-bold">계산기 검증 방식</h1>
+      <h1 className="font-serif text-3xl font-bold text-ink">계산기 검증 방식</h1>
       {paras.map((p, i) => (
         <p key={i} className="mt-4 text-sm leading-relaxed text-body">
           {p}
         </p>
       ))}
 
-      <h2 className="mt-8 text-lg font-bold">검증 5단계</h2>
+      <h2 className="mt-8 font-serif text-xl font-bold text-ink">검증 5단계</h2>
       <div className="mt-4 space-y-3">
         {STEPS.map((s, i) => (
           <div key={s.title} className="flex gap-3">
             <div className="flex flex-col items-center">
-              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-tint text-base">
-                <span aria-hidden="true">{s.icon}</span>
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center bg-tint font-mono text-sm text-ink">
+                {String(i + 1).padStart(2, '0')}
               </div>
               {i < STEPS.length - 1 && (
                 <div className="mt-1 w-px flex-1 bg-tint" aria-hidden="true" />
@@ -42,7 +42,7 @@ export default function VerificationProcessPage() {
             </div>
             <div className="pb-3">
               <p className="text-sm font-semibold text-ink">
-                {i + 1}. {s.title}
+                {s.title}
               </p>
               <p className="mt-1 text-sm leading-relaxed text-body">{s.desc}</p>
             </div>
@@ -50,7 +50,7 @@ export default function VerificationProcessPage() {
         ))}
       </div>
 
-      <h2 className="mt-8 text-lg font-bold">실제 오류 발견·수정 사례</h2>
+      <h2 className="mt-8 font-serif text-xl font-bold text-ink">실제 오류 발견·수정 사례</h2>
       <p className="mt-2 text-sm leading-relaxed text-muted">
         이 절차를 거쳐 실제로 발견하고 고친 사례 일부입니다. 완벽함을 주장하는 대신, 오류를
         발견하고 고치는 과정 자체를 투명하게 공개합니다.
@@ -66,7 +66,7 @@ export default function VerificationProcessPage() {
 
       {faqs.length > 0 && (
         <>
-          <h2 className="mt-8 text-lg font-bold">자주 묻는 질문</h2>
+          <h2 className="mt-8 font-serif text-xl font-bold text-ink">자주 묻는 질문</h2>
           <div className="mt-3 space-y-2">
             {faqs.map((f) => (
               <details

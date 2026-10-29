@@ -118,7 +118,7 @@ export default function YutnoriBoard({
           {LINE_SEGMENTS.map(([from, to], i) => {
             const [t1, l1] = NODE_COORDS[from]
             const [t2, l2] = NODE_COORDS[to]
-            return <line key={i} x1={l1} y1={t1} x2={l2} y2={t2} stroke="#cbd5e1" strokeWidth="1" />
+            return <line key={i} x1={l1} y1={t1} x2={l2} y2={t2} stroke="#cfc7b6" strokeWidth="1" />
           })}
         </svg>
 
@@ -126,7 +126,7 @@ export default function YutnoriBoard({
           return (
             <div
               key={node}
-              className="absolute flex h-12 w-12 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-rule bg-paper shadow"
+              className="absolute flex h-12 w-12 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-rule bg-paper"
               style={{ top: `${top}%`, left: `${left}%` }}
             >
               <span className="select-none text-[11px] font-semibold text-muted">

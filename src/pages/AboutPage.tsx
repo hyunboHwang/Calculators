@@ -24,10 +24,10 @@ export default function AboutPage() {
 
   return (
     <div className="max-w-3xl">
-      <h1 className="text-2xl font-bold">계산기 소개</h1>
+      <h1 className="font-serif text-3xl font-bold text-ink">계산기 소개</h1>
 
       <section className="mt-6 border border-rule bg-paper p-5">
-        <h2 className="text-lg font-bold">운영자 소개</h2>
+        <h2 className="font-serif text-xl font-bold text-ink">운영자 소개</h2>
         {operatorParas.map((p, i) => (
           <p key={i} className="mt-3 text-sm leading-relaxed text-body">
             {p}
@@ -47,7 +47,7 @@ export default function AboutPage() {
         </p>
       ))}
 
-      <h2 className="mt-8 text-lg font-bold">제공하는 계산기</h2>
+      <h2 className="mt-8 font-serif text-xl font-bold text-ink">제공하는 계산기</h2>
       <div className="mt-3 space-y-3">
         {groups.map((g) => (
           <p key={g} className="text-sm leading-relaxed text-body">
@@ -60,7 +60,7 @@ export default function AboutPage() {
         ))}
       </div>
 
-      <h2 className="mt-8 text-lg font-bold">제공하는 가이드</h2>
+      <h2 className="mt-8 font-serif text-xl font-bold text-ink">제공하는 가이드</h2>
       <div className="mt-3 space-y-3">
         {GUIDE_TRACKS.map((track) => (
           <p key={track.title} className="text-sm leading-relaxed text-body">
@@ -75,7 +75,7 @@ export default function AboutPage() {
 
       {faqs.length > 0 && (
         <>
-          <h2 className="mt-8 text-lg font-bold">자주 묻는 질문</h2>
+          <h2 className="mt-8 font-serif text-xl font-bold text-ink">자주 묻는 질문</h2>
           <div className="mt-3 space-y-2">
             {faqs.map((f) => (
               <details

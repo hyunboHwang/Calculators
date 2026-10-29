@@ -29,7 +29,10 @@ export default function ToolsPanel({
 }) {
   const [query, setQuery] = useState('')
   const inputRef = useRef<HTMLInputElement>(null)
-  useEffect(() => inputRef.current?.focus({ preventScroll: true }), [])
+  useEffect(() => {
+    // 데스크톱 패널에서만 자동 포커스 (모바일 메뉴에서는 키보드가 올라오지 않게)
+    if (window.matchMedia('(min-width: 1024px)').matches) inputRef.current?.focus({ preventScroll: true })
+  }, [])
 
   const q = query.trim().toLowerCase()
   const results = q ? ALL.filter((r) => `${r.label} ${r.description}`.toLowerCase().includes(q)) : []
@@ -81,7 +84,7 @@ export default function ToolsPanel({
       <div className="tools-scroll max-h-[60vh] overflow-y-auto pt-4 lg:max-h-[70vh]">
         {q ? (
           results.length ? (
-            <div role="list" className="grid gap-x-7 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-x-7 sm:grid-cols-2 lg:grid-cols-3">
               {results.map(link)}
             </div>
           ) : (
@@ -91,7 +94,7 @@ export default function ToolsPanel({
           <div className="grid grid-cols-2 gap-x-7 gap-y-6 sm:grid-cols-3 lg:grid-cols-5">
             {COLUMNS.map((c) => (
               <div key={c.title}>
-                <h4 className="mb-2 border-b border-ink pb-1.5 font-serif text-[15px] text-ink">{c.title}</h4>
+                <h3 className="mb-2 border-b border-ink pb-1.5 font-serif text-[15px] text-ink">{c.title}</h3>
                 {c.items.map(link)}
               </div>
             ))}

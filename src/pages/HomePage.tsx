@@ -65,7 +65,7 @@ export default function HomePage({ navigate }: { navigate: (to: string) => void 
                     </span>
                     <span className="mt-0.5 block text-sm">{t.summary}</span>
                     <span className="mt-1 block text-xs text-muted">
-                      가이드 {guides} · 계산기 {calcs}
+                      {[guides && `가이드 ${guides}`, calcs && `계산기 ${calcs}`].filter(Boolean).join(' · ')}
                     </span>
                   </span>
                 </a>

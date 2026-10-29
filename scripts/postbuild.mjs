@@ -21,9 +21,7 @@ const popularLinks = JSON.parse(
   readFileSync(new URL('../src/popularLinks.json', import.meta.url), 'utf8'),
 )
 
-const groupOrder = JSON.parse(
-  readFileSync(new URL('../src/groups.json', import.meta.url), 'utf8'),
-)
+const lifeIds = ['age', 'celebration', 'insuranceAge', 'pensionAge', 'dday', 'dateCalc', 'discharge', 'dueDate', 'bmi', 'generalCalculator'] // src/lib/topics.ts LIFE_IDS와 동일
 
 const SITE_URL = 'https://www.calculators.ai.kr'
 
@@ -46,11 +44,14 @@ function prerenderBody(route) {
   const h1 = route.title.split(' | ')[0]
 
   let html = `<div class="mx-auto max-w-3xl px-4 py-8 text-sm leading-relaxed text-slate-600">`
+  if (route.group === '주제') {
+    html += `<nav aria-label="현재 위치" class="text-xs text-muted"><a href="/">홈</a> › ${esc(route.label)}</nav>`
+  }
   html += `<h1 class="text-2xl font-bold text-slate-900">${esc(h1)}</h1>`
   html += `<p class="mt-2">${esc(route.description)}</p>`
   if (c?.updatedAt) {
     html += `<p class="mt-1 text-xs">최종 업데이트: ${esc(c.updatedAt.replaceAll('-', '. '))}.</p>`
-    html += `<p class="mt-1 text-xs">작성·운영: 계산기 운영자(1인 개발자) · <a href="/about/">운영자 소개</a> · <a href="/verification/">검증 방식</a></p>`
+    if (route.group !== '주제') html += `<p class="mt-1 text-xs">작성·운영: 계산기 운영자(1인 개발자) · <a href="/about/">운영자 소개</a> · <a href="/verification/">검증 방식</a></p>`
   }
 
   if (c) {
@@ -201,17 +202,22 @@ function prerenderBody(route) {
     const topic = topics.find((t) => t.path === route.path)
     if (topic) {
       const { guides, calcs } = topicStats(topic)
-      html += `<nav aria-label="현재 위치" class="text-xs text-muted"><a href="/">홈</a> › ${esc(topic.label)}</nav>`
-      html += `<h2 class="${H2}">이 주제의 가이드</h2><ul class="mt-2 list-disc pl-5">`
-      html += guides
-        .map((g) => {
-          const u = pageContent[g.id]?.updatedAt
-          return `<li class="mt-1">${link(g)} — ${esc(g.description)}${u ? ` (최종 업데이트 ${esc(u.replaceAll('-', '. '))}.)` : ''}</li>`
-        })
-        .join('')
-      html += `</ul><h2 class="${H2}">이 주제의 계산기</h2><ul class="mt-2 list-disc pl-5">`
-      html += calcs.map((r) => `<li class="mt-1">${link(r)} — ${esc(r.description)}</li>`).join('')
-      html += `</ul><nav class="mt-6 text-sm" aria-label="다른 주제"><b>다른 주제</b> `
+      if (guides.length) {
+        html += `<h2 class="${H2}">이 주제의 가이드</h2><ul class="mt-2 list-disc pl-5">`
+        html += guides
+          .map((g) => {
+            const u = pageContent[g.id]?.updatedAt
+            return `<li class="mt-1">${link(g)} — ${esc(g.description)}${u ? ` (최종 업데이트 ${esc(u.replaceAll('-', '. '))}.)` : ''}</li>`
+          })
+          .join('')
+        html += `</ul>`
+      }
+      if (calcs.length) {
+        html += `<h2 class="${H2}">이 주제의 계산기</h2><ul class="mt-2 list-disc pl-5">`
+        html += calcs.map((r) => `<li class="mt-1">${link(r)} — ${esc(r.description)}</li>`).join('')
+        html += `</ul>`
+      }
+      html += `<nav class="mt-6 text-sm" aria-label="다른 주제"><b>다른 주제</b> `
       html += topics.filter((t) => t.id !== topic.id).map((t) => `<a href="${urlOf(t.path)}">${esc(t.label)}</a>`).join(' · ')
       html += `</nav><p class="mt-3 text-xs">작성·운영: 계산기 운영자(1인 개발자) · ${operatorLine}</p>`
     }
@@ -222,7 +228,9 @@ function prerenderBody(route) {
     html += topics
       .map((t) => {
         const { guides, calcs } = topicStats(t)
-        return `<li class="mt-1"><a href="${urlOf(t.path)}">${esc(t.label)}</a> — ${esc(t.summary)} (가이드 ${guides.length} · 계산기 ${calcs.length})</li>`
+        const parts = [guides.length && `가이드 ${guides.length}`, calcs.length && `계산기 ${calcs.length}`].filter(Boolean)
+        const counts = parts.length ? ` (${parts.join(' · ')})` : ''
+        return `<li class="mt-1"><a href="${urlOf(t.path)}">${esc(t.label)}</a> — ${esc(t.summary)}${counts}</li>`
       })
       .join('')
     html += `</ol><p class="mt-2"><a href="/guides/">가이드 전체 보기</a></p>`
@@ -296,6 +304,7 @@ function prerenderBody(route) {
   for (const [title, ids] of [
     ['인기 계산기', popularLinks.calculators],
     ['인기 가이드', popularLinks.guides],
+    ['생활 계산기', lifeIds],
   ]) {
     const links = routes.filter((r) => ids.includes(r.id) && r.id !== route.id)
     html += `<nav class="mt-4 text-xs" aria-label="${title}"><b>${title}</b> `
