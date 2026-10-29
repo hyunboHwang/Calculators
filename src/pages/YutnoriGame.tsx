@@ -197,7 +197,7 @@ const COLOR_DOT: Record<TeamColor, string> = {
   red: 'bg-red-500',
   blue: 'bg-blue-500',
   yellow: 'bg-yellow-400',
-  green: 'bg-emerald-500',
+  green: 'bg-ink text-paper',
 }
 
 // 기본 조 편성 프리셋 — 4조, 조당 5명.
@@ -261,29 +261,29 @@ function SetupScreen({ onStart }: { onStart: (teams: Team[], endMode: EndMode, t
   return (
     <div>
       <h1 className="text-2xl font-bold">윷놀이</h1>
-      <p className="mt-1 mb-3 text-sm text-slate-500">
+      <p className="mt-1 mb-3 text-sm text-muted">
         팀을 만들고 시작하세요. 윷은 직접 던지고, 나온 결과만 화면에 입력하면 됩니다.
       </p>
 
       <button
         type="button"
         onClick={loadDefaultRosters}
-        className="mb-6 rounded-lg bg-emerald-50 px-3 py-2 text-sm font-semibold text-emerald-700 ring-1 ring-emerald-200 hover:bg-emerald-100"
+        className="mb-6 bg-tint px-3 py-2 text-sm font-semibold text-accent ring-1 ring-accent hover:bg-tint"
       >
         기본 조 편성 불러오기 (4조)
       </button>
 
-      <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+      <div className="border border-rule bg-paper p-5">
         <label className="block">
-          <span className="mb-1.5 block text-sm font-medium text-slate-700">팀 수</span>
+          <span className="mb-1.5 block text-sm font-medium text-ink">팀 수</span>
           <div className="flex gap-2">
             {[2, 3, 4].map((n) => (
               <button
                 key={n}
                 type="button"
                 onClick={() => setTeamCountAndResize(n)}
-                className={`rounded-lg px-4 py-2 text-sm font-semibold ${
-                  teamCount === n ? 'bg-emerald-600 text-white' : 'bg-slate-100 text-slate-600'
+                className={`px-4 py-2 text-sm font-semibold ${
+                  teamCount === n ? 'bg-ink text-paper' : 'bg-tint text-body'
                 }`}
               >
                 {n}팀
@@ -294,9 +294,9 @@ function SetupScreen({ onStart }: { onStart: (teams: Team[], endMode: EndMode, t
 
         <div className="mt-5 space-y-5">
           {rosters.slice(0, teamCount).map((names, teamIdx) => (
-            <div key={teamIdx} className="rounded-xl border border-slate-200 p-4">
+            <div key={teamIdx} className="border border-rule p-4">
               <div className="flex items-center justify-between gap-3">
-                <span className="flex items-center gap-2 text-sm font-semibold text-slate-800">
+                <span className="flex items-center gap-2 text-sm font-semibold text-ink">
                   <span className={`h-3 w-3 rounded-full ${COLOR_DOT[TEAM_COLORS[teamIdx]]}`} aria-hidden="true" />
                   {COLOR_LABEL[TEAM_COLORS[teamIdx]]}팀 ({names.length}명)
                 </span>
@@ -306,8 +306,8 @@ function SetupScreen({ onStart }: { onStart: (teams: Team[], endMode: EndMode, t
                       key={n}
                       type="button"
                       onClick={() => setPlayerCount(teamIdx, n)}
-                      className={`h-7 w-7 rounded-md text-xs font-semibold ${
-                        names.length === n ? 'bg-emerald-600 text-white' : 'bg-slate-100 text-slate-500'
+                      className={`h-7 w-7 text-xs font-semibold ${
+                        names.length === n ? 'bg-ink text-paper' : 'bg-tint text-muted'
                       }`}
                     >
                       {n}
@@ -323,7 +323,7 @@ function SetupScreen({ onStart }: { onStart: (teams: Team[], endMode: EndMode, t
                     value={name}
                     onChange={(e) => setPlayerName(teamIdx, playerIdx, e.target.value)}
                     placeholder={`팀원${playerIdx + 1} 이름`}
-                    className="rounded-lg border border-slate-300 px-2.5 py-1.5 text-sm"
+                    className="border border-rule px-2.5 py-1.5 text-sm"
                   />
                 ))}
               </div>
@@ -332,13 +332,13 @@ function SetupScreen({ onStart }: { onStart: (teams: Team[], endMode: EndMode, t
         </div>
 
         <div className="mt-5">
-          <span className="mb-1.5 block text-sm font-medium text-slate-700">종료 방식</span>
+          <span className="mb-1.5 block text-sm font-medium text-ink">종료 방식</span>
           <div className="flex flex-wrap gap-2">
             <button
               type="button"
               onClick={() => setEndMode('complete')}
-              className={`rounded-lg px-4 py-2 text-sm font-semibold ${
-                endMode === 'complete' ? 'bg-emerald-600 text-white' : 'bg-slate-100 text-slate-600'
+              className={`px-4 py-2 text-sm font-semibold ${
+                endMode === 'complete' ? 'bg-ink text-paper' : 'bg-tint text-body'
               }`}
             >
               전체 완주까지
@@ -346,8 +346,8 @@ function SetupScreen({ onStart }: { onStart: (teams: Team[], endMode: EndMode, t
             <button
               type="button"
               onClick={() => setEndMode('timed')}
-              className={`rounded-lg px-4 py-2 text-sm font-semibold ${
-                endMode === 'timed' ? 'bg-emerald-600 text-white' : 'bg-slate-100 text-slate-600'
+              className={`px-4 py-2 text-sm font-semibold ${
+                endMode === 'timed' ? 'bg-ink text-paper' : 'bg-tint text-body'
               }`}
             >
               시간제한
@@ -358,10 +358,10 @@ function SetupScreen({ onStart }: { onStart: (teams: Team[], endMode: EndMode, t
                 min={1}
                 value={timeLimitMin}
                 onChange={(e) => setTimeLimitMin(Math.max(1, Number(e.target.value) || 1))}
-                className="w-20 rounded-lg border border-slate-300 px-2.5 py-1.5 text-sm"
+                className="w-20 border border-rule px-2.5 py-1.5 text-sm"
               />
             )}
-            {endMode === 'timed' && <span className="self-center text-sm text-slate-500">분</span>}
+            {endMode === 'timed' && <span className="self-center text-sm text-muted">분</span>}
           </div>
         </div>
 
@@ -369,7 +369,7 @@ function SetupScreen({ onStart }: { onStart: (teams: Team[], endMode: EndMode, t
           type="button"
           disabled={!canStart}
           onClick={handleStart}
-          className="mt-6 w-full rounded-xl bg-emerald-600 py-3 text-sm font-bold text-white disabled:bg-slate-300"
+          className="mt-6 w-full bg-ink text-paper py-3 text-sm font-bold disabled:bg-muted"
         >
           게임 시작
         </button>
@@ -468,7 +468,7 @@ function PlayingScreen({
     <div>
       <h1 className="text-2xl font-bold">윷놀이</h1>
       {state.endMode === 'timed' && (
-        <p className="mt-1 text-sm font-semibold text-slate-600">
+        <p className="mt-1 text-sm font-semibold text-body">
           남은 시간: {Math.floor(remainingSec / 60)}분 {remainingSec % 60}초
         </p>
       )}
@@ -484,15 +484,15 @@ function PlayingScreen({
           canUndo={canUndo}
         >
           {!state.awaitingMove && !state.awaitingShortcut && state.pendingThrows.length > 0 && (
-            <div className="mt-2 rounded-2xl border border-sky-200 bg-sky-50 p-4">
-              <p className="text-sm font-semibold text-sky-800">배정 대기 중인 결과 — 눌러서 말을 고르세요</p>
+            <div className="mt-2 border border-rule bg-tint p-4">
+              <p className="text-sm font-semibold text-body">배정 대기 중인 결과 — 눌러서 말을 고르세요</p>
               <div className="mt-2 flex flex-wrap gap-2">
                 {state.pendingThrows.map((r, i) => (
                   <button
                     key={i}
                     type="button"
                     onClick={() => dispatch({ type: 'RESOLVE_THROW', index: i })}
-                    className="rounded-lg bg-white px-3 py-2 text-sm font-semibold text-sky-700 shadow-sm hover:bg-sky-100"
+                    className="bg-paper px-3 py-2 text-sm font-semibold text-body hover:bg-tint"
                   >
                     {THROW_LABELS[r]}
                   </button>
@@ -508,7 +508,7 @@ function PlayingScreen({
                   key={r}
                   type="button"
                   onClick={() => dispatch({ type: 'THROW', result: r })}
-                  className="rounded-xl bg-slate-800 py-3 text-sm font-bold text-white hover:bg-slate-700"
+                  className="bg-ink py-3 text-sm font-bold text-paper hover:bg-body"
                 >
                   {THROW_LABELS[r]}
                 </button>
@@ -517,8 +517,8 @@ function PlayingScreen({
           )}
 
           {state.awaitingMove && (
-            <div className="mt-2 rounded-2xl border border-amber-200 bg-amber-50 p-4">
-              <p className="text-sm font-semibold text-amber-800">
+            <div className="mt-2 border border-rule bg-tint p-4">
+              <p className="text-sm font-semibold text-body">
                 {THROW_LABELS[state.awaitingMove.result]} — 움직일 말을 고르세요
               </p>
               <div className="mt-2 flex flex-wrap gap-2">
@@ -533,10 +533,10 @@ function PlayingScreen({
                     onMouseLeave={() => setPreviewAt(null)}
                     onFocus={() => setPreviewAt(previewDestination(state.pieces, opt, state.awaitingMove!.result))}
                     onBlur={() => setPreviewAt(null)}
-                    className="rounded-lg bg-white px-3 py-2 text-sm font-medium text-slate-700 shadow-sm hover:bg-slate-50"
+                    className="bg-paper px-3 py-2 text-sm font-medium text-ink hover:bg-tint"
                   >
                     {opt.pieceIds.map((id) => pieceName(state.pieces, state.teams, id)).join(', ')}
-                    <span className="text-slate-400"> · {nodeLabel(opt.at)}</span>
+                    <span className="text-muted"> · {nodeLabel(opt.at)}</span>
                     {opt.pieceIds.length > 1 ? ' (업힘)' : ''}
                   </button>
                 ))}
@@ -549,22 +549,22 @@ function PlayingScreen({
               const piece = state.pieces.find((p) => state.awaitingShortcut!.pieceIds.includes(p.id))
               const atCenter = piece?.position.status === 'onBoard' && piece.position.at === 'c'
               return (
-                <div className="mt-2 rounded-2xl border border-amber-200 bg-amber-50 p-4">
-                  <p className="text-sm font-semibold text-amber-800">
+                <div className="mt-2 border border-rule bg-tint p-4">
+                  <p className="text-sm font-semibold text-body">
                     {atCenter ? '중앙에서 어느 지름길로 갈까요?' : '지름길로 갈까요?'}
                   </p>
                   <div className="mt-2 flex gap-2">
                     <button
                       type="button"
                       onClick={() => dispatch({ type: 'CHOOSE_SHORTCUT', take: true })}
-                      className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white"
+                      className="bg-ink text-paper px-4 py-2 text-sm font-semibold"
                     >
                       {atCenter ? '15번 칸 방향' : '지름길로'}
                     </button>
                     <button
                       type="button"
                       onClick={() => dispatch({ type: 'CHOOSE_SHORTCUT', take: false })}
-                      className="rounded-lg bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm"
+                      className="bg-paper px-4 py-2 text-sm font-semibold text-ink"
                     >
                       {atCenter ? '도착 방향' : '그냥 테두리로'}
                     </button>
@@ -579,16 +579,16 @@ function PlayingScreen({
         <button
           type="button"
           onClick={() => setShowRename((v) => !v)}
-          className="text-xs font-semibold text-slate-500 underline underline-offset-2"
+          className="text-xs font-semibold text-muted underline underline-offset-2"
         >
           {showRename ? '말 이름 수정 닫기' : '말 이름 수정'}
         </button>
         {showRename && (
-          <div className="mt-2 rounded-2xl border border-slate-200 bg-white p-4">
+          <div className="mt-2 border border-rule bg-paper p-4">
             <div className="space-y-3">
               {state.teams.map((t) => (
                 <div key={t.id}>
-                  <p className="mb-1 flex items-center gap-1.5 text-xs font-semibold text-slate-500">
+                  <p className="mb-1 flex items-center gap-1.5 text-xs font-semibold text-muted">
                     <span className={`h-2 w-2 rounded-full ${COLOR_DOT[t.color]}`} aria-hidden="true" />
                     {t.name}
                   </p>
@@ -601,7 +601,7 @@ function PlayingScreen({
                         onChange={(e) =>
                           dispatch({ type: 'RENAME_PLAYER', teamId: t.id, index: i, name: e.target.value })
                         }
-                        className="w-24 rounded-lg border border-slate-300 px-2 py-1 text-xs"
+                        className="w-24 border border-rule px-2 py-1 text-xs"
                       />
                     ))}
                   </div>
@@ -612,7 +612,7 @@ function PlayingScreen({
         )}
       </div>
 
-      <div className="mt-4 space-y-1 text-xs text-slate-400">
+      <div className="mt-4 space-y-1 text-xs text-muted">
         {state.log.map((l, i) => (
           <p key={i}>{l}</p>
         ))}
@@ -635,11 +635,11 @@ function ResultsScreen({ state, undo, canUndo }: { state: GameState; undo: () =>
           return (
             <li
               key={teamId}
-              className="flex items-center gap-3 rounded-xl border border-slate-200 bg-white p-4 shadow-sm"
+              className="flex items-center gap-3 border border-rule bg-paper p-4"
             >
-              <span className="text-lg font-bold text-emerald-600">{i + 1}등</span>
-              <span className="font-semibold text-slate-800">{team.name}</span>
-              <span className="text-sm text-slate-400">({team.playerNames.join(', ')})</span>
+              <span className="text-lg font-bold text-accent">{i + 1}등</span>
+              <span className="font-semibold text-ink">{team.name}</span>
+              <span className="text-sm text-muted">({team.playerNames.join(', ')})</span>
             </li>
           )
         })}
@@ -648,14 +648,14 @@ function ResultsScreen({ state, undo, canUndo }: { state: GameState; undo: () =>
         type="button"
         disabled={!canUndo}
         onClick={undo}
-        className="mt-4 w-full rounded-xl bg-white py-3 text-sm font-semibold text-slate-600 shadow-sm disabled:opacity-40"
+        className="mt-4 w-full bg-paper py-3 text-sm font-semibold text-body disabled:opacity-40"
       >
         되돌리기
       </button>
       <button
         type="button"
         onClick={() => window.location.reload()}
-        className="mt-3 w-full rounded-xl bg-emerald-600 py-3 text-sm font-bold text-white"
+        className="mt-3 w-full bg-ink text-paper py-3 text-sm font-bold"
       >
         다시 시작
       </button>

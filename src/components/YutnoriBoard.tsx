@@ -60,20 +60,20 @@ const COLOR_BG: Record<TeamColor, string> = {
   red: 'bg-red-500',
   blue: 'bg-blue-500',
   yellow: 'bg-yellow-400',
-  green: 'bg-emerald-500',
+  green: 'bg-ink text-paper',
 }
 // 말 마커는 흰 보드 위에서 더 진하고 또렷하게 보이도록 범례보다 채도/명도를 살짝 높인 색을 쓴다.
 const PIECE_COLOR_BG: Record<TeamColor, string> = {
   red: 'bg-red-600',
   blue: 'bg-blue-600',
   yellow: 'bg-yellow-500',
-  green: 'bg-emerald-600',
+  green: 'bg-ink text-paper',
 }
 const COLOR_BORDER: Record<TeamColor, string> = {
   red: 'border-red-500',
   blue: 'border-blue-500',
   yellow: 'border-yellow-400',
-  green: 'border-emerald-500',
+  green: 'border-accent',
 }
 // 말 이름과 같은 파일명의 이미지가 있으면 그 이미지를, 없으면(404) 팀 색 배경만 보여준다.
 const PIECE_IMAGE_BASE = 'http://content.chungchy.com/data/playchungchy/game/'
@@ -111,7 +111,7 @@ export default function YutnoriBoard({
   }
 
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+    <div className="border border-rule bg-paper p-5">
       <div className="flex flex-col gap-4 lg:flex-row lg:items-start">
       <div className="relative mx-auto my-6 aspect-square w-full max-w-[29.4rem]">
         <svg className="absolute inset-0 h-full w-full" viewBox="0 0 100 100" preserveAspectRatio="none">
@@ -126,10 +126,10 @@ export default function YutnoriBoard({
           return (
             <div
               key={node}
-              className="absolute flex h-12 w-12 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-slate-300 bg-white shadow"
+              className="absolute flex h-12 w-12 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-rule bg-paper shadow"
               style={{ top: `${top}%`, left: `${left}%` }}
             >
-              <span className="select-none text-[11px] font-semibold text-slate-400">
+              <span className="select-none text-[11px] font-semibold text-muted">
                 {boardNodeLabel(node)}
               </span>
             </div>
@@ -151,7 +151,7 @@ export default function YutnoriBoard({
                 return (
                   <span
                     key={p.id}
-                    className={`relative block h-12 w-12 overflow-hidden rounded-full border-[3px] border-white shadow-md ring-1 ring-black/10 ${PIECE_COLOR_BG[colorOf(p.teamId)]}`}
+                    className={`relative block h-12 w-12 overflow-hidden rounded-full border-[3px] border-white  ring-1 ring-black/10 ${PIECE_COLOR_BG[colorOf(p.teamId)]}`}
                     title={name}
                   >
                     <img
@@ -177,7 +177,7 @@ export default function YutnoriBoard({
             const [top, left] = coords
             return (
               <div
-                className={`pointer-events-none absolute h-5 w-5 -translate-x-1/2 -translate-y-1/2 animate-pulse rounded-full border-2 bg-white/40 ${COLOR_BORDER[colorOf(previewTeamId)]}`}
+                className={`pointer-events-none absolute h-5 w-5 -translate-x-1/2 -translate-y-1/2 animate-pulse rounded-full border-2 bg-paper/40 ${COLOR_BORDER[colorOf(previewTeamId)]}`}
                 style={{ top: `${top}%`, left: `${left}%` }}
                 aria-hidden="true"
               />
@@ -191,12 +191,12 @@ export default function YutnoriBoard({
           type="button"
           disabled={!canUndo}
           onClick={onUndo}
-          className="self-start rounded-lg bg-white px-3 py-1.5 text-xs font-semibold text-slate-600 shadow-sm ring-1 ring-slate-200 disabled:opacity-40"
+          className="self-start bg-paper px-3 py-1.5 text-xs font-semibold text-body ring-1 ring-accent disabled:opacity-40"
         >
           되돌리기
         </button>
       )}
-      <ul className="flex flex-col gap-1.5 text-sm text-slate-600">
+      <ul className="flex flex-col gap-1.5 text-sm text-body">
         {teams.map((t) => {
           const teamPieces = pieces.filter((p) => p.teamId === t.id)
           const home = teamPieces.filter((p) => p.position.status === 'home').length
@@ -205,17 +205,17 @@ export default function YutnoriBoard({
           return (
             <li
               key={t.id}
-              className={`flex flex-nowrap items-center gap-2 whitespace-nowrap rounded-lg px-2 py-1 ${
-                isCurrent ? 'bg-emerald-50 ring-1 ring-emerald-300' : ''
+              className={`flex flex-nowrap items-center gap-2 whitespace-nowrap px-2 py-1 ${
+                isCurrent ? 'bg-tint ring-1 ring-accent' : ''
               }`}
             >
               <span className={`h-2.5 w-2.5 shrink-0 rounded-full ${COLOR_BG[t.color]}`} aria-hidden="true" />
               <b className="shrink-0">{t.name}</b>
-              <span className="shrink-0 text-slate-400">
+              <span className="shrink-0 text-muted">
                 대기 {home} · 완주 {finished}
               </span>
               {isCurrent && (
-                <span className="ml-auto shrink-0 text-xs font-bold text-emerald-600">◀ 차례</span>
+                <span className="ml-auto shrink-0 text-xs font-bold text-accent">◀ 차례</span>
               )}
             </li>
           )
