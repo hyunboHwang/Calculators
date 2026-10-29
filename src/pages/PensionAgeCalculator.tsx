@@ -33,20 +33,20 @@ export default function PensionAgeCalculator() {
   return (
     <div>
       <h1 className="text-2xl font-bold">국민연금 수령나이 계산기</h1>
-      <p className="mt-1 mb-6 text-sm text-slate-500">
+      <p className="mt-1 mb-6 text-sm text-muted">
         출생연도별 노령연금 수령 개시 연령과 조기·연기 수령 시 금액 변화를 확인합니다.
       </p>
 
       <div className="grid gap-6 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
         <section className="h-fit space-y-4">
-          <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+          <div className="border border-rule bg-paper p-5">
             <h2 className="mb-4 text-base font-semibold">생년월일 입력</h2>
             <DateField label="생년월일" value={birthStr} onChange={setBirthStr} />
           </div>
 
-          <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+          <div className="border border-rule bg-paper p-5">
             <h2 className="mb-2 text-base font-semibold">출생연도별 개시 연령</h2>
-            <div className="divide-y divide-slate-100">
+            <div className="divide-y divide-rule">
               {(
                 [
                   ['1952년생 이전', 60],
@@ -70,17 +70,17 @@ export default function PensionAgeCalculator() {
 
         <section className="space-y-4">
           {!r ? (
-            <div className="rounded-2xl border border-red-200 bg-red-50 p-5 text-sm text-red-700">
+            <div className="border border-accent bg-tint p-5 text-sm text-accent">
               날짜를 확인해주세요.
             </div>
           ) : (
             <>
-              <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-5">
-                <p className="text-sm text-slate-500">{r.birthYear}년생의 노령연금 개시</p>
-                <p className="mt-1 text-3xl font-extrabold text-emerald-700">
+              <div className="border border-accent bg-tint p-5">
+                <p className="text-sm text-muted">{r.birthYear}년생의 노령연금 개시</p>
+                <p className="mt-1 text-3xl font-bold font-serif text-ink">
                   만 {r.startAge}세
                 </p>
-                <p className="mt-2 text-sm text-slate-600">
+                <p className="mt-2 text-sm text-body">
                   {fmtDate(r.startDate)} 도달 ·{' '}
                   {r.remain ? (
                     <>
@@ -90,14 +90,14 @@ export default function PensionAgeCalculator() {
                     <b>이미 수령 연령에 도달했습니다</b>
                   )}
                 </p>
-                <p className="mt-1 text-xs text-slate-400">
+                <p className="mt-1 text-xs text-muted">
                   실제 지급은 도달일이 속한 달의 다음 달부터 시작됩니다.
                 </p>
               </div>
 
-              <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+              <div className="border border-rule bg-paper p-5">
                 <h2 className="mb-3 text-base font-semibold">조기 vs 정상 vs 연기 수령</h2>
-                <div className="grid grid-cols-3 gap-2 border-b border-slate-100 pb-2 text-xs font-semibold text-slate-400">
+                <div className="grid grid-cols-3 gap-2 border-b border-rule pb-2 text-xs font-semibold text-muted">
                   <span>수령 시점</span>
                   <span className="text-right">나이</span>
                   <span className="text-right">수령액</span>
@@ -114,8 +114,8 @@ export default function PensionAgeCalculator() {
                   <div
                     key={String(label)}
                     className={`grid grid-cols-3 gap-2 py-2 text-sm ${
-                      pct === 100 ? 'font-bold text-emerald-700' : 'text-slate-600'
-                    } ${i > 0 ? 'border-t border-slate-100' : ''}`}
+                      pct === 100 ? 'font-bold text-accent' : 'text-body'
+                    } ${i > 0 ? 'border-t border-rule' : ''}`}
                   >
                     <span>{label}</span>
                     <span className="text-right tabular-nums">만 {age}세</span>
@@ -124,14 +124,14 @@ export default function PensionAgeCalculator() {
                     </span>
                   </div>
                 ))}
-                <p className="mt-3 text-xs leading-relaxed text-slate-400">
+                <p className="mt-3 text-xs leading-relaxed text-muted">
                   조기노령연금은 1년당 6%(월 0.5%) 감액, 연기연금은 1년당 7.2%(월 0.6%)
                   증액되며 평생 적용됩니다. 조기수령은 가입기간 10년 이상, 소득이 일정 기준
                   이하일 때 가능합니다.
                 </p>
               </div>
 
-              <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-xs leading-relaxed text-amber-800">
+              <div className="border border-rule bg-tint p-4 text-xs leading-relaxed text-body">
                 수령 개시 연령 기준이며 실제 연금액은 가입기간과 평균소득에 따라 다릅니다.
                 정확한 예상 연금액은 국민연금공단 '내 연금 알아보기'에서 확인하세요.
               </div>

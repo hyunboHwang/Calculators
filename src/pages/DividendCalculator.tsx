@@ -56,13 +56,13 @@ export default function DividendCalculator() {
   return (
     <div>
       <h1 className="text-2xl font-bold">배당금 계산기</h1>
-      <p className="mt-1 mb-6 text-sm text-slate-500">
+      <p className="mt-1 mb-6 text-sm text-muted">
         투자금과 배당수익률로 세후 배당금을 계산하고, 목표 월 배당에 필요한 투자금을
         역산합니다. 원화(15.4%)·달러(미국 원천징수 15%) 모두 지원합니다.
       </p>
 
       <div className="grid gap-6 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
-        <section className="h-fit rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+        <section className="h-fit border border-rule bg-paper p-5">
           <h2 className="mb-4 text-base font-semibold">투자 정보</h2>
           <div className="space-y-4">
             <CurrencyToggle value={currency} onChange={switchCurrency} />
@@ -91,7 +91,7 @@ export default function DividendCalculator() {
                 hint="원화 환산 표시용"
               />
             )}
-            <div className="border-t border-slate-100 pt-4">
+            <div className="border-t border-rule pt-4">
               <Field
                 label="목표 월 배당금 (세후)"
                 value={targetMonthly}
@@ -105,29 +105,29 @@ export default function DividendCalculator() {
         </section>
 
         <section className="space-y-4">
-          <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-5">
+          <div className="border border-accent bg-tint p-5">
             <div className="flex flex-wrap items-end justify-between gap-3">
               <div>
-                <p className="text-sm text-slate-500">월평균 배당금 (세후)</p>
-                <p className="text-3xl font-extrabold tabular-nums text-emerald-700">
+                <p className="text-sm text-muted">월평균 배당금 (세후)</p>
+                <p className="text-3xl font-bold font-serif tabular-nums text-ink">
                   {m(r.monthlyNet)}
                 </p>
                 {currency === 'USD' && fxRate > 0 && (
-                  <p className="mt-1 text-sm text-slate-500">
+                  <p className="mt-1 text-sm text-muted">
                     약 {fmt(r.monthlyNet * fxRate)}원
                   </p>
                 )}
               </div>
               <div className="text-right">
-                <p className="text-sm text-slate-500">연 배당금 (세후)</p>
+                <p className="text-sm text-muted">연 배당금 (세후)</p>
                 <p className="text-lg font-bold tabular-nums">{m(r.annualNet)}</p>
               </div>
             </div>
           </div>
 
-          <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+          <div className="border border-rule bg-paper p-5">
             <h2 className="mb-2 text-base font-semibold">상세 내역</h2>
-            <div className="divide-y divide-slate-100">
+            <div className="divide-y divide-rule">
               <Row label="연 배당금 (세전)" value={m(r.annualGross)} />
               <Row label={tax.label} value={`-${m(r.taxAmount)}`} />
               <Row label="연 배당금 (세후)" value={m(r.annualNet)} strong />
@@ -138,20 +138,20 @@ export default function DividendCalculator() {
             </div>
           </div>
 
-          <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+          <div className="border border-rule bg-paper p-5">
             <h2 className="mb-2 text-base font-semibold">목표 배당 역산</h2>
-            <p className="text-sm leading-relaxed text-slate-600">
+            <p className="text-sm leading-relaxed text-body">
               세후 월 <b>{m(targetMonthly)}</b>을 배당으로 받으려면 배당수익률 {yieldPct}%
-              기준 약 <b className="text-emerald-700">{m(r.needed)}</b>
+              기준 약 <b className="text-accent">{m(r.needed)}</b>
               {currency === 'USD' && fxRate > 0 && Number.isFinite(r.needed) && (
-                <span className="text-slate-400"> (약 {fmt(r.needed * fxRate)}원)</span>
+                <span className="text-muted"> (약 {fmt(r.needed * fxRate)}원)</span>
               )}
               을 투자해야 합니다.
             </p>
           </div>
 
           {r.overThreshold && (
-            <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-xs leading-relaxed text-amber-800">
+            <div className="border border-rule bg-tint p-4 text-xs leading-relaxed text-body">
               연간 금융소득(이자+배당)이 원화 기준 2,000만원을 초과하면 금융소득종합과세
               대상이 되어 다른 소득과 합산 과세됩니다. 지금 계산된 세전 배당금이 이 기준을
               넘으니 실제 세부담은 원천징수율보다 커질 수 있습니다.

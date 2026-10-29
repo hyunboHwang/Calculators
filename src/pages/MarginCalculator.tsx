@@ -107,20 +107,20 @@ const verdictStyle: Record<
 > = {
   good: {
     label: '좋음 · 등록해도 됩니다',
-    badge: 'bg-emerald-600',
-    box: 'border-emerald-200 bg-emerald-50',
+    badge: 'bg-ink text-paper',
+    box: 'border-accent bg-tint',
     desc: '마진율 25% 이상, 건당 순이익 5,000원 이상. 광고·반품 변수에 버틸 체력이 있는 상품입니다.',
   },
   soso: {
     label: '애매 · 조건부로만',
     badge: 'bg-amber-500',
-    box: 'border-amber-200 bg-amber-50',
+    box: 'border-rule bg-tint',
     desc: '마진율 10~25% 구간이거나, 마진율은 25% 이상이어도 건당 순이익이 5,000원 미만인 경우입니다. 광고비를 쓰기 시작하면 적자로 전환될 수 있으니 무료 노출 위주로 팔 수 있을 때만 등록하세요.',
   },
   risky: {
     label: '위험 · 등록 비추천',
     badge: 'bg-red-600',
-    box: 'border-red-200 bg-red-50',
+    box: 'border-accent bg-tint',
     desc: '마진율 10% 미만이거나 반품 1건이 여러 건의 이익을 지웁니다. 공급가를 낮추거나 판매가를 올리지 못하면 팔수록 손해에 가깝습니다.',
   },
 }
@@ -151,13 +151,13 @@ export default function MarginCalculator() {
   return (
     <div>
       <h1 className="text-2xl font-bold">스마트스토어 위탁판매 마진 계산기</h1>
-      <p className="mt-1 mb-6 text-sm text-slate-500">
+      <p className="mt-1 mb-6 text-sm text-muted">
         상품 등록 전에 숫자로 판단하세요. 반품·광고비까지 반영한 기대 이익 기준입니다.
       </p>
 
       <div className="grid gap-6 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
         {/* 입력 */}
-        <section className="h-fit rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+        <section className="h-fit border border-rule bg-paper p-5">
           <h2 className="mb-4 text-base font-semibold">상품 정보 입력</h2>
           <div className="grid grid-cols-2 gap-x-3 gap-y-4">
             <Field label="판매가" value={input.sellPrice} onChange={set('sellPrice')} />
@@ -211,7 +211,7 @@ export default function MarginCalculator() {
         {/* 결과 */}
         <section className="space-y-4">
           {/* 판정 */}
-          <div className={`rounded-2xl border p-5 ${v.box}`}>
+          <div className={`border p-5 ${v.box}`}>
             <div className="flex flex-wrap items-center gap-3">
               <span className={`shrink-0 rounded-full px-3 py-1 text-sm font-bold whitespace-nowrap text-white ${v.badge}`}>
                 {v.label}
@@ -219,15 +219,15 @@ export default function MarginCalculator() {
               <span className="text-2xl font-extrabold tabular-nums">
                 {fmtPct(r.marginRate)}
               </span>
-              <span className="text-sm text-slate-500">최종 마진율</span>
+              <span className="text-sm text-muted">최종 마진율</span>
             </div>
-            <p className="mt-3 text-sm leading-relaxed text-slate-700">{v.desc}</p>
+            <p className="mt-3 text-sm leading-relaxed text-ink">{v.desc}</p>
           </div>
 
           {/* 핵심 지표 */}
-          <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+          <div className="border border-rule bg-paper p-5">
             <h2 className="mb-2 text-base font-semibold">핵심 지표</h2>
-            <div className="divide-y divide-slate-100">
+            <div className="divide-y divide-rule">
               <Row label="건당 순이익 (반품 미반영)" value={`${fmt(r.unitProfit)}원`} negative={r.unitProfit < 0} />
               <Row
                 label="반품 반영 후 기대 순이익"
@@ -249,51 +249,49 @@ export default function MarginCalculator() {
           </div>
 
           {/* 판단 코멘트 */}
-          <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+          <div className="border border-rule bg-paper p-5">
             <h2 className="mb-3 text-base font-semibold">이 숫자가 의미하는 것</h2>
-            <ul className="space-y-2 text-sm leading-relaxed text-slate-700">
+            <ul className="space-y-2 text-sm leading-relaxed text-ink">
               <li className="flex gap-2">
                 <span aria-hidden>↩️</span>
                 {Number.isFinite(r.returnEatsSales) ? (
                   <span>
                     반품 1건이 발생하면 약{' '}
-                    <b className={r.returnEatsSales >= 5 ? 'text-red-600' : ''}>
+                    <b className={r.returnEatsSales >= 5 ? 'text-accent' : ''}>
                       {r.returnEatsSales.toFixed(1)}건
                     </b>
                     의 판매 이익이 사라집니다.
                   </span>
                 ) : (
-                  <span className="text-red-600">
+                  <span className="text-accent">
                     건당 이익이 없어 반품이 나면 손실이 그대로 쌓입니다.
                   </span>
                 )}
               </li>
               <li className="flex gap-2">
-                <span aria-hidden>🎯</span>
                 {Number.isFinite(r.neededMonthly) ? (
                   <span>
                     목표 월 순이익 <b>{fmt(input.targetMonthly)}원</b>을 만들려면 월{' '}
                     <b>{fmt(r.neededMonthly)}건</b> 판매가 필요합니다.
                   </span>
                 ) : (
-                  <span className="text-red-600">
+                  <span className="text-accent">
                     기대 이익이 0 이하라 아무리 팔아도 목표 월 순이익을 달성할 수 없습니다.
                   </span>
                 )}
               </li>
               <li className="flex gap-2">
-                <span aria-hidden>📣</span>
                 {r.maxAdSafe > 0 ? (
                   <span>
                     광고비는 건당 최대 <b>{fmt(r.maxAdSafe)}원</b>까지만 쓰는 게 안전합니다
-                    <span className="text-slate-400">
+                    <span className="text-muted">
                       {' '}
                       (마진율 10% 유지 기준 · 건당 {fmt(r.maxAdBreakEven)}원부터는 적자)
                     </span>
                     .
                   </span>
                 ) : (
-                  <span className="text-red-600">
+                  <span className="text-accent">
                     광고비를 쓸 여력이 없는 상품입니다. 무료 노출로만 판매 가능한 경우에만
                     고려하세요.
                   </span>
@@ -303,11 +301,11 @@ export default function MarginCalculator() {
           </div>
 
           {/* 계산 내역 */}
-          <details className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-            <summary className="cursor-pointer text-sm font-semibold text-slate-600">
+          <details className="border border-rule bg-paper p-5">
+            <summary className="cursor-pointer text-sm font-semibold text-body">
               계산 내역 펼쳐보기
             </summary>
-            <div className="mt-3 divide-y divide-slate-100">
+            <div className="mt-3 divide-y divide-rule">
               <Row label="총매출 (판매가 + 구매자 배송비)" value={`${fmt(r.gross)}원`} />
               <Row label="판매가" value={`${fmt(input.sellPrice)}원`} />
               <Row label="− 공급가" value={`${fmt(input.supplyPrice)}원`} />

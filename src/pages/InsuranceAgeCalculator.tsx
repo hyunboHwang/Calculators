@@ -21,13 +21,13 @@ export default function InsuranceAgeCalculator() {
   return (
     <div>
       <h1 className="text-2xl font-bold">보험나이 계산기</h1>
-      <p className="mt-1 mb-6 text-sm text-slate-500">
+      <p className="mt-1 mb-6 text-sm text-muted">
         보험나이는 만 나이에서 6개월 미만은 버리고 6개월 이상은 올린 나이입니다. 상령일이
         지나면 보험나이가 1살 올라 보험료가 비싸집니다.
       </p>
 
       <div className="grid gap-6 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
-        <section className="h-fit rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+        <section className="h-fit border border-rule bg-paper p-5">
           <h2 className="mb-4 text-base font-semibold">정보 입력</h2>
           <div className="space-y-4">
             <DateField label="생년월일" value={birthStr} onChange={setBirthStr} />
@@ -42,25 +42,25 @@ export default function InsuranceAgeCalculator() {
 
         <section className="space-y-4">
           {!r ? (
-            <div className="rounded-2xl border border-red-200 bg-red-50 p-5 text-sm text-red-700">
+            <div className="border border-accent bg-tint p-5 text-sm text-accent">
               날짜를 확인해주세요.
             </div>
           ) : (
             <>
               <div className="grid grid-cols-2 gap-3">
-                <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-center">
-                  <p className="text-xs font-semibold text-slate-500">보험나이</p>
-                  <p className="mt-1 text-3xl font-extrabold text-emerald-700">{r.age}세</p>
+                <div className="border border-accent bg-tint p-4 text-center">
+                  <p className="text-xs font-semibold text-muted">보험나이</p>
+                  <p className="mt-1 text-3xl font-bold font-serif text-ink">{r.age}세</p>
                 </div>
-                <div className="rounded-2xl border border-slate-200 bg-white p-4 text-center shadow-sm">
-                  <p className="text-xs font-semibold text-slate-500">만 나이</p>
-                  <p className="mt-1 text-3xl font-extrabold">{r.man}세</p>
+                <div className="border border-rule bg-paper p-4 text-center">
+                  <p className="text-xs font-semibold text-muted">만 나이</p>
+                  <p className="mt-1 text-3xl font-bold font-serif">{r.man}세</p>
                 </div>
               </div>
 
-              <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+              <div className="border border-rule bg-paper p-5">
                 <h2 className="mb-2 text-base font-semibold">상령일 정보</h2>
-                <div className="divide-y divide-slate-100">
+                <div className="divide-y divide-rule">
                   <Row
                     label="정확한 만 나이"
                     value={`${r.parts.years}년 ${r.parts.months}개월 ${r.parts.days}일`}
@@ -73,10 +73,10 @@ export default function InsuranceAgeCalculator() {
                   />
                 </div>
                 <p
-                  className={`mt-3 rounded-lg p-3 text-sm leading-relaxed ${
+                  className={`mt-3 p-3 text-sm leading-relaxed ${
                     r.daysLeft <= 30
-                      ? 'bg-red-50 text-red-700'
-                      : 'bg-slate-50 text-slate-600'
+                      ? 'bg-tint text-accent'
+                      : 'bg-tint text-body'
                   }`}
                 >
                   {r.daysLeft <= 30 ? (
@@ -94,7 +94,7 @@ export default function InsuranceAgeCalculator() {
                 </p>
               </div>
 
-              <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-xs leading-relaxed text-amber-800">
+              <div className="border border-rule bg-tint p-4 text-xs leading-relaxed text-body">
                 보험나이는 생명보험·장기손해보험의 표준 계산 방식이며, 일부 상품(자동차보험
                 등)은 만 나이나 다른 기준을 사용합니다. 정확한 적용 나이는 약관을
                 확인하세요.

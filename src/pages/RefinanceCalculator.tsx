@@ -32,13 +32,13 @@ export default function RefinanceCalculator() {
   return (
     <div>
       <h1 className="text-2xl font-bold">대출 갈아타기 계산기</h1>
-      <p className="mt-1 mb-6 text-sm text-slate-500">
+      <p className="mt-1 mb-6 text-sm text-muted">
         기존 대출을 낮은 금리로 대환할 때 중도상환수수료를 포함한 손익과 손익분기 시점을
         계산합니다.
       </p>
 
       <div className="grid gap-6 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
-        <section className="h-fit rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+        <section className="h-fit border border-rule bg-paper p-5">
           <h2 className="mb-4 text-base font-semibold">대출 조건</h2>
           <div className="grid grid-cols-2 gap-x-3 gap-y-4">
             <div className="col-span-2">
@@ -84,21 +84,21 @@ export default function RefinanceCalculator() {
               hint="보통 36개월"
             />
           </div>
-          <p className="mt-3 text-xs text-slate-400">
+          <p className="mt-3 text-xs text-muted">
             두 대출 모두 원리금균등, 같은 잔여기간으로 가정합니다.
           </p>
         </section>
 
         <section className="space-y-4">
           <div
-            className={`rounded-2xl border p-5 ${
-              good ? 'border-emerald-200 bg-emerald-50' : 'border-red-200 bg-red-50'
+            className={`border p-5 ${
+              good ? 'border-accent bg-tint' : 'border-accent bg-tint'
             }`}
           >
             <div className="flex flex-wrap items-center gap-3">
               <span
                 className={`shrink-0 rounded-full px-3 py-1 text-sm font-bold whitespace-nowrap text-white ${
-                  good ? 'bg-emerald-600' : 'bg-red-600'
+                  good ? 'bg-ink text-paper' : 'bg-red-600'
                 }`}
               >
                 {good ? '갈아타는 게 이득' : '갈아타면 손해'}
@@ -108,7 +108,7 @@ export default function RefinanceCalculator() {
                 {fmt(r.net)}원
               </span>
             </div>
-            <p className="mt-3 text-sm leading-relaxed text-slate-600">
+            <p className="mt-3 text-sm leading-relaxed text-body">
               {good ? (
                 <>
                   월 상환액이 <b>{fmt(r.monthlySaving)}원</b> 줄고, 비용을 빼고도 잔여기간
@@ -124,9 +124,9 @@ export default function RefinanceCalculator() {
             </p>
           </div>
 
-          <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+          <div className="border border-rule bg-paper p-5">
             <h2 className="mb-3 text-base font-semibold">기존 vs 신규</h2>
-            <div className="grid grid-cols-3 gap-2 border-b border-slate-100 pb-2 text-xs font-semibold text-slate-400">
+            <div className="grid grid-cols-3 gap-2 border-b border-rule pb-2 text-xs font-semibold text-muted">
               <span />
               <span className="text-right">기존 {oldRate}%</span>
               <span className="text-right">신규 {newRate}%</span>
@@ -140,18 +140,18 @@ export default function RefinanceCalculator() {
             ).map(([label, a, b], i) => (
               <div
                 key={label}
-                className={`grid grid-cols-3 gap-2 py-2 text-sm text-slate-600 ${
-                  i > 0 ? 'border-t border-slate-100' : ''
+                className={`grid grid-cols-3 gap-2 py-2 text-sm text-body ${
+                  i > 0 ? 'border-t border-rule' : ''
                 }`}
               >
                 <span>{label}</span>
                 <span className="text-right tabular-nums">{fmt(a)}원</span>
-                <span className="text-right font-semibold tabular-nums text-slate-800">
+                <span className="text-right font-semibold tabular-nums text-ink">
                   {fmt(b)}원
                 </span>
               </div>
             ))}
-            <div className="mt-2 rounded-lg bg-slate-50 p-3">
+            <div className="mt-2 bg-tint p-3">
               <Row
                 label="이자 절감액"
                 value={`${r.interestSaving >= 0 ? '+' : '-'}${fmt(Math.abs(r.interestSaving))}원`}
@@ -172,7 +172,7 @@ export default function RefinanceCalculator() {
             </div>
           </div>
 
-          <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-xs leading-relaxed text-amber-800">
+          <div className="border border-rule bg-tint p-4 text-xs leading-relaxed text-body">
             새 대출의 기간을 다시 길게 잡으면 월 상환액은 더 줄지만 총이자는 늘어날 수
             있습니다. 신규 대출의 인지세·근저당 설정비 부담 조건과 DSR 재심사 여부도 함께
             확인하세요.

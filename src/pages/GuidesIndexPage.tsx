@@ -1,23 +1,5 @@
 import routes from '../routes.json'
 
-const GUIDE_ICONS: Record<string, string> = {
-  yearEndTaxProcedureGuide: '🧾',
-  yearEndTax2026Guide: '🗓️',
-  jeonseDepositRecoveryGuide: '🔑',
-  severanceInterimGuide: '💼',
-  unemploymentApplicationGuide: '📋',
-  pensionTaxCreditGuide: '💰',
-  youthRentSubsidyGuide: '🏠',
-  youthLeapAccountGuide: '📈',
-  youthJeonseLoanGuide: '🏦',
-  nationalEmploymentSupportGuide: '🧑‍💼',
-  inheritanceTaxProcedureGuide: '⚖️',
-  giftTaxProcedureGuide: '🎁',
-  subscriptionScoreGuide: '🏆',
-  subscriptionRankGuide: '📊',
-  holdingTaxGuide: '🏠',
-}
-
 const TRACK1_IDS = [
   'yearEndTaxProcedureGuide',
   'yearEndTax2026Guide',
@@ -64,12 +46,9 @@ function GuideList({ ids, title }: { ids: string[]; title: string }) {
           <a
             key={r.id}
             href={`${r.path}/`}
-            className="flex flex-col items-center gap-2 rounded-xl border border-slate-200 bg-white p-4 text-center transition-colors hover:border-emerald-300 hover:bg-emerald-50/30"
+            className="flex flex-col items-center justify-center gap-2 border border-rule bg-paper p-4 text-center transition-colors hover:border-accent hover:bg-tint"
           >
-            <span className="text-4xl" aria-hidden="true">
-              {GUIDE_ICONS[r.id] ?? '📖'}
-            </span>
-            <p className="text-sm font-semibold text-slate-800">{r.label}</p>
+            <p className="text-sm font-semibold text-ink">{r.label}</p>
           </a>
         ))}
       </div>
@@ -81,7 +60,7 @@ export default function GuidesIndexPage() {
   return (
     <div className="max-w-3xl">
       <h1 className="text-2xl font-bold">가이드</h1>
-      <p className="mt-2 text-sm leading-relaxed text-slate-500">
+      <p className="mt-2 text-sm leading-relaxed text-muted">
         계산기와 함께 보면 도움이 되는 절차·정책 안내 아티클입니다. 모든 내용은 작성 시점 기준
         참고용이며, 정확한 신청·적용은 반드시 각 글에 표기된 공식 출처에서 최신 정보를
         확인하세요.

@@ -23,12 +23,12 @@ export default function UnemploymentCalculator() {
   return (
     <div>
       <h1 className="text-2xl font-bold">실업급여(구직급여) 계산기</h1>
-      <p className="mt-1 mb-6 text-sm text-slate-500">
+      <p className="mt-1 mb-6 text-sm text-muted">
         비자발적 이직(권고사직·계약만료·폐업 등) 기준 예상 구직급여입니다.
       </p>
 
       <div className="grid gap-6 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
-        <section className="h-fit rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+        <section className="h-fit border border-rule bg-paper p-5">
           <h2 className="mb-4 text-base font-semibold">이직 정보 입력</h2>
 
           <Field
@@ -40,17 +40,17 @@ export default function UnemploymentCalculator() {
           />
 
           <div className="mt-4">
-            <span className="mb-1 block text-sm font-medium text-slate-700">고용보험 가입기간</span>
+            <span className="mb-1 block text-sm font-medium text-ink">고용보험 가입기간</span>
             <div className="grid grid-cols-2 gap-1.5">
               {(Object.keys(PERIOD_LABELS) as InsuredPeriod[]).map((p) => (
                 <button
                   key={p}
                   type="button"
                   onClick={() => setInsuredPeriod(p)}
-                  className={`rounded-lg border px-2 py-2 text-xs font-medium transition-colors ${
+                  className={`border px-2 py-2 text-xs font-medium transition-colors ${
                     insuredPeriod === p
-                      ? 'border-emerald-600 bg-emerald-600 text-white'
-                      : 'border-slate-300 text-slate-500 hover:bg-slate-100'
+                      ? 'border-ink bg-ink text-paper'
+                      : 'border-ink text-ink hover:bg-tint'
                   }`}
                 >
                   {PERIOD_LABELS[p]}
@@ -59,31 +59,31 @@ export default function UnemploymentCalculator() {
             </div>
           </div>
 
-          <label className="mt-4 flex items-center gap-2 text-sm text-slate-700">
+          <label className="mt-4 flex items-center gap-2 text-sm text-ink">
             <input
               type="checkbox"
               checked={isOlderOrDisabled}
               onChange={(e) => setIsOlderOrDisabled(e.target.checked)}
-              className="h-4 w-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500"
+              className="h-4 w-4 rounded border-rule text-accent focus:ring-accent"
             />
             이직일 기준 만 50세 이상 또는 장애인
           </label>
         </section>
 
         <section className="space-y-4">
-          <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-5">
-            <p className="text-sm text-slate-500">예상 총 구직급여</p>
-            <p className="mt-1 text-3xl font-extrabold tabular-nums text-emerald-700">
+          <div className="border border-accent bg-tint p-5">
+            <p className="text-sm text-muted">예상 총 구직급여</p>
+            <p className="mt-1 text-3xl font-bold font-serif tabular-nums text-ink">
               {fmt(r.totalBenefit)}원
             </p>
-            <p className="mt-3 text-sm text-slate-600">
+            <p className="mt-3 text-sm text-body">
               1일 <b>{fmt(r.dailyBenefit)}원</b> × 소정급여일수 <b>{r.days}일</b>
             </p>
           </div>
 
-          <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+          <div className="border border-rule bg-paper p-5">
             <h2 className="mb-2 text-base font-semibold">계산 내역</h2>
-            <div className="divide-y divide-slate-100">
+            <div className="divide-y divide-rule">
               <Row label="1일 평균임금" value={`${fmt(r.avgDailyWage)}원`} sub="근사: 월급여×3÷91일" />
               <Row
                 label="1일 구직급여액"
@@ -102,7 +102,7 @@ export default function UnemploymentCalculator() {
             </div>
           </div>
 
-          <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-xs leading-relaxed text-amber-800">
+          <div className="border border-rule bg-tint p-4 text-xs leading-relaxed text-body">
             <b>이 계산은 예상치입니다.</b> 실업급여는 권고사직·계약만료·폐업·정년 등 비자발적
             이직이면서 이직 전 18개월간 고용보험 가입기간이 180일 이상이어야 대상이 됩니다.
             자발적 퇴사는 원칙적으로 지급 대상이 아니며(중대한 사유는 예외), 상한·하한액은

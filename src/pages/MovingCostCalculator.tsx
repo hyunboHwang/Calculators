@@ -18,12 +18,12 @@ export default function MovingCostCalculator() {
   return (
     <div>
       <h1 className="text-2xl font-bold">이사비용 계산기</h1>
-      <p className="mt-1 mb-6 text-sm text-slate-500">
+      <p className="mt-1 mb-6 text-sm text-muted">
         이사에 드는 비용 항목을 입력하면 총 이사비용을 계산합니다.
       </p>
 
       <div className="grid gap-6 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
-        <section className="h-fit rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+        <section className="h-fit border border-rule bg-paper p-5">
           <h2 className="mb-4 text-base font-semibold">이사비용 항목 입력</h2>
           <div className="space-y-4">
             <Field label="사다리차 비용" value={ladderTruckCost} onChange={setLadderTruckCost} step={10_000} />
@@ -47,12 +47,12 @@ export default function MovingCostCalculator() {
         </section>
 
         <section className="space-y-4">
-          <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-5">
-            <p className="text-sm text-slate-500">총 이사비용</p>
-            <p className="text-3xl font-extrabold tabular-nums text-emerald-700">{fmt(r.totalCost)}원</p>
+          <div className="border border-accent bg-tint p-5">
+            <p className="text-sm text-muted">총 이사비용</p>
+            <p className="text-3xl font-bold font-serif tabular-nums text-ink">{fmt(r.totalCost)}원</p>
           </div>
 
-          <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 text-xs leading-relaxed text-slate-500">
+          <div className="border border-rule bg-tint p-4 text-xs leading-relaxed text-muted">
             이 계산기는 입력한 항목의 합계만 계산하며, 실제 이사비용 시세를 제공하지 않습니다.
             각 항목은 견적받은 금액이나 예상 비용을 직접 입력하세요.
           </div>

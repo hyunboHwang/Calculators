@@ -16,12 +16,12 @@ export default function AnnualLeaveCalculator() {
   return (
     <div>
       <h1 className="text-2xl font-bold">연차수당 계산기</h1>
-      <p className="mt-1 mb-6 text-sm text-slate-500">
+      <p className="mt-1 mb-6 text-sm text-muted">
         입사일 기준 발생 연차와 미사용 연차수당을 계산합니다.
       </p>
 
       <div className="grid gap-6 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
-        <section className="h-fit rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+        <section className="h-fit border border-rule bg-paper p-5">
           <h2 className="mb-4 text-base font-semibold">근무 정보</h2>
           <div className="grid grid-cols-2 gap-x-3 gap-y-4">
             <DateField label="입사일" value={joinDate} onChange={setJoinDate} />
@@ -45,24 +45,24 @@ export default function AnnualLeaveCalculator() {
 
         <section className="space-y-4">
           {!r.valid ? (
-            <div className="rounded-2xl border border-red-200 bg-red-50 p-5 text-sm text-red-700">
+            <div className="border border-accent bg-tint p-5 text-sm text-accent">
               {!joinDate || !referenceDate ? '입사일과 정산 기준일을 모두 입력해주세요.' : '날짜를 확인해주세요. 정산 기준일이 입사일보다 빠릅니다.'}
             </div>
           ) : (
             <>
-              <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-5">
-                <p className="text-sm text-slate-500">예상 연차수당</p>
-                <p className="mt-1 text-3xl font-extrabold tabular-nums text-emerald-700">
+              <div className="border border-accent bg-tint p-5">
+                <p className="text-sm text-muted">예상 연차수당</p>
+                <p className="mt-1 text-3xl font-bold font-serif tabular-nums text-ink">
                   {fmt(r.amount)}원
                 </p>
-                <p className="mt-3 text-sm text-slate-600">
+                <p className="mt-3 text-sm text-body">
                   미사용 연차 <b>{r.unusedDays}일</b> × 1일 통상임금 <b>{fmt(r.dailyWage)}원</b>
                 </p>
               </div>
 
-              <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+              <div className="border border-rule bg-paper p-5">
                 <h2 className="mb-2 text-base font-semibold">계산 내역</h2>
-                <div className="divide-y divide-slate-100">
+                <div className="divide-y divide-rule">
                   <Row label="근속기간" value={r.serviceText} />
                   <Row label="발생 연차" value={`${r.accruedDays}일`} />
                   <Row label="사용 연차" value={`${usedDays}일`} />
@@ -75,7 +75,7 @@ export default function AnnualLeaveCalculator() {
             </>
           )}
 
-          <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-xs leading-relaxed text-amber-800">
+          <div className="border border-rule bg-tint p-4 text-xs leading-relaxed text-body">
             계속근로 1년 미만은 1개월 개근 시 1일(최대 11일), 1년 이상은 15일에 최초 1년 이후
             매 2년마다 1일씩 가산되어 최대 25일까지 발생합니다(근로기준법 60조). 이 계산은 매월
             개근을 가정한 최대치이며, 무급휴직·결근이 있으면 실제 발생일수가 줄어들 수 있습니다.

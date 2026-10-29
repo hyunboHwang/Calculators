@@ -26,12 +26,12 @@ export default function DepositCalculator() {
   return (
     <div>
       <h1 className="text-2xl font-bold">예적금 이자 계산기</h1>
-      <p className="mt-1 mb-6 text-sm text-slate-500">
+      <p className="mt-1 mb-6 text-sm text-muted">
         정기예금·정기적금의 세전·세후 이자와 만기 수령액을 계산합니다.
       </p>
 
       <div className="grid gap-6 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
-        <section className="h-fit rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+        <section className="h-fit border border-rule bg-paper p-5">
           <h2 className="mb-4 text-base font-semibold">예금 정보 입력</h2>
 
           <div className="mb-4 flex gap-1.5">
@@ -40,10 +40,10 @@ export default function DepositCalculator() {
                 key={m}
                 type="button"
                 onClick={() => set('mode')(m)}
-                className={`flex-1 rounded-lg border px-2 py-2 text-sm font-medium transition-colors ${
+                className={`flex-1 border px-2 py-2 text-sm font-medium transition-colors ${
                   input.mode === m
-                    ? 'border-emerald-600 bg-emerald-600 text-white'
-                    : 'border-slate-300 text-slate-500 hover:bg-slate-100'
+                    ? 'border-ink bg-ink text-paper'
+                    : 'border-ink text-ink hover:bg-tint'
                 }`}
               >
                 {m === 'deposit' ? '예금 (거치식)' : '적금 (적립식)'}
@@ -71,17 +71,17 @@ export default function DepositCalculator() {
 
           {input.mode === 'deposit' && (
             <div className="mt-4">
-              <span className="mb-1 block text-sm font-medium text-slate-700">이자 방식</span>
+              <span className="mb-1 block text-sm font-medium text-ink">이자 방식</span>
               <div className="flex gap-1.5">
                 {([false, true] as const).map((c) => (
                   <button
                     key={String(c)}
                     type="button"
                     onClick={() => set('compound')(c)}
-                    className={`flex-1 rounded-lg border px-2 py-2 text-sm font-medium transition-colors ${
+                    className={`flex-1 border px-2 py-2 text-sm font-medium transition-colors ${
                       input.compound === c
-                        ? 'border-emerald-600 bg-emerald-600 text-white'
-                        : 'border-slate-300 text-slate-500 hover:bg-slate-100'
+                        ? 'border-ink bg-ink text-paper'
+                        : 'border-ink text-ink hover:bg-tint'
                     }`}
                   >
                     {c ? '월복리' : '단리'}
@@ -92,17 +92,17 @@ export default function DepositCalculator() {
           )}
 
           <div className="mt-4">
-            <span className="mb-1 block text-sm font-medium text-slate-700">과세 방식</span>
+            <span className="mb-1 block text-sm font-medium text-ink">과세 방식</span>
             <div className="flex gap-1.5">
               {(Object.keys(TAX_LABELS) as TaxOption[]).map((t) => (
                 <button
                   key={t}
                   type="button"
                   onClick={() => set('taxOption')(t)}
-                  className={`flex-1 rounded-lg border px-1 py-2 text-xs font-medium transition-colors ${
+                  className={`flex-1 border px-1 py-2 text-xs font-medium transition-colors ${
                     input.taxOption === t
-                      ? 'border-emerald-600 bg-emerald-600 text-white'
-                      : 'border-slate-300 text-slate-500 hover:bg-slate-100'
+                      ? 'border-ink bg-ink text-paper'
+                      : 'border-ink text-ink hover:bg-tint'
                   }`}
                 >
                   {TAX_LABELS[t]}
@@ -112,7 +112,7 @@ export default function DepositCalculator() {
           </div>
 
           {input.mode === 'savings' && (
-            <p className="mt-4 text-xs leading-relaxed text-slate-400">
+            <p className="mt-4 text-xs leading-relaxed text-muted">
               적금은 매월 납입한 금액이 만기까지 남은 기간만큼만 이자가 붙는 단리 후취 방식으로
               계산합니다. 그래서 "연 5% 적금"이라도 실제 받는 이자는 예금보다 훨씬 적습니다.
             </p>
@@ -120,27 +120,27 @@ export default function DepositCalculator() {
         </section>
 
         <section className="space-y-4">
-          <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-5">
+          <div className="border border-accent bg-tint p-5">
             <div className="flex flex-wrap items-end justify-between gap-3">
               <div>
-                <p className="text-sm text-slate-500">세후 이자</p>
-                <p className="text-3xl font-extrabold tabular-nums text-emerald-700">
+                <p className="text-sm text-muted">세후 이자</p>
+                <p className="text-3xl font-bold font-serif tabular-nums text-ink">
                   {fmt(r.postTaxInterest)}원
                 </p>
               </div>
               <div className="text-right">
-                <p className="text-sm text-slate-500">만기 수령액</p>
+                <p className="text-sm text-muted">만기 수령액</p>
                 <p className="text-lg font-bold tabular-nums">{fmt(r.maturityAmount)}원</p>
               </div>
             </div>
-            <p className="mt-3 text-sm text-slate-600">
+            <p className="mt-3 text-sm text-body">
               세후 실질 연이율 <b>{r.effectiveAnnualRate.toFixed(2)}%</b> (원금 대비, 단리 환산)
             </p>
           </div>
 
-          <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+          <div className="border border-rule bg-paper p-5">
             <h2 className="mb-2 text-base font-semibold">계산 내역</h2>
-            <div className="divide-y divide-slate-100">
+            <div className="divide-y divide-rule">
               <Row
                 label="원금 합계"
                 value={`${fmt(r.principal)}원`}
@@ -153,7 +153,7 @@ export default function DepositCalculator() {
             </div>
           </div>
 
-          <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-xs leading-relaxed text-amber-800">
+          <div className="border border-rule bg-tint p-4 text-xs leading-relaxed text-body">
             은행 광고 금리(세전)와 실제 수령 이자(세후)는 다릅니다. 일반과세 기준 이자소득세
             15.4%가 원천징수되며, 연간 이자·배당 합계가 2,000만원을 넘으면 금융소득종합과세
             대상이 될 수 있습니다. 비과세종합저축(0%)은 만 65세 이상 기초연금 수급자·장애인 등 일부 대상자만 가입할 수 있고(한도 5,000만원, 가입기한 2028.12.31), 세금우대종합저축(9%+농특세)은 2014.12.31 가입 종료로 신규 가입이 불가능해 참고용 옵션입니다.

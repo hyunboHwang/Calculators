@@ -49,32 +49,32 @@ export default function SubscriptionRankCalculator() {
   return (
     <div>
       <h1 className="text-2xl font-bold">청약순위 계산기</h1>
-      <p className="mt-1 mb-6 text-sm text-slate-500">
+      <p className="mt-1 mb-6 text-sm text-muted">
         국민주택(공공분양) 1순위·2순위 요건과 순차제(저축총액·납입횟수) 비교 기준을
         확인합니다.
       </p>
 
       <div className="grid gap-6 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
-        <section className="h-fit rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+        <section className="h-fit border border-rule bg-paper p-5">
           <h2 className="mb-4 text-base font-semibold">청약 조건 입력</h2>
           <div className="space-y-4">
-            <div className="rounded-xl bg-slate-50 p-3">
-              <label className="flex items-center gap-2 text-sm text-slate-700">
+            <div className="bg-tint p-3">
+              <label className="flex items-center gap-2 text-sm text-ink">
                 <input
                   type="checkbox"
                   checked={allHouseholdNoHouse}
                   onChange={(e) => setAllHouseholdNoHouse(e.target.checked)}
-                  className="h-4 w-4 rounded border-slate-300 accent-emerald-600"
+                  className="h-4 w-4 rounded border-rule accent-ink"
                 />
                 세대 전원 무주택
               </label>
             </div>
             <div>
-              <span className="mb-1.5 block text-sm font-medium text-slate-700">청약 지역 유형</span>
+              <span className="mb-1.5 block text-sm font-medium text-ink">청약 지역 유형</span>
               <select
                 value={regionType}
                 onChange={(e) => setRegionType(e.target.value as RegionType)}
-                className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm focus:border-emerald-500 focus:outline-none"
+                className="w-full border border-rule bg-paper px-3 py-2.5 text-sm focus:border-accent focus:outline-none"
               >
                 {(Object.keys(REGION_LABELS) as RegionType[]).map((key) => (
                   <option key={key} value={key}>
@@ -84,22 +84,22 @@ export default function SubscriptionRankCalculator() {
               </select>
             </div>
             {regionType === 'speculation' && (
-              <div className="space-y-3 rounded-xl bg-slate-50 p-3">
-                <label className="flex items-center gap-2 text-sm text-slate-700">
+              <div className="space-y-3 bg-tint p-3">
+                <label className="flex items-center gap-2 text-sm text-ink">
                   <input
                     type="checkbox"
                     checked={isHouseholdHead}
                     onChange={(e) => setIsHouseholdHead(e.target.checked)}
-                    className="h-4 w-4 rounded border-slate-300 accent-emerald-600"
+                    className="h-4 w-4 rounded border-rule accent-ink"
                   />
                   세대주임
                 </label>
-                <label className="flex items-center gap-2 text-sm text-slate-700">
+                <label className="flex items-center gap-2 text-sm text-ink">
                   <input
                     type="checkbox"
                     checked={wonInLast5Years}
                     onChange={(e) => setWonInLast5Years(e.target.checked)}
-                    className="h-4 w-4 rounded border-slate-300 accent-emerald-600"
+                    className="h-4 w-4 rounded border-rule accent-ink"
                   />
                   최근 5년 이내 세대구성원 당첨 이력 있음
                 </label>
@@ -124,13 +124,13 @@ export default function SubscriptionRankCalculator() {
               step={100_000}
               hint="청약홈 나의 청약통장 정보 기준 실제 저축총액"
             />
-            <div className="rounded-xl bg-slate-50 p-3">
-              <label className="flex items-center gap-2 text-sm text-slate-700">
+            <div className="bg-tint p-3">
+              <label className="flex items-center gap-2 text-sm text-ink">
                 <input
                   type="checkbox"
                   checked={unitSizeOver40}
                   onChange={(e) => setUnitSizeOver40(e.target.checked)}
-                  className="h-4 w-4 rounded border-slate-300 accent-emerald-600"
+                  className="h-4 w-4 rounded border-rule accent-ink"
                 />
                 희망 평형 전용 40㎡ 초과
               </label>
@@ -141,13 +141,13 @@ export default function SubscriptionRankCalculator() {
         <section className="space-y-4">
           {r.eligible ? (
             <>
-              <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-5">
-                <p className="text-sm text-slate-500">청약 순위</p>
-                <p className="text-3xl font-extrabold tabular-nums text-emerald-700">{r.rank}</p>
+              <div className="border border-accent bg-tint p-5">
+                <p className="text-sm text-muted">청약 순위</p>
+                <p className="text-3xl font-bold font-serif tabular-nums text-ink">{r.rank}</p>
               </div>
-              <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+              <div className="border border-rule bg-paper p-5">
                 <h2 className="mb-2 text-base font-semibold">순차제 비교 기준</h2>
-                <div className="divide-y divide-slate-100">
+                <div className="divide-y divide-rule">
                   <Row label="비교 기준" value={r.sequencingBasis} />
                   <Row
                     label={r.sequencingBasis === '저축총액' ? '저축총액' : '납입 횟수'}
@@ -158,13 +158,13 @@ export default function SubscriptionRankCalculator() {
               </div>
             </>
           ) : (
-            <div className="rounded-2xl border border-red-200 bg-red-50 p-5">
-              <p className="text-sm text-slate-500">판정 결과</p>
-              <p className="text-xl font-bold text-red-700">{r.reason}</p>
+            <div className="border border-accent bg-tint p-5">
+              <p className="text-sm text-muted">판정 결과</p>
+              <p className="text-xl font-bold text-accent">{r.reason}</p>
             </div>
           )}
 
-          <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-xs leading-relaxed text-amber-800">
+          <div className="border border-rule bg-tint p-4 text-xs leading-relaxed text-body">
             <b>이 계산은 예상치입니다.</b> 재당첨제한(지역별 5~10년 별도 제도)은 반영하지
             않았습니다. 순차제에서 &lsquo;3년 이상 무주택세대구성원&rsquo;이 먼저 경쟁한다는 구분(규칙 제27조제2항)도
             모델링하지 않습니다. 투기과열지구·청약과열지역 지정 현황은 수시로 바뀌므로 청약홈에서 최종

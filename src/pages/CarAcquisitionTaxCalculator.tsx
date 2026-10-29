@@ -17,27 +17,27 @@ export default function CarAcquisitionTaxCalculator() {
   return (
     <div>
       <h1 className="text-2xl font-bold">자동차 취득세 계산기</h1>
-      <p className="mt-1 mb-6 text-sm text-slate-500">
+      <p className="mt-1 mb-6 text-sm text-muted">
         차량가액과 차종으로 자동차 취득세를 계산합니다.
       </p>
 
       <div className="grid gap-6 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
-        <section className="h-fit rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+        <section className="h-fit border border-rule bg-paper p-5">
           <h2 className="mb-4 text-base font-semibold">차량 정보</h2>
           <div className="space-y-4">
             <Field label="차량가액" value={price} onChange={setPrice} step={1_000_000} />
             <div>
-              <span className="mb-1.5 block text-sm font-medium text-slate-700">차종</span>
+              <span className="mb-1.5 block text-sm font-medium text-ink">차종</span>
               <div className="flex gap-1.5">
                 {(Object.keys(VEHICLE_TYPE_LABEL) as VehicleType[]).map((v) => (
                   <button
                     key={v}
                     type="button"
                     onClick={() => setVehicleType(v)}
-                    className={`flex-1 rounded-lg border px-2 py-2 text-xs font-medium transition-colors ${
+                    className={`flex-1 border px-2 py-2 text-xs font-medium transition-colors ${
                       vehicleType === v
-                        ? 'border-emerald-600 bg-emerald-600 text-white'
-                        : 'border-slate-300 text-slate-500 hover:bg-slate-100'
+                        ? 'border-ink bg-ink text-paper'
+                        : 'border-ink text-ink hover:bg-tint'
                     }`}
                   >
                     {VEHICLE_TYPE_LABEL[v]}
@@ -49,15 +49,15 @@ export default function CarAcquisitionTaxCalculator() {
         </section>
 
         <section className="space-y-4">
-          <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-5">
-            <p className="text-sm text-slate-500">예상 취득세</p>
-            <p className="text-3xl font-extrabold tabular-nums text-emerald-700">
+          <div className="border border-accent bg-tint p-5">
+            <p className="text-sm text-muted">예상 취득세</p>
+            <p className="text-3xl font-bold font-serif tabular-nums text-ink">
               {fmt(r.tax)}원
             </p>
-            <p className="mt-2 text-sm text-slate-600">적용 세율 {r.rate}%</p>
+            <p className="mt-2 text-sm text-body">적용 세율 {r.rate}%</p>
           </div>
 
-          <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-xs leading-relaxed text-amber-800">
+          <div className="border border-rule bg-tint p-4 text-xs leading-relaxed text-body">
             <b>이 계산은 예상치입니다.</b> 경차 감면 한도, 다자녀·친환경차 감면 등 세부 감면은
             반영하지 않았습니다. 정확한 세액은 위택스(wetax.go.kr)에서 확인하세요.
           </div>

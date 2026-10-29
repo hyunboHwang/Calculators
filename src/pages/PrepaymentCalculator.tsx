@@ -46,12 +46,12 @@ export default function PrepaymentCalculator() {
   return (
     <div>
       <h1 className="text-2xl font-bold">중도상환수수료 계산기</h1>
-      <p className="mt-1 mb-6 text-sm text-slate-500">
+      <p className="mt-1 mb-6 text-sm text-muted">
         잔여기간 슬라이딩 방식으로 수수료를 계산하고, 지금 갚는 게 이득인지 판단합니다.
       </p>
 
       <div className="grid gap-6 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
-        <section className="h-fit rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+        <section className="h-fit border border-rule bg-paper p-5">
           <h2 className="mb-4 text-base font-semibold">상환 정보</h2>
           <div className="grid grid-cols-2 gap-x-3 gap-y-4">
             <div className="col-span-2">
@@ -89,21 +89,21 @@ export default function PrepaymentCalculator() {
 
         <section className="space-y-4">
           {!r ? (
-            <div className="rounded-2xl border border-red-200 bg-red-50 p-5 text-sm text-red-700">
+            <div className="border border-accent bg-tint p-5 text-sm text-accent">
               날짜를 확인해주세요.
             </div>
           ) : (
             <>
               <div
-                className={`rounded-2xl border p-5 ${
-                  r.exempt ? 'border-emerald-200 bg-emerald-50' : 'border-slate-200 bg-white shadow-sm'
+                className={`border p-5 ${
+                  r.exempt ? 'border-accent bg-tint' : 'border-rule bg-paper '
                 }`}
               >
-                <p className="text-sm text-slate-500">중도상환수수료</p>
-                <p className="mt-1 text-3xl font-extrabold tabular-nums text-slate-900">
+                <p className="text-sm text-muted">중도상환수수료</p>
+                <p className="mt-1 text-3xl font-bold font-serif tabular-nums text-ink">
                   {r.exempt ? '면제 (0원)' : `${fmt(r.fee)}원`}
                 </p>
-                <p className="mt-2 text-sm text-slate-600">
+                <p className="mt-2 text-sm text-body">
                   {r.exempt ? (
                     <>부과기간 {feePeriod}개월이 지나 수수료가 면제됩니다.</>
                   ) : (
@@ -115,9 +115,9 @@ export default function PrepaymentCalculator() {
                 </p>
               </div>
 
-              <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+              <div className="border border-rule bg-paper p-5">
                 <h2 className="mb-2 text-base font-semibold">지금 갚는 게 이득일까?</h2>
-                <div className="divide-y divide-slate-100">
+                <div className="divide-y divide-rule">
                   <Row
                     label="월 이자 절감액"
                     value={`${fmt(r.monthlySaving)}원`}
@@ -136,8 +136,8 @@ export default function PrepaymentCalculator() {
                   />
                 </div>
                 <p
-                  className={`mt-3 rounded-lg p-3 text-sm leading-relaxed ${
-                    r.worthIt || r.fee === 0 ? 'bg-emerald-50 text-emerald-800' : 'bg-red-50 text-red-700'
+                  className={`mt-3 p-3 text-sm leading-relaxed ${
+                    r.worthIt || r.fee === 0 ? 'bg-tint text-accent' : 'bg-tint text-accent'
                   }`}
                 >
                   {r.exempt || r.fee === 0 ? (
@@ -156,7 +156,7 @@ export default function PrepaymentCalculator() {
                 </p>
               </div>
 
-              <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-xs leading-relaxed text-amber-800">
+              <div className="border border-rule bg-tint p-4 text-xs leading-relaxed text-body">
                 이자 절감액은 잔액 고정(만기일시) 기준 근사치로, 원리금균등 상환이면 실제
                 절감액은 이보다 적습니다. 경과 개월은 일할(30.44일=1개월) 근사입니다. 수수료율과 부과기간은 대출 약정서를 확인하세요.
               </div>

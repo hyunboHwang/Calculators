@@ -34,14 +34,14 @@ export default function RaiseComparator() {
   return (
     <div>
       <h1 className="text-2xl font-bold">연봉 인상 비교기</h1>
-      <p className="mt-1 mb-6 text-sm text-slate-500">
+      <p className="mt-1 mb-6 text-sm text-muted">
         연봉이 오르면 실수령액이 실제로 얼마나 느는지 비교합니다. 세금·보험료 증가분을 뺀
         체감 인상액을 확인하세요.
       </p>
 
       <div className="grid gap-6 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
         {/* 입력 */}
-        <section className="h-fit rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+        <section className="h-fit border border-rule bg-paper p-5">
           <h2 className="mb-4 text-base font-semibold">연봉 정보</h2>
           <div className="space-y-4">
             <Field label="현재 연봉" value={current} onChange={setCurrent} step={1_000_000} />
@@ -53,7 +53,7 @@ export default function RaiseComparator() {
                     key={p}
                     type="button"
                     onClick={() => setAfter(roundMan(current * (1 + p / 100)))}
-                    className="rounded-full border border-slate-200 px-2.5 py-1 text-xs font-medium text-slate-500 transition-colors hover:bg-slate-100"
+                    className="rounded-full border border-rule px-2.5 py-1 text-xs font-medium text-muted transition-colors hover:bg-tint"
                   >
                     +{p}%
                   </button>
@@ -88,26 +88,26 @@ export default function RaiseComparator() {
 
         {/* 결과 */}
         <section className="space-y-4">
-          <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-5">
-            <p className="text-sm text-slate-500">
+          <div className="border border-accent bg-tint p-5">
+            <p className="text-sm text-muted">
               연봉 {fmt(raiseAmount)}원 ({Number.isFinite(raisePct) ? raisePct.toFixed(1) : '-'}%)
               인상 시 월 실수령액은
             </p>
-            <p className="mt-1 text-3xl font-extrabold tabular-nums text-emerald-700">
+            <p className="mt-1 text-3xl font-bold font-serif tabular-nums text-ink">
               {monthlyDiff >= 0 ? '+' : ''}
               {fmt(monthlyDiff)}원
             </p>
             {raiseAmount > 0 && (
-              <p className="mt-3 text-sm text-slate-600">
+              <p className="mt-3 text-sm text-body">
                 인상분 중 실제로 손에 들어오는 비율은 <b>{takeHomeRatio.toFixed(1)}%</b>
                 입니다. 나머지는 세금과 보험료로 나갑니다.
               </p>
             )}
           </div>
 
-          <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+          <div className="border border-rule bg-paper p-5">
             <h2 className="mb-3 text-base font-semibold">전 · 후 비교</h2>
-            <div className="grid grid-cols-3 gap-2 border-b border-slate-100 pb-2 text-xs font-semibold text-slate-400">
+            <div className="grid grid-cols-3 gap-2 border-b border-rule pb-2 text-xs font-semibold text-muted">
               <span />
               <span className="text-right">현재</span>
               <span className="text-right">인상 후</span>
@@ -123,21 +123,21 @@ export default function RaiseComparator() {
               <div
                 key={label}
                 className={`grid grid-cols-3 gap-2 py-2 text-sm ${
-                  idx >= 2 ? 'font-semibold text-slate-800' : 'text-slate-500'
-                } ${idx > 0 ? 'border-t border-slate-100' : ''}`}
+                  idx >= 2 ? 'font-semibold text-ink' : 'text-muted'
+                } ${idx > 0 ? 'border-t border-rule' : ''}`}
               >
                 <span>{label}</span>
                 <span className="text-right tabular-nums">{fmt(a)}원</span>
                 <span className="text-right tabular-nums">{fmt(b)}원</span>
               </div>
             ))}
-            <div className="mt-2 rounded-lg bg-slate-50 p-3">
+            <div className="mt-2 bg-tint p-3">
               <Row label="월 실수령 증가" value={`${monthlyDiff < 0 ? "" : "+"}${fmt(monthlyDiff)}원`} strong />
               <Row label="연 실수령 증가" value={`${annualDiff < 0 ? "" : "+"}${fmt(annualDiff)}원`} strong />
             </div>
           </div>
 
-          <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-xs leading-relaxed text-amber-800">
+          <div className="border border-rule bg-tint p-4 text-xs leading-relaxed text-body">
             소득세법 시행령 별표 2 간이세액표 기준 예상치입니다. 소득 구간이 올라가면 한계세율이 높아져
             인상분의 체감 비율이 낮아질 수 있습니다.
           </div>

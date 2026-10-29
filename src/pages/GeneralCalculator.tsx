@@ -2,7 +2,7 @@ import { useMemo, useRef, useState } from 'react'
 import { evaluate, formatResult, MathError } from '../lib/mathExpr'
 
 const KEYS: { label: string; insert?: string; action?: 'clear' | 'back' | 'eval'; style?: string }[] = [
-  { label: 'AC', action: 'clear', style: 'text-red-600' },
+  { label: 'AC', action: 'clear', style: 'bg-tint text-accent hover:bg-rule/40' },
   { label: '⌫', action: 'back' },
   { label: '(', insert: '(' },
   { label: ')', insert: ')' },
@@ -13,22 +13,22 @@ const KEYS: { label: string; insert?: string; action?: 'clear' | 'back' | 'eval'
   { label: '7', insert: '7' },
   { label: '8', insert: '8' },
   { label: '9', insert: '9' },
-  { label: '÷', insert: '÷', style: 'text-emerald-700' },
+  { label: '÷', insert: '÷', style: 'bg-tint text-accent hover:bg-rule/40' },
   { label: '4', insert: '4' },
   { label: '5', insert: '5' },
   { label: '6', insert: '6' },
-  { label: '×', insert: '×', style: 'text-emerald-700' },
+  { label: '×', insert: '×', style: 'bg-tint text-accent hover:bg-rule/40' },
   { label: '1', insert: '1' },
   { label: '2', insert: '2' },
   { label: '3', insert: '3' },
-  { label: '−', insert: '−', style: 'text-emerald-700' },
+  { label: '−', insert: '−', style: 'bg-tint text-accent hover:bg-rule/40' },
   { label: '0', insert: '0' },
   { label: '.', insert: '.' },
   { label: '%', insert: '%' },
-  { label: '+', insert: '+', style: 'text-emerald-700' },
+  { label: '+', insert: '+', style: 'bg-tint text-accent hover:bg-rule/40' },
   { label: 'Ans', insert: 'Ans' },
   { label: 'abs', insert: 'abs(' },
-  { label: '=', action: 'eval', style: 'col-span-2 bg-emerald-600 text-white hover:bg-emerald-700' },
+  { label: '=', action: 'eval', style: 'col-span-2 bg-ink text-paper hover:bg-body' },
 ]
 
 interface Entry {
@@ -111,13 +111,13 @@ export default function GeneralCalculator() {
   return (
     <div>
       <h1 className="text-2xl font-bold">일반 계산기</h1>
-      <p className="mt-1 mb-6 text-sm text-slate-500">
+      <p className="mt-1 mb-6 text-sm text-muted">
         괄호·거듭제곱·퍼센트·제곱근까지 한 줄 식으로 계산합니다. 키보드로 식을 입력하고 Enter를
         누르거나, 아래 버튼을 사용하세요.
       </p>
 
       <div className="grid gap-6 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)]">
-        <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+        <section className="border border-rule bg-paper p-5">
           <input
             ref={inputRef}
             value={expr}
@@ -136,11 +136,11 @@ export default function GeneralCalculator() {
             spellCheck={false}
             aria-label="계산식"
             placeholder="예: (3+4)*2^3/5"
-            className="w-full rounded-xl border border-slate-300 px-4 py-3 text-right text-xl tabular-nums focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 focus:outline-none"
+            className="w-full border border-rule px-4 py-3 text-right text-xl tabular-nums focus:border-accent focus:ring-2 focus:ring-accent focus:outline-none"
           />
           <div className="mt-2 flex min-h-8 items-center justify-between gap-2">
             <p
-              className={`min-h-6 text-right text-sm tabular-nums ${error ? 'text-red-600' : 'text-slate-500'}`}
+              className={`min-h-6 text-right text-sm tabular-nums ${error ? 'text-accent' : 'text-muted'}`}
               aria-live="polite"
             >
               {error || (preview !== null ? `= ${formatResult(preview)}` : ' ')}
@@ -148,7 +148,7 @@ export default function GeneralCalculator() {
             <button
               type="button"
               onClick={copy}
-              className="shrink-0 rounded-lg border border-slate-200 px-2.5 py-1 text-xs font-medium text-slate-500 hover:bg-slate-100"
+              className="shrink-0 border border-rule px-2.5 py-1 text-xs font-medium text-muted hover:bg-tint"
             >
               {copied ? '복사됨' : '결과 복사'}
             </button>
@@ -160,7 +160,7 @@ export default function GeneralCalculator() {
                 key={k.label}
                 type="button"
                 onClick={() => press(k)}
-                className={`min-h-12 rounded-xl border border-slate-200 bg-slate-50 text-lg font-medium transition-colors hover:bg-slate-100 active:bg-slate-200 ${k.style ?? 'text-slate-800'}`}
+                className={`min-h-12 border border-rule text-lg font-medium transition-colors ${k.style ?? 'bg-tint text-ink hover:bg-rule/40'}`}
               >
                 {k.label}
               </button>
@@ -168,12 +168,12 @@ export default function GeneralCalculator() {
           </div>
         </section>
 
-        <section className="h-fit rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+        <section className="h-fit border border-rule bg-paper p-5">
           <h2 className="mb-2 text-base font-semibold">최근 계산</h2>
           {history.length === 0 ? (
-            <p className="text-sm text-slate-400">계산하면 여기에 기록됩니다.</p>
+            <p className="text-sm text-muted">계산하면 여기에 기록됩니다.</p>
           ) : (
-            <ul className="divide-y divide-slate-100">
+            <ul className="divide-y divide-rule">
               {history.map((h, i) => (
                 <li key={i}>
                   <button
@@ -183,10 +183,10 @@ export default function GeneralCalculator() {
                       setError('')
                       inputRef.current?.focus()
                     }}
-                    className="flex w-full items-baseline justify-between gap-3 py-2 text-left text-sm hover:bg-slate-50"
+                    className="flex w-full items-baseline justify-between gap-3 py-2 text-left text-sm hover:bg-tint"
                   >
-                    <span className="truncate text-slate-500">{h.expr}</span>
-                    <span className="shrink-0 font-semibold tabular-nums text-slate-800">
+                    <span className="truncate text-muted">{h.expr}</span>
+                    <span className="shrink-0 font-semibold tabular-nums text-ink">
                       = {formatResult(h.result)}
                     </span>
                   </button>
@@ -194,7 +194,7 @@ export default function GeneralCalculator() {
               ))}
             </ul>
           )}
-          <p className="mt-3 text-xs leading-relaxed text-slate-400">
+          <p className="mt-3 text-xs leading-relaxed text-muted">
             결과는 유효숫자 12자리로 정리해 표시합니다. 기록은 이 페이지를 닫으면 사라지며 어디에도
             저장되지 않습니다.
           </p>

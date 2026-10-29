@@ -19,13 +19,13 @@ export default function JeonseConversionCalculator() {
   return (
     <div>
       <h1 className="text-2xl font-bold">전월세 전환율 계산기</h1>
-      <p className="mt-1 mb-6 text-sm text-slate-500">
+      <p className="mt-1 mb-6 text-sm text-muted">
         전세보증금과 월세 전환 조건을 비교해 법정 전환율 상한을 넘는지 확인합니다. 상한은
         한국은행 기준금리+2%p와 연 10% 중 낮은 값입니다.
       </p>
 
       <div className="grid gap-6 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
-        <section className="h-fit rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+        <section className="h-fit border border-rule bg-paper p-5">
           <h2 className="mb-4 text-base font-semibold">계약 조건</h2>
           <div className="space-y-4">
             <Field
@@ -54,35 +54,35 @@ export default function JeonseConversionCalculator() {
 
         <section className="space-y-4">
           {r.depositDiff <= 0 ? (
-            <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5 text-sm text-slate-600">
+            <div className="border border-rule bg-tint p-5 text-sm text-body">
               보증금 차액이 없어 전환율을 계산할 수 없습니다. 전세보증금이 월세 전환 시
               보증금보다 커야 합니다.
             </div>
           ) : (
             <div
-              className={`rounded-2xl border p-5 ${
-                r.isOverCap ? 'border-red-200 bg-red-50' : 'border-emerald-200 bg-emerald-50'
+              className={`border p-5 ${
+                r.isOverCap ? 'border-accent bg-tint' : 'border-accent bg-tint'
               }`}
             >
-              <p className="text-sm text-slate-500">현재 조건의 전환율</p>
-              <p className="text-3xl font-extrabold tabular-nums text-slate-800">
+              <p className="text-sm text-muted">현재 조건의 전환율</p>
+              <p className="text-3xl font-bold font-serif tabular-nums text-ink">
                 {pct2(r.actualRate)}
               </p>
-              <p className="mt-2 text-sm text-slate-600">
+              <p className="mt-2 text-sm text-body">
                 법정 상한 {pct2(r.legalCapRate)} {r.isOverCap ? '초과' : '이내'}
               </p>
             </div>
           )}
 
-          <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+          <div className="border border-rule bg-paper p-5">
             <h2 className="mb-2 text-base font-semibold">상세</h2>
-            <div className="divide-y divide-slate-100">
+            <div className="divide-y divide-rule">
               <Row label="보증금 차액" value={`${fmt(r.depositDiff)}원`} />
               <Row label="법정 상한 기준 월세" value={`${fmt(r.capMonthlyRent)}원`} strong />
             </div>
           </div>
 
-          <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-xs leading-relaxed text-amber-800">
+          <div className="border border-rule bg-tint p-4 text-xs leading-relaxed text-body">
             <b>이 계산은 참고용입니다.</b> 법정 상한은 보증금을 월세로 전환하는 경우의 월차임
             전환율을 제한하는 기준(주택임대차보호법 제7조의2)이며, 갱신 시 차임 증액 5% 제한(제7조)과는 별개의 제도입니다. 신규 계약에 적용되는지는 해석상 다툼이 있을 수 있으니 법원·법무부 등에서 확인하세요.
           </div>

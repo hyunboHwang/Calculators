@@ -23,7 +23,7 @@ export default function VerificationProcessPage() {
     <div className="max-w-3xl">
       <h1 className="text-2xl font-bold">계산기 검증 방식</h1>
       {paras.map((p, i) => (
-        <p key={i} className="mt-4 text-sm leading-relaxed text-slate-600">
+        <p key={i} className="mt-4 text-sm leading-relaxed text-body">
           {p}
         </p>
       ))}
@@ -33,33 +33,33 @@ export default function VerificationProcessPage() {
         {STEPS.map((s, i) => (
           <div key={s.title} className="flex gap-3">
             <div className="flex flex-col items-center">
-              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-emerald-50 text-base">
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-tint text-base">
                 <span aria-hidden="true">{s.icon}</span>
               </div>
               {i < STEPS.length - 1 && (
-                <div className="mt-1 w-px flex-1 bg-slate-200" aria-hidden="true" />
+                <div className="mt-1 w-px flex-1 bg-tint" aria-hidden="true" />
               )}
             </div>
             <div className="pb-3">
-              <p className="text-sm font-semibold text-slate-800">
+              <p className="text-sm font-semibold text-ink">
                 {i + 1}. {s.title}
               </p>
-              <p className="mt-1 text-sm leading-relaxed text-slate-600">{s.desc}</p>
+              <p className="mt-1 text-sm leading-relaxed text-body">{s.desc}</p>
             </div>
           </div>
         ))}
       </div>
 
       <h2 className="mt-8 text-lg font-bold">실제 오류 발견·수정 사례</h2>
-      <p className="mt-2 text-sm leading-relaxed text-slate-500">
+      <p className="mt-2 text-sm leading-relaxed text-muted">
         이 절차를 거쳐 실제로 발견하고 고친 사례 일부입니다. 완벽함을 주장하는 대신, 오류를
         발견하고 고치는 과정 자체를 투명하게 공개합니다.
       </p>
       <div className="mt-3 space-y-2">
         {CORRECTIONS.map((c) => (
-          <div key={c.title} className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
-            <p className="text-sm font-semibold text-slate-800">{c.title}</p>
-            <p className="mt-1 text-sm leading-relaxed text-slate-600">{c.desc}</p>
+          <div key={c.title} className="border border-rule bg-paper p-4">
+            <p className="text-sm font-semibold text-ink">{c.title}</p>
+            <p className="mt-1 text-sm leading-relaxed text-body">{c.desc}</p>
           </div>
         ))}
       </div>
@@ -71,18 +71,18 @@ export default function VerificationProcessPage() {
             {faqs.map((f) => (
               <details
                 key={f.q}
-                className="group rounded-xl border border-slate-200 bg-white p-4 transition-colors open:border-emerald-200 open:bg-emerald-50/30"
+                className="group border border-rule bg-paper p-4 transition-colors open:border-accent open:bg-tint"
               >
-                <summary className="flex cursor-pointer list-none items-start justify-between gap-3 text-sm font-semibold text-slate-800 marker:content-none">
+                <summary className="flex cursor-pointer list-none items-start justify-between gap-3 text-sm font-semibold text-ink marker:content-none">
                   <span>
-                    <span className="mr-1.5 text-emerald-600">Q.</span>
+                    <span className="mr-1.5 text-accent">Q.</span>
                     {f.q}
                   </span>
                   <svg
                     viewBox="0 0 20 20"
                     fill="currentColor"
                     aria-hidden="true"
-                    className="mt-0.5 h-4 w-4 shrink-0 text-slate-400 transition-transform group-open:rotate-180"
+                    className="mt-0.5 h-4 w-4 shrink-0 text-muted transition-transform group-open:rotate-180"
                   >
                     <path
                       fillRule="evenodd"
@@ -91,18 +91,18 @@ export default function VerificationProcessPage() {
                     />
                   </svg>
                 </summary>
-                <p className="mt-2 pl-6 text-sm leading-relaxed text-slate-600">{f.a}</p>
+                <p className="mt-2 pl-6 text-sm leading-relaxed text-body">{f.a}</p>
               </details>
             ))}
           </div>
         </>
       )}
 
-      <p className="mt-8 text-sm text-slate-500">
+      <p className="mt-8 text-sm text-muted">
         운영자 소개와 문의 방법은{' '}
         <a
           href="/about/"
-          className="font-medium text-emerald-700 underline decoration-emerald-300 underline-offset-2 hover:text-emerald-800"
+          className="font-medium text-accent underline decoration-accent underline-offset-2 hover:text-accent"
         >
           소개 페이지
         </a>

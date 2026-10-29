@@ -36,12 +36,12 @@ export default function DueDateCalculator() {
   return (
     <div>
       <h1 className="text-2xl font-bold">출산예정일 계산기</h1>
-      <p className="mt-1 mb-6 text-sm text-slate-500">
+      <p className="mt-1 mb-6 text-sm text-muted">
         마지막 생리 시작일 기준으로 출산예정일(임신 40주)과 현재 임신 주수를 계산합니다.
       </p>
 
       <div className="grid gap-6 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
-        <section className="h-fit rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+        <section className="h-fit border border-rule bg-paper p-5">
           <h2 className="mb-4 text-base font-semibold">정보 입력</h2>
           <div className="space-y-4">
             <DateField label="마지막 생리 시작일" value={lmpStr} onChange={setLmpStr} />
@@ -59,20 +59,20 @@ export default function DueDateCalculator() {
         <section className="space-y-4">
           {r && (
             <>
-              <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-6 text-center">
-                <p className="text-sm text-slate-500">출산예정일 (임신 40주)</p>
-                <p className="mt-1 text-3xl font-extrabold text-emerald-700">{fmtDate(r.due)}</p>
+              <div className="border border-accent bg-tint p-6 text-center">
+                <p className="text-sm text-muted">출산예정일 (임신 40주)</p>
+                <p className="mt-1 text-3xl font-bold font-serif text-ink">{fmtDate(r.due)}</p>
                 {r.valid && (
-                  <p className="mt-3 text-sm text-slate-600">
+                  <p className="mt-3 text-sm text-body">
                     오늘은 임신 <b>{r.weeks}주 {r.days}일</b> ({r.trimester}분기) · 예정일까지{' '}
                     <b>{r.d >= 0 ? `D-${r.d}` : `D+${-r.d} 예정일 경과`}</b>
                   </p>
                 )}
               </div>
 
-              <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+              <div className="border border-rule bg-paper p-5">
                 <h2 className="mb-2 text-base font-semibold">주요 시점</h2>
-                <div className="divide-y divide-slate-100">
+                <div className="divide-y divide-rule">
                   <Row label="2분기 시작 (14주)" value={fmtDate(r.t2)} />
                   <Row label="3분기 시작 (28주)" value={fmtDate(r.t3)} />
                   <Row label="만삭 시작 (37주)" value={fmtDate(r.fullTerm)} />
@@ -80,7 +80,7 @@ export default function DueDateCalculator() {
                 </div>
               </div>
 
-              <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-xs leading-relaxed text-amber-800">
+              <div className="border border-rule bg-tint p-4 text-xs leading-relaxed text-body">
                 마지막 생리일 기준 네겔레 법칙(+280일, 주기 보정)에 따른 추정치입니다. 실제
                 예정일은 초음파 검사 결과에 따라 조정될 수 있으며, 정확한 진단과 관리는
                 반드시 산부인과 진료를 따르세요.

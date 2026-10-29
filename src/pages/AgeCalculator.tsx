@@ -43,13 +43,13 @@ export default function AgeCalculator() {
   return (
     <div>
       <h1 className="text-2xl font-bold">나이 계산기</h1>
-      <p className="mt-1 mb-6 text-sm text-slate-500">
+      <p className="mt-1 mb-6 text-sm text-muted">
         만 나이 · 연 나이 · 세는 나이를 한 번에 계산합니다. 2023년 6월부터 법적 나이는 만
         나이로 통일되었습니다.
       </p>
 
       <div className="grid gap-6 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
-        <section className="h-fit rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+        <section className="h-fit border border-rule bg-paper p-5">
           <h2 className="mb-4 text-base font-semibold">생년월일 입력</h2>
           <div className="space-y-4">
             <DateField label="생년월일" value={birthStr} onChange={setBirthStr} />
@@ -59,7 +59,7 @@ export default function AgeCalculator() {
 
         <section className="space-y-4">
           {!r ? (
-            <div className="rounded-2xl border border-red-200 bg-red-50 p-5 text-sm text-red-700">
+            <div className="border border-accent bg-tint p-5 text-sm text-accent">
               {invalid
                 ? '생년월일과 기준일을 올바른 날짜(YYYY-MM-DD)로 입력해주세요.'
                 : '생년월일이 기준일보다 늦습니다(아직 태어나지 않은 날짜). 기준일이나 생년월일을 확인해주세요.'}
@@ -67,23 +67,23 @@ export default function AgeCalculator() {
           ) : (
             <>
               <div className="grid grid-cols-3 gap-3">
-                <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-center">
-                  <p className="text-xs font-semibold text-slate-500">만 나이 (법적)</p>
-                  <p className="mt-1 text-3xl font-extrabold text-emerald-700">{r.ages.man}세</p>
+                <div className="border border-accent bg-tint p-4 text-center">
+                  <p className="text-xs font-semibold text-muted">만 나이 (법적)</p>
+                  <p className="mt-1 text-3xl font-bold font-serif text-ink">{r.ages.man}세</p>
                 </div>
-                <div className="rounded-2xl border border-slate-200 bg-white p-4 text-center shadow-sm">
-                  <p className="text-xs font-semibold text-slate-500">연 나이</p>
-                  <p className="mt-1 text-3xl font-extrabold">{r.ages.yeon}세</p>
+                <div className="border border-rule bg-paper p-4 text-center">
+                  <p className="text-xs font-semibold text-muted">연 나이</p>
+                  <p className="mt-1 text-3xl font-bold font-serif">{r.ages.yeon}세</p>
                 </div>
-                <div className="rounded-2xl border border-slate-200 bg-white p-4 text-center shadow-sm">
-                  <p className="text-xs font-semibold text-slate-500">세는 나이</p>
-                  <p className="mt-1 text-3xl font-extrabold">{r.ages.seneun}세</p>
+                <div className="border border-rule bg-paper p-4 text-center">
+                  <p className="text-xs font-semibold text-muted">세는 나이</p>
+                  <p className="mt-1 text-3xl font-bold font-serif">{r.ages.seneun}세</p>
                 </div>
               </div>
 
-              <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+              <div className="border border-rule bg-paper p-5">
                 <h2 className="mb-2 text-base font-semibold">상세 정보</h2>
-                <div className="divide-y divide-slate-100">
+                <div className="divide-y divide-rule">
                   <Row
                     label="정확한 만 나이"
                     value={`${r.parts.years}년 ${r.parts.months}개월 ${r.parts.days}일`}
@@ -98,15 +98,15 @@ export default function AgeCalculator() {
                 </div>
               </div>
 
-              <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+              <div className="border border-rule bg-paper p-5">
                 <h2 className="mb-2 text-base font-semibold">입학년도</h2>
-                <div className="divide-y divide-slate-100">
+                <div className="divide-y divide-rule">
                   <Row label="초등학교" value={`${r.elementary}년 3월`} />
                   <Row label="중학교" value={`${r.middle}년 3월`} />
                   <Row label="고등학교" value={`${r.high}년 3월`} />
                   <Row label="대학교" value={`${r.univ}년 3월`} sub="재수·조기입학 미반영" />
                 </div>
-                <p className="mt-3 text-xs text-slate-400">
+                <p className="mt-3 text-xs text-muted">
                   현재 초등학교 입학 기준(출생연도 + 7년)입니다. 과거 &quot;빠른년생&quot; 입학자나
                   조기입학·입학연기 신청자는 1년 다를 수 있습니다.
                 </p>

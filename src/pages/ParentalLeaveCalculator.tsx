@@ -14,12 +14,12 @@ export default function ParentalLeaveCalculator() {
   return (
     <div>
       <h1 className="text-2xl font-bold">육아휴직급여 계산기</h1>
-      <p className="mt-1 mb-6 text-sm text-slate-500">
+      <p className="mt-1 mb-6 text-sm text-muted">
         2025년 개편 기준(사후지급금 폐지, 매월 전액 지급) 예상 육아휴직급여입니다.
       </p>
 
       <div className="grid gap-6 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
-        <section className="h-fit rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+        <section className="h-fit border border-rule bg-paper p-5">
           <h2 className="mb-4 text-base font-semibold">휴직 정보 입력</h2>
           <Field
             label="월 통상임금"
@@ -41,21 +41,21 @@ export default function ParentalLeaveCalculator() {
         </section>
 
         <section className="space-y-4">
-          <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-5">
+          <div className="border border-accent bg-tint p-5">
             <div className="flex flex-wrap items-end justify-between gap-3">
               <div>
-                <p className="text-sm text-slate-500">총 육아휴직급여</p>
-                <p className="text-3xl font-extrabold tabular-nums text-emerald-700">
+                <p className="text-sm text-muted">총 육아휴직급여</p>
+                <p className="text-3xl font-bold font-serif tabular-nums text-ink">
                   {fmt(r.total)}원
                 </p>
               </div>
               <div className="text-right">
-                <p className="text-sm text-slate-500">월평균</p>
+                <p className="text-sm text-muted">월평균</p>
                 <p className="text-lg font-bold tabular-nums">{fmt(r.average)}원</p>
               </div>
             </div>
             {(ordinaryWage > 2_500_000 || ordinaryWage > 2_000_000 || ordinaryWage * 0.8 > 1_600_000) && (
-              <p className="mt-3 text-sm text-slate-600">
+              <p className="mt-3 text-sm text-body">
                 통상임금이 상한액을 넘는 구간은 상한으로 제한됩니다:
                 {ordinaryWage > 2_500_000 && ' 1~3개월차 250만원'}
                 {ordinaryWage > 2_000_000 && ' · 4~6개월차 200만원'}
@@ -64,9 +64,9 @@ export default function ParentalLeaveCalculator() {
             )}
           </div>
 
-          <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+          <div className="border border-rule bg-paper p-5">
             <h2 className="mb-2 text-base font-semibold">구간별 지급액</h2>
-            <div className="divide-y divide-slate-100">
+            <div className="divide-y divide-rule">
               <Row
                 label="1~3개월차"
                 value={`${fmt(r.phase1)}원`}
@@ -86,7 +86,7 @@ export default function ParentalLeaveCalculator() {
             </div>
           </div>
 
-          <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-xs leading-relaxed text-amber-800">
+          <div className="border border-rule bg-tint p-4 text-xs leading-relaxed text-body">
             <b>이 계산은 예상치입니다.</b> 하한액은 전 구간 70만원이며, 2025년 개편으로
             사후지급금(과거 25% 유보분) 제도가 폐지되어 매월 전액이 지급됩니다. 부모가 모두
             육아휴직을 사용하는 "6+6 부모육아휴직제" 특례(첫 6개월 상한 인상)는 별도 제도라

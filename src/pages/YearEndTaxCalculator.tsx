@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { calcYearEndTax, type YearEndTaxInput } from '../lib/yearEndTax'
-import { Field, Row, fmt } from '../components/ui'
+import { Field, Row, fmt, Result } from '../components/ui'
 
 export default function YearEndTaxCalculator() {
   const [input, setInput] = useState<YearEndTaxInput>({
@@ -28,7 +28,7 @@ export default function YearEndTaxCalculator() {
   return (
     <div>
       <h1 className="text-2xl font-bold">연말정산 환급액 계산기</h1>
-      <p className="mt-1 mb-6 text-sm text-slate-500">
+      <p className="mt-1 mb-6 text-sm text-muted">
         신용카드·연금계좌·보험료·의료비·교육비·기부금·월세 공제를 반영한 결정세액과
         환급/추가납부 예상액입니다. 2026년 귀속(2027년 1월 정산) 세법 기준이며, 2026년 1월에 한
         2025년 귀속 정산과는 일부 공제 기준이 다를 수 있습니다.
@@ -37,7 +37,7 @@ export default function YearEndTaxCalculator() {
       <div className="grid gap-6 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
         {/* 입력 */}
         <section className="space-y-4">
-          <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+          <div className="border border-rule bg-paper p-5">
             <h2 className="mb-4 text-base font-semibold">기본 정보</h2>
             <Field
               label="연봉 (세전)"
@@ -68,17 +68,17 @@ export default function YearEndTaxCalculator() {
                 step={1}
               />
               <div>
-                <span className="mb-1 block text-sm font-medium text-slate-700">원천징수 비율</span>
+                <span className="mb-1 block text-sm font-medium text-ink">원천징수 비율</span>
                 <div className="flex gap-1.5">
                   {([80, 100, 120] as const).map((p) => (
                     <button
                       key={p}
                       type="button"
                       onClick={() => set('withholdingRatio')(p)}
-                      className={`min-w-0 flex-1 rounded-lg border px-1 py-2 text-sm font-medium transition-colors ${
+                      className={`min-w-0 flex-1 border px-1 py-2 text-sm font-medium transition-colors ${
                         input.withholdingRatio === p
-                          ? 'border-emerald-600 bg-emerald-600 text-white'
-                          : 'border-slate-300 text-slate-500 hover:bg-slate-100'
+                          ? 'border-ink bg-ink text-paper'
+                          : 'border-ink text-ink hover:bg-tint'
                       }`}
                     >
                       {p}%
@@ -89,7 +89,7 @@ export default function YearEndTaxCalculator() {
             </div>
           </div>
 
-          <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+          <div className="border border-rule bg-paper p-5">
             <h2 className="mb-4 text-base font-semibold">소득공제 항목 (연간)</h2>
             <div className="grid grid-cols-2 gap-x-3 gap-y-4">
               <Field
@@ -107,7 +107,7 @@ export default function YearEndTaxCalculator() {
             </div>
           </div>
 
-          <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+          <div className="border border-rule bg-paper p-5">
             <h2 className="mb-4 text-base font-semibold">세액공제 항목 (연간)</h2>
             <div className="grid grid-cols-2 gap-x-3 gap-y-4">
               <Field
@@ -155,27 +155,22 @@ export default function YearEndTaxCalculator() {
         {/* 결과 */}
         <section className="space-y-4">
           <div
-            className={`rounded-2xl border p-5 ${
-              r.isRefund ? 'border-emerald-200 bg-emerald-50' : 'border-red-200 bg-red-50'
-            }`}
+            className="border border-accent bg-tint p-5"
           >
-            <p className="text-sm text-slate-500">{r.isRefund ? '예상 환급액' : '예상 추가납부액'}</p>
-            <p
-              className={`mt-1 text-3xl font-extrabold tabular-nums ${
-                r.isRefund ? 'text-emerald-700' : 'text-red-700'
-              }`}
-            >
-              {fmt(Math.abs(r.refund))}원
-            </p>
-            <p className="mt-3 text-sm text-slate-600">
+            <Result
+              label={r.isRefund ? '예상 환급액' : '예상 추가납부액'}
+              value={fmt(Math.abs(r.refund))}
+              unit="원"
+            />
+            <p className="mt-3 text-sm text-body">
               기납부세액 <b>{fmt(r.paidTax + r.paidLocalTax)}원</b> − 결정세액{' '}
               <b>{fmt(r.finalTax + r.finalLocalTax)}원</b>
             </p>
           </div>
 
-          <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+          <div className="border border-rule bg-paper p-5">
             <h2 className="mb-2 text-base font-semibold">소득공제 · 과세표준</h2>
-            <div className="divide-y divide-slate-100">
+            <div className="divide-y divide-rule">
               <Row label="총급여 (비과세 제외)" value={`${fmt(r.gross)}원`} />
               <Row label="근로소득금액" value={`${fmt(r.earnedIncome)}원`} sub="근로소득공제 차감 후" />
               <Row label="인적공제" value={`-${fmt(r.personalDeduction)}원`} />
@@ -187,9 +182,9 @@ export default function YearEndTaxCalculator() {
             </div>
           </div>
 
-          <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+          <div className="border border-rule bg-paper p-5">
             <h2 className="mb-2 text-base font-semibold">세액공제 내역</h2>
-            <div className="divide-y divide-slate-100">
+            <div className="divide-y divide-rule">
               <Row label="근로소득세액공제" value={`-${fmt(r.earnedCredit)}원`} />
               <Row label="자녀세액공제" value={`-${fmt(r.childCredit)}원`} />
               <Row label="연금계좌세액공제" value={`-${fmt(r.pensionCredit)}원`} />
@@ -203,7 +198,7 @@ export default function YearEndTaxCalculator() {
             </div>
           </div>
 
-          <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-xs leading-relaxed text-amber-800">
+          <div className="border border-rule bg-tint p-4 text-xs leading-relaxed text-body">
             <b>이 계산은 근사 추정치입니다.</b> 주택자금(주담대 이자상환액) 소득공제, 청약저축
             공제, 장애인·경로우대 추가공제, 부양가족의 소득 요건 등은 반영하지 않았습니다.
             표준세액공제(연 13만원), 의료비·교육비 한도, 0~7세 자녀의 신용카드 추가한도도 반영하지

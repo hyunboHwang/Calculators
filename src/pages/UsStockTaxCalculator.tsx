@@ -44,13 +44,13 @@ export default function UsStockTaxCalculator() {
   return (
     <div>
       <h1 className="text-2xl font-bold">미국주식 양도소득세 계산기</h1>
-      <p className="mt-1 mb-6 text-sm text-slate-500">
+      <p className="mt-1 mb-6 text-sm text-muted">
         해외주식 양도차익은 연 250만원 공제 후 22%(지방세 포함)로 과세됩니다. 올해 실현한
         손익을 넣어 내년 5월에 낼 세금을 미리 확인하세요.
       </p>
 
       <div className="grid gap-6 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
-        <section className="h-fit rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+        <section className="h-fit border border-rule bg-paper p-5">
           <h2 className="mb-4 text-base font-semibold">올해 실현 손익 (1.1 ~ 12.31 결제 기준)</h2>
           <div className="space-y-4">
             <CurrencyToggle value={currency} onChange={switchCurrency} />
@@ -83,19 +83,19 @@ export default function UsStockTaxCalculator() {
         </section>
 
         <section className="space-y-4">
-          <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-5">
-            <p className="text-sm text-slate-500">예상 양도소득세 (지방세 포함)</p>
-            <p className="mt-1 text-3xl font-extrabold tabular-nums text-emerald-700">
+          <div className="border border-accent bg-tint p-5">
+            <p className="text-sm text-muted">예상 양도소득세 (지방세 포함)</p>
+            <p className="mt-1 text-3xl font-bold font-serif tabular-nums text-ink">
               {fmt(r.tax)}원
             </p>
-            <p className="mt-2 text-sm text-slate-600">
+            <p className="mt-2 text-sm text-body">
               순손익 {fmt(r.net)}원 기준 실효세율 <b>{r.effectiveRate.toFixed(1)}%</b>
             </p>
           </div>
 
-          <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+          <div className="border border-rule bg-paper p-5">
             <h2 className="mb-2 text-base font-semibold">계산 내역</h2>
-            <div className="divide-y divide-slate-100">
+            <div className="divide-y divide-rule">
               <Row
                 label="실현 이익"
                 value={`${fmt(r.gainKrw)}원`}
@@ -114,12 +114,12 @@ export default function UsStockTaxCalculator() {
             </div>
           </div>
 
-          <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+          <div className="border border-rule bg-paper p-5">
             <h2 className="mb-2 text-base font-semibold">절세 포인트</h2>
-            <p className="text-sm leading-relaxed text-slate-600">
+            <p className="text-sm leading-relaxed text-body">
               {r.remainingDeduction > 0 ? (
                 <>
-                  올해 공제 한도가 <b className="text-emerald-700">{fmt(r.remainingDeduction)}원</b>{' '}
+                  올해 공제 한도가 <b className="text-accent">{fmt(r.remainingDeduction)}원</b>{' '}
                   남았습니다{r.net < 0 && ' (순손실만큼 공제 여력이 늘어납니다)'}. 이 금액까지는 이익을 실현해도 세금이 없으니, 연말 전에 수익
                   종목 일부를 매도해 공제를 활용하는 것을 검토해보세요.
                 </>
@@ -133,7 +133,7 @@ export default function UsStockTaxCalculator() {
             </p>
           </div>
 
-          <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-xs leading-relaxed text-amber-800">
+          <div className="border border-rule bg-tint p-4 text-xs leading-relaxed text-body">
             손익은 결제일 기준 환율로 원화 환산해 계산하며, 매매 수수료는 차감됩니다. 신고는
             다음 해 5월 종합소득세 기간에 하며 대부분 증권사가 신고 대행 서비스를 제공합니다.
             세법은 바뀔 수 있으니 신고 시점 기준을 확인하세요.

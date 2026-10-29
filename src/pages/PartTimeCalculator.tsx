@@ -39,13 +39,13 @@ export default function PartTimeCalculator() {
   return (
     <div>
       <h1 className="text-2xl font-bold">알바 월급 · 주휴수당 계산기</h1>
-      <p className="mt-1 mb-6 text-sm text-slate-500">
+      <p className="mt-1 mb-6 text-sm text-muted">
         시급과 주 근무시간으로 주휴수당 포함 주급·월급을 계산합니다. 2026년 최저시급은{' '}
         {fmt(MIN_WAGE_2026)}원입니다.
       </p>
 
       <div className="grid gap-6 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
-        <section className="h-fit rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+        <section className="h-fit border border-rule bg-paper p-5">
           <h2 className="mb-4 text-base font-semibold">근무 조건</h2>
           <div className="space-y-4">
             <Field label="시급" value={hourly} onChange={setHourly} step={10} />
@@ -58,7 +58,7 @@ export default function PartTimeCalculator() {
               hint="휴게시간 제외"
             />
             <div>
-              <span className="mb-1 block text-sm font-medium text-slate-700">공제 방식</span>
+              <span className="mb-1 block text-sm font-medium text-ink">공제 방식</span>
               <div className="grid grid-cols-3 gap-1.5">
                 {(
                   [
@@ -71,10 +71,10 @@ export default function PartTimeCalculator() {
                     key={d}
                     type="button"
                     onClick={() => setDeduct(d)}
-                    className={`rounded-lg border px-2 py-2 text-sm font-medium transition-colors ${
+                    className={`border px-2 py-2 text-sm font-medium transition-colors ${
                       deduct === d
-                        ? 'border-emerald-600 bg-emerald-600 text-white'
-                        : 'border-slate-300 text-slate-500 hover:bg-slate-100'
+                        ? 'border-ink bg-ink text-paper'
+                        : 'border-ink text-ink hover:bg-tint'
                     }`}
                   >
                     {label}
@@ -83,13 +83,13 @@ export default function PartTimeCalculator() {
               </div>
             </div>
             {deduct === 'insurance' && weeklyHours < 15 && (
-              <p className="mt-2 text-xs text-slate-500">
+              <p className="mt-2 text-xs text-muted">
                 주 15시간 미만은 대부분 4대보험 가입 대상이 아닙니다. 참고용 계산입니다.
               </p>
             )}
           </div>
           {r.belowMinWage && (
-            <p className="mt-4 rounded-lg bg-red-50 p-3 text-sm text-red-700">
+            <p className="mt-4 bg-tint p-3 text-sm text-accent">
               입력한 시급이 2026년 최저시급({fmt(MIN_WAGE_2026)}원)보다 낮습니다. 최저임금법
               위반입니다.
             </p>
@@ -97,29 +97,29 @@ export default function PartTimeCalculator() {
         </section>
 
         <section className="space-y-4">
-          <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-5">
+          <div className="border border-accent bg-tint p-5">
             <div className="flex flex-wrap items-end justify-between gap-3">
               <div>
-                <p className="text-sm text-slate-500">예상 월급 {deduct !== 'none' && '(공제 후)'}</p>
-                <p className="text-3xl font-extrabold tabular-nums text-emerald-700">
+                <p className="text-sm text-muted">예상 월급 {deduct !== 'none' && '(공제 후)'}</p>
+                <p className="text-3xl font-bold font-serif tabular-nums text-ink">
                   {fmt(r.monthlyNet)}원
                 </p>
               </div>
               <div className="text-right">
-                <p className="text-sm text-slate-500">주급 (주휴 포함)</p>
+                <p className="text-sm text-muted">주급 (주휴 포함)</p>
                 <p className="text-lg font-bold tabular-nums">{fmt(r.weeklyTotal)}원</p>
               </div>
             </div>
             {r.holidayHours === 0 && (
-              <p className="mt-3 text-sm text-slate-600">
+              <p className="mt-3 text-sm text-body">
                 주 15시간 미만 근무라 주휴수당이 발생하지 않습니다.
               </p>
             )}
           </div>
 
-          <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+          <div className="border border-rule bg-paper p-5">
             <h2 className="mb-2 text-base font-semibold">계산 내역</h2>
-            <div className="divide-y divide-slate-100">
+            <div className="divide-y divide-rule">
               <Row label="주 근무 급여" value={`${fmt(r.weeklyPay)}원`} sub={`${weeklyHours}시간 × ${fmt(hourly)}원`} />
               <Row
                 label="주휴수당"
@@ -138,7 +138,7 @@ export default function PartTimeCalculator() {
             </div>
           </div>
 
-          <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-xs leading-relaxed text-amber-800">
+          <div className="border border-rule bg-tint p-4 text-xs leading-relaxed text-body">
             월 환산시간은 (주 소정근로시간+주휴시간)×365÷7÷12를 정수로 반올림한 값(주 40시간은
             최저임금 환산 209시간)이며 실제 급여 방식과 소폭 다를 수 있습니다. 주휴수당은 1주 소정근로시간 15시간 이상 + 개근 시 발생합니다. 알바를 3.3%
             사업소득으로 처리하는 관행이 있으나 원칙적으로 근로자는 4대보험 대상입니다. 야간

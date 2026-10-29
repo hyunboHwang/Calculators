@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { calcSalary, getSalaryVerdict, RATES_2026, type SalaryInput } from '../lib/salary'
-import { Field, Row, fmt } from '../components/ui'
+import { Field, Row, fmt, Result } from '../components/ui'
 import VerdictBanner from '../components/VerdictBanner'
 
 /* ---------- 페이지 ---------- */
@@ -25,13 +25,13 @@ export default function SalaryCalculator() {
   return (
     <div>
       <h1 className="text-2xl font-bold">연봉 실수령액 계산기</h1>
-      <p className="mt-1 mb-6 text-sm text-slate-500">
+      <p className="mt-1 mb-6 text-sm text-muted">
         2026년 4대보험 요율과 소득세법 시행령 별표 2 근로소득 간이세액표를 반영한 예상치입니다.
       </p>
 
       <div className="grid gap-6 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
         {/* 입력 */}
-        <section className="h-fit rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+        <section className="h-fit border border-rule bg-paper p-5">
           <h2 className="mb-4 text-base font-semibold">급여 정보 입력</h2>
 
           <Field
@@ -48,8 +48,8 @@ export default function SalaryCalculator() {
                 onClick={() => set('annualSalary')(p)}
                 className={`min-h-11 rounded-full border px-3.5 text-sm font-medium transition-colors ${
                   input.annualSalary === p
-                    ? 'border-emerald-600 bg-emerald-600 text-white'
-                    : 'border-slate-200 text-slate-500 hover:bg-slate-100'
+                    ? 'border-ink bg-ink text-paper'
+                    : 'border-ink text-ink hover:bg-tint'
                 }`}
               >
                 {p >= 100_000_000 ? `${p / 100_000_000}억` : `${p / 10_000_000}천만`}
@@ -81,17 +81,17 @@ export default function SalaryCalculator() {
               hint="부양가족 수에도 포함해 입력"
             />
             <div className="col-span-2">
-              <span className="mb-1 block text-sm font-medium text-slate-700">원천징수 비율</span>
+              <span className="mb-1 block text-sm font-medium text-ink">원천징수 비율</span>
               <div className="flex gap-1.5">
                 {([80, 100, 120] as const).map((p) => (
                   <button
                     key={p}
                     type="button"
                     onClick={() => set('withholdingRatio')(p)}
-                    className={`min-w-0 flex-1 rounded-lg border px-1 py-2 text-sm font-medium transition-colors ${
+                    className={`min-w-0 flex-1 border px-1 py-2 text-sm font-medium transition-colors ${
                       input.withholdingRatio === p
-                        ? 'border-emerald-600 bg-emerald-600 text-white'
-                        : 'border-slate-300 text-slate-500 hover:bg-slate-100'
+                        ? 'border-ink bg-ink text-paper'
+                        : 'border-ink text-ink hover:bg-tint'
                     }`}
                   >
                     {p}%
@@ -101,7 +101,7 @@ export default function SalaryCalculator() {
             </div>
           </div>
 
-          <p className="mt-4 text-xs leading-relaxed text-slate-400">
+          <p className="mt-4 text-xs leading-relaxed text-muted">
             원천징수 비율은 매월 떼는 소득세의 비율 선택지(80/100/120%)로, 연말정산에서
             정산되므로 연간 총 세금은 같습니다.
           </p>
@@ -110,20 +110,17 @@ export default function SalaryCalculator() {
         {/* 결과 */}
         <section className="space-y-4">
           {/* 요약 */}
-          <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-5">
+          <div className="border border-accent bg-tint p-5">
             <div className="flex flex-wrap items-end justify-between gap-3">
               <div>
-                <p className="text-sm text-slate-500">월 예상 실수령액</p>
-                <p className="text-3xl font-extrabold tabular-nums text-emerald-700">
-                  {fmt(r.monthlyNet)}원
-                </p>
+                <Result label="월 예상 실수령액" value={fmt(r.monthlyNet)} unit="원" />
               </div>
               <div className="text-right">
-                <p className="text-sm text-slate-500">연 예상 실수령액</p>
+                <p className="text-sm text-muted">연 예상 실수령액</p>
                 <p className="text-lg font-bold tabular-nums">{fmt(r.annualNet)}원</p>
               </div>
             </div>
-            <p className="mt-3 text-sm text-slate-600">
+            <p className="mt-3 text-sm text-body">
               연봉의 <b>{Number.isFinite(r.netRatio) ? `${(r.netRatio * 100).toFixed(1)}%` : '-'}</b>를 실수령하고, 매월{' '}
               <b>{fmt(r.totalDeduction)}원</b>이 공제됩니다.
             </p>
@@ -132,9 +129,9 @@ export default function SalaryCalculator() {
           {verdict && <VerdictBanner verdict={verdict} />}
 
           {/* 공제 내역 */}
-          <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+          <div className="border border-rule bg-paper p-5">
             <h2 className="mb-2 text-base font-semibold">월 공제 내역</h2>
-            <div className="divide-y divide-slate-100">
+            <div className="divide-y divide-rule">
               <Row label="월 세전급여" value={`${fmt(r.monthlyGross)}원`} strong />
               <Row
                 label="과세 대상 월급여"
@@ -173,7 +170,7 @@ export default function SalaryCalculator() {
           </div>
 
           {/* 안내 */}
-          <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-xs leading-relaxed text-amber-800">
+          <div className="border border-rule bg-tint p-4 text-xs leading-relaxed text-body">
             <b>이 계산은 예상치입니다.</b> 소득세는 소득세법 시행령 별표 2 근로소득 간이세액표
             조회값(매월 원천징수 세액)이며, 회사의 비과세 항목 구성, 상여 지급 방식, 연말정산 결과에 따라
             실제 수령액과 달라질 수 있습니다. 국민연금은 기준소득월액 하한{' '}
@@ -181,10 +178,10 @@ export default function SalaryCalculator() {
             (2026.7~2027.6)을 반영했습니다.
           </div>
 
-          <div className="rounded-2xl border border-slate-200 bg-white p-4 text-sm">
+          <div className="border border-rule bg-paper p-4 text-sm">
             <a
               href="/salary-table/"
-              className="font-medium text-emerald-700 underline decoration-emerald-300 underline-offset-2 hover:text-emerald-800"
+              className="font-medium text-accent underline decoration-accent underline-offset-2 hover:text-accent"
             >
               연봉 2,000만원~2억원 구간별 실수령액표 보기 →
             </a>

@@ -20,13 +20,13 @@ export default function FreelanceTaxCalculator() {
   return (
     <div>
       <h1 className="text-2xl font-bold">프리랜서 3.3% 계산기</h1>
-      <p className="mt-1 mb-6 text-sm text-slate-500">
+      <p className="mt-1 mb-6 text-sm text-muted">
         사업소득 원천징수(3.3%) 세전·세후 환산과 연간 종합소득세 정산 추정입니다.
       </p>
 
       <div className="grid gap-6 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
         <section className="space-y-4">
-          <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+          <div className="border border-rule bg-paper p-5">
             <h2 className="mb-4 text-base font-semibold">건별 원천징수 계산</h2>
             <div className="mb-4 flex gap-1.5">
               {(['grossToNet', 'netToGross'] as const).map((m) => (
@@ -34,10 +34,10 @@ export default function FreelanceTaxCalculator() {
                   key={m}
                   type="button"
                   onClick={() => setMode(m)}
-                  className={`flex-1 rounded-lg border px-2 py-2 text-xs font-medium transition-colors ${
+                  className={`flex-1 border px-2 py-2 text-xs font-medium transition-colors ${
                     mode === m
-                      ? 'border-emerald-600 bg-emerald-600 text-white'
-                      : 'border-slate-300 text-slate-500 hover:bg-slate-100'
+                      ? 'border-ink bg-ink text-paper'
+                      : 'border-ink text-ink hover:bg-tint'
                   }`}
                 >
                   {m === 'grossToNet' ? '세전 → 세후' : '세후 → 세전'}
@@ -52,7 +52,7 @@ export default function FreelanceTaxCalculator() {
             />
           </div>
 
-          <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+          <div className="border border-rule bg-paper p-5">
             <h2 className="mb-4 text-base font-semibold">연간 종합소득세 추정</h2>
             <Field
               label="연간 총 용역비 (세전 합계)"
@@ -82,25 +82,25 @@ export default function FreelanceTaxCalculator() {
         </section>
 
         <section className="space-y-4">
-          <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-5">
+          <div className="border border-accent bg-tint p-5">
             <div className="flex flex-wrap items-end justify-between gap-3">
               <div>
-                <p className="text-sm text-slate-500">세전 금액</p>
-                <p className="text-2xl font-extrabold tabular-nums text-slate-800">{fmt(w.gross)}원</p>
+                <p className="text-sm text-muted">세전 금액</p>
+                <p className="text-2xl font-extrabold tabular-nums text-ink">{fmt(w.gross)}원</p>
               </div>
               <div className="text-right">
-                <p className="text-sm text-slate-500">세후 실수령액</p>
-                <p className="text-2xl font-extrabold tabular-nums text-emerald-700">{fmt(w.net)}원</p>
+                <p className="text-sm text-muted">세후 실수령액</p>
+                <p className="text-2xl font-extrabold tabular-nums text-accent">{fmt(w.net)}원</p>
               </div>
             </div>
-            <p className="mt-3 text-sm text-slate-600">
+            <p className="mt-3 text-sm text-body">
               원천징수액 <b>{fmt(w.withholding)}원</b> (소득세 3% + 지방소득세 0.3%)
             </p>
           </div>
 
-          <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+          <div className="border border-rule bg-paper p-5">
             <h2 className="mb-2 text-base font-semibold">연간 정산 추정</h2>
-            <div className="divide-y divide-slate-100">
+            <div className="divide-y divide-rule">
               <Row label="소득금액" value={`${fmt(a.income)}원`} sub={`매출×(1-경비율)`} />
               <Row label="과세표준" value={`${fmt(a.taxBase)}원`} />
               <Row label="종합소득세+지방소득세" value={`${fmt(a.total)}원`} strong />
@@ -114,7 +114,7 @@ export default function FreelanceTaxCalculator() {
             </div>
           </div>
 
-          <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-xs leading-relaxed text-amber-800">
+          <div className="border border-rule bg-tint p-4 text-xs leading-relaxed text-body">
             <b>이 계산은 예상치입니다.</b> 3.3%는 매월 떼는 예납일 뿐이고, 실제 세금은 다음 해
             5월 종합소득세 신고에서 경비율·소득공제를 반영해 정산됩니다. 경비율은 업종별로
             크게 다르므로(예: 인적용역 단순경비율 대략 50~65%대) 국세청 홈택스에서 본인 업종의

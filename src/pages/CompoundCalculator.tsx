@@ -26,13 +26,13 @@ export default function CompoundCalculator() {
   return (
     <div>
       <h1 className="text-2xl font-bold">복리 계산기</h1>
-      <p className="mt-1 mb-6 text-sm text-slate-500">
+      <p className="mt-1 mb-6 text-sm text-muted">
         초기 원금과 월 적립액이 연 수익률로 굴러가면 얼마가 되는지 월복리 기준으로
         계산합니다.
       </p>
 
       <div className="grid gap-6 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
-        <section className="h-fit rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+        <section className="h-fit border border-rule bg-paper p-5">
           <h2 className="mb-4 text-base font-semibold">투자 조건</h2>
           <div className="space-y-4">
             <Field label="초기 원금" value={principal} onChange={setPrincipal} step={1_000_000} />
@@ -51,23 +51,23 @@ export default function CompoundCalculator() {
         </section>
 
         <section className="space-y-4">
-          <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-5">
-            <p className="text-sm text-slate-500">{years}년 후 예상 자산</p>
-            <p className="mt-1 text-3xl font-extrabold tabular-nums text-emerald-700">
+          <div className="border border-accent bg-tint p-5">
+            <p className="text-sm text-muted">{years}년 후 예상 자산</p>
+            <p className="mt-1 text-3xl font-bold font-serif tabular-nums text-ink">
               {fmt(r.final)}원
             </p>
-            <p className="mt-2 text-sm text-slate-600">
+            <p className="mt-2 text-sm text-body">
               총 납입 {fmt(r.totalPaid)}원 → <b>{Number.isFinite(r.multiple) ? `${r.multiple.toFixed(2)}배` : '-'}</b> · 수익{' '}
               <b>+{fmt(r.profit)}원</b>
             </p>
           </div>
 
-          <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+          <div className="border border-rule bg-paper p-5">
             <h2 className="mb-2 text-base font-semibold">연도별 자산 추이</h2>
             <div className="max-h-80 overflow-y-auto">
               <table className="w-full text-right text-xs tabular-nums">
-                <thead className="sticky top-0 bg-white text-slate-400">
-                  <tr className="border-b border-slate-200">
+                <thead className="sticky top-0 bg-paper text-muted">
+                  <tr className="border-b border-rule">
                     <th className="py-1.5 pr-2 font-medium">연차</th>
                     <th className="py-1.5 pr-2 font-medium">납입 누계</th>
                     <th className="py-1.5 pr-2 font-medium">평가 자산</th>
@@ -76,11 +76,11 @@ export default function CompoundCalculator() {
                 </thead>
                 <tbody>
                   {r.yearly.map((y) => (
-                    <tr key={y.year} className="border-b border-slate-50 text-slate-600">
-                      <td className="py-1 pr-2 text-slate-400">{y.year}년</td>
+                    <tr key={y.year} className="border-b border-rule text-body">
+                      <td className="py-1 pr-2 text-muted">{y.year}년</td>
                       <td className="py-1 pr-2">{fmt(y.paid)}</td>
                       <td className="py-1 pr-2 font-medium">{fmt(y.value)}</td>
-                      <td className="py-1 text-red-600">+{fmt(y.value - y.paid)}</td>
+                      <td className="py-1 text-accent">+{fmt(y.value - y.paid)}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -88,7 +88,7 @@ export default function CompoundCalculator() {
             </div>
           </div>
 
-          <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-xs leading-relaxed text-amber-800">
+          <div className="border border-rule bg-tint p-4 text-xs leading-relaxed text-body">
             매월 말 적립, 월복리 가정의 단순 시뮬레이션입니다. 실제 투자는 수익률이 매년
             변동하고 세금·수수료가 발생하므로 결과와 다를 수 있습니다. 특정 수익률을 보장하는
             것이 아닙니다.

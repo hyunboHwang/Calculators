@@ -19,7 +19,7 @@ export function CurrencyToggle({
   onChange: (c: Currency) => void
 }) {
   return (
-    <div className="flex gap-1 rounded-lg bg-slate-100 p-1">
+    <div className="flex gap-1 bg-tint p-1">
       {(
         [
           ['KRW', '₩ 원화'],
@@ -30,8 +30,8 @@ export function CurrencyToggle({
           key={c}
           type="button"
           onClick={() => onChange(c)}
-          className={`flex-1 rounded-md px-3 py-2 text-sm font-medium transition-all ${
-            value === c ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'
+          className={`flex-1 px-3 py-2 text-sm font-medium transition-all ${
+            value === c ? 'bg-ink text-paper' : 'text-muted hover:text-ink'
           }`}
         >
           {label}

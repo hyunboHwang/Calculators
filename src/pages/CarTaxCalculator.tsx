@@ -15,22 +15,22 @@ export default function CarTaxCalculator() {
   return (
     <div>
       <h1 className="text-2xl font-bold">자동차세 계산기</h1>
-      <p className="mt-1 mb-6 text-sm text-slate-500">
+      <p className="mt-1 mb-6 text-sm text-muted">
         배기량과 차령(경과연수)으로 비영업용 승용차의 연간 자동차세를 계산합니다. 차령 3년차부터
         매년 5%p씩, 최대 50%까지 감경됩니다.
       </p>
 
       <div className="grid gap-6 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
-        <section className="h-fit rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+        <section className="h-fit border border-rule bg-paper p-5">
           <h2 className="mb-4 text-base font-semibold">차량 정보</h2>
           <div className="space-y-4">
-            <div className="rounded-xl bg-slate-50 p-3">
-              <label className="flex items-center gap-2 text-sm text-slate-700">
+            <div className="bg-tint p-3">
+              <label className="flex items-center gap-2 text-sm text-ink">
                 <input
                   type="checkbox"
                   checked={isElectric}
                   onChange={(e) => setIsElectric(e.target.checked)}
-                  className="h-4 w-4 rounded border-slate-300 accent-emerald-600"
+                  className="h-4 w-4 rounded border-rule accent-ink"
                 />
                 전기차 (정액 10만원)
               </label>
@@ -58,26 +58,26 @@ export default function CarTaxCalculator() {
         </section>
 
         <section className="space-y-4">
-          <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-5">
-            <p className="text-sm text-slate-500">예상 연간 총액</p>
-            <p className="text-3xl font-extrabold tabular-nums text-emerald-700">
+          <div className="border border-accent bg-tint p-5">
+            <p className="text-sm text-muted">예상 연간 총액</p>
+            <p className="text-3xl font-bold font-serif tabular-nums text-ink">
               {fmt(r.total)}원
             </p>
             {r.depreciationPct > 0 && (
-              <p className="mt-2 text-sm text-slate-600">경년 감경 {r.depreciationPct}% 적용</p>
+              <p className="mt-2 text-sm text-body">경년 감경 {r.depreciationPct}% 적용</p>
             )}
           </div>
 
-          <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+          <div className="border border-rule bg-paper p-5">
             <h2 className="mb-2 text-base font-semibold">상세 내역</h2>
-            <div className="divide-y divide-slate-100">
+            <div className="divide-y divide-rule">
               <Row label="자동차세" value={`${fmt(r.carTax)}원`} strong />
               <Row label="지방교육세" value={`${fmt(r.localEduTax)}원`} />
               <Row label="합계" value={`${fmt(r.total)}원`} strong />
             </div>
           </div>
 
-          <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-xs leading-relaxed text-amber-800">
+          <div className="border border-rule bg-tint p-4 text-xs leading-relaxed text-body">
             <b>이 계산은 예상치입니다.</b> 연납 신청 시 받을 수 있는 할인은 반영하지
             않았습니다. 입력하는 &lsquo;차령&rsquo;은 법정 차령(지방세법 시행령 제122조제2항: 자동차관리법상 차령기산일 기준으로
             기산일이 1~6월이면 과세연도−기산연도+1, 7~12월이면 1기분은 −0·2기분은 +1)과 단순 경과연수가 다를 수 있으니
